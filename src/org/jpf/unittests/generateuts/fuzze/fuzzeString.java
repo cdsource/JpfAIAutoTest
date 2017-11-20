@@ -32,13 +32,13 @@ public class fuzzeString implements IFuzze{
      * @return
      * update 2017年11月17日
      */
-    public ArrayList<String> getFuzze(ParamInitBody cParamInitBody) {
+    public ArrayList<String> getFuzzeForNull(ParamInitBody cParamInitBody) {
         mList.clear();
         logger.debug("strParamName="+cParamInitBody.getParamVariable());
         //mList.add("    int "+strParamName+" =  1;");
         if (cParamInitBody.isArray())
         {
-            mList.add("    byte "+cParamInitBody.getParamVariable()+" =  new byte[10];");
+            mList.add("    String "+cParamInitBody.getParamVariable()+" =  String byte[10];");
         }else
         {
             mList.add("    String "+cParamInitBody.getParamVariable()+" =  \"abc123\";\n");

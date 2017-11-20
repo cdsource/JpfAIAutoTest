@@ -20,7 +20,7 @@ import org.jpf.unittests.generateuts.ParamInitBody;
 public class fuzzefloat  implements IFuzze{
 
     private static final Logger logger = LogManager.getLogger();
-    public  ArrayList<String> getFuzze(ParamInitBody cParamInitBody) {
+    public  ArrayList<String> getFuzzeForNull(ParamInitBody cParamInitBody) {
         ArrayList<String> mList=new ArrayList<String>();
         logger.debug("strParamName="+cParamInitBody.getParamVariable());
         if (cParamInitBody.isArray())

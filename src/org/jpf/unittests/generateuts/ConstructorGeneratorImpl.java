@@ -70,7 +70,7 @@ public class ConstructorGeneratorImpl implements IConstructorGenerator {
                  */
             } else if (method.getModifiers() == 9 && returnType.toString().equalsIgnoreCase(strClass)) {
                 logger.info("单例模式");
-                addPrivateConstructor(method, strClass, cUtFileText);
+                getSingletonInstance(method, strClass, cUtFileText);
             }
 
         }
@@ -82,14 +82,14 @@ public class ConstructorGeneratorImpl implements IConstructorGenerator {
 
     /**
      * 
-     * @category 增加私有构造函数单元测试
+     * @category 单例模式获取INSTANCE
      * @author 吴平福
      * @param methodDec
      * @param strClass
      * @return update 2017年10月19日
      */
-    private void addPrivateConstructor(MethodDeclaration method, String strClass, UtFileText cUtFileText) {
-        /*
+    private void getSingletonInstance(MethodDeclaration method, String strClass, UtFileText cUtFileText) {
+        
         // PUBLIC返回本身类函数
         StringBuffer sbPrivateConstructor = new StringBuffer();
         List param = method.parameters();
@@ -104,13 +104,13 @@ public class ConstructorGeneratorImpl implements IConstructorGenerator {
 
         }
         //logger.info(sbPrivateConstructor.toString());
-        sbPrivateConstructor.append("  ").append(strClass).append(" fixture=").append(strClass).append(".")
+        sbPrivateConstructor.append("    ").append(strClass).append(" fixture=").append(strClass).append(".")
                 .append(method.getName().toString());
         sbPrivateConstructor.append(GenerateUtils.addMethodParam2Method(method.getModifiers(), param, cUtFileText));
 
         logger.info(sbPrivateConstructor);
         cUtFileText.setSbPrivateConstructor(sbPrivateConstructor);
-        */
+        
     }
 
     /**
@@ -128,7 +128,7 @@ public class ConstructorGeneratorImpl implements IConstructorGenerator {
         sb.append(GenerateUtils.addMethodJavaDoc(Modifiers, "", strMethod, MethodParam, cUtFileText));
         // int Modifier,String strReturn, String strMethodName, List MethodParam, UtFileText
         // cUtFileText
-        sb.append("  public void test").append(strMethod).append("_").append(GenerateUnitTests.iMethodCount++)
+        sb.append("  public void test").append(strMethod).append("_").append(GenerateConst.iMethodCount++)
                 .append("() throws Exception\n").append("  {").append("\n");
         // instance
         sb.append(analyseConstructor(Modifiers, strClass, strMethod, MethodParam, cUtFileText));

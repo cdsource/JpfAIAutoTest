@@ -18,7 +18,7 @@ public class fuzzeshort implements IFuzze {
 
     private static final Logger logger = LogManager.getLogger();
 
-    public ArrayList<String> getFuzze(ParamInitBody cParamInitBody) {
+    public ArrayList<String> getFuzzeForNull(ParamInitBody cParamInitBody) {
         ArrayList<String> mList = new ArrayList<String>();
 
 

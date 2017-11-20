@@ -16,5 +16,5 @@ import org.jpf.unittests.generateuts.ParamInitBody;
  * 
  */
 public interface IFuzze {
-    ArrayList<String> getFuzze(ParamInitBody cParamInitBody);
+    ArrayList<String> getFuzzeForNull(ParamInitBody cParamInitBody);
 }

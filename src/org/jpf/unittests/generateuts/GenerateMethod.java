@@ -61,13 +61,40 @@ public abstract class GenerateMethod {
 
     /**
      * 
+     * @category 增加TRY 
+     * @author 吴平福 
+     * @return
+     * update 2017年12月9日
+     */
+    public StringBuffer addTry() {
+        StringBuffer sb = new StringBuffer();
+        sb.append("    try{\n");
+        return sb;
+    }
+    /**
+     * 
+     * @category 增加CATCH 
+     * @author 吴平福 
+     * @param strClassName
+     * @return
+     * update 2017年12月9日
+     */
+    public StringBuffer addCatch(String strClassName) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("    }catch(Exception ex){\n")
+        .append("        ex.printStackTrace();\n")
+        .append("      }\n");
+        return sb;
+    }
+    /**
+     * 
      * @category doGenerateMethod
      * @author 吴平福
      * @param cMethodInfo
      * @param cUtFileText
      * @return update 2017年11月13日
      */
-    public StringBuffer doGenerateMethod(MethodInfo cMethodInfo, UtFileText cUtFileText) {
+    public StringBuffer doGenerateMethod(JpfMethodInfo cMethodInfo, UtFileText cUtFileText) {
 
         StringBuffer sb = new StringBuffer();
         // 注释
@@ -104,9 +131,9 @@ public abstract class GenerateMethod {
         ArrayList<String> cParamInitBody = addMethodParamInit2(cMethodInfo.getMethodParam(), cUtFileText);
 
         for (int i = 0; i < cParamInitBody.size(); i++) {
-            sb.append(sbJavaDoc).append(addMethodDeclare(cMethodInfo.getMethodName(), cUtFileText))
+            sb.append(sbJavaDoc).append(addMethodDeclare(cMethodInfo.getMethodName(), cUtFileText)).append(addTry())
                     .append(cParamInitBody.get(i)).append(sbClassName).append(sbReturnName).append(sbCallMethod)
-                    .append(sbAssert);
+                    .append(sbAssert).append(addCatch(cMethodInfo.getClassName())) ;
             logger.trace(sb.length());
         }
 
@@ -182,7 +209,7 @@ public abstract class GenerateMethod {
      */
     private StringBuffer addMethodDeclare(String strMethodName, UtFileText cUtFileText) {
         StringBuffer sb = new StringBuffer();
-        sb.append("  public void test").append(strMethodName).append("_").append(GenerateUnitTests.iMethodCount++)
+        sb.append("  public void test").append(strMethodName).append("_").append(GenerateConst.iMethodCount++)
                 .append("() throws Exception\n").append("  {").append("\n");
         return sb;
     }
@@ -207,31 +234,31 @@ public abstract class GenerateMethod {
                 case "boolean":
                 case "final boolean":
                 case "boolean[]":
-                    listAll.add(new fuzzBoolean().getFuzze(cParamInitBody));
+                    listAll.add(new fuzzBoolean().getFuzzeForNull(cParamInitBody));
                     break;
 
                 case "byte":
                 case "final byte":
                 case "byte[]":
-                    listAll.add(new fuzzebyte().getFuzze(cParamInitBody));
+                    listAll.add(new fuzzebyte().getFuzzeForNull(cParamInitBody));
                     break;
 
                 case "char":
                 case "final char":
                 case "char[]":
-                    listAll.add(new fuzzechar().getFuzze(cParamInitBody));
+                    listAll.add(new fuzzechar().getFuzzeForNull(cParamInitBody));
                     break;
 
                 case "double":
                 case "final double":
                 case "double[]":
-                    listAll.add(new fuzzedouble().getFuzze(cParamInitBody));
+                    listAll.add(new fuzzedouble().getFuzzeForNull(cParamInitBody));
                     break;
 
                 case "float":
                 case "final float":
                 case "float[]":
-                    listAll.add(new fuzzefloat().getFuzze(cParamInitBody));
+                    listAll.add(new fuzzefloat().getFuzzeForNull(cParamInitBody));
                     break;
 
                 case "int":
@@ -243,27 +270,27 @@ public abstract class GenerateMethod {
                 case "long":
                 case "final long":
                 case "long[]":
-                    listAll.add(new fuzzelong().getFuzze(cParamInitBody));
+                    listAll.add(new fuzzelong().getFuzzeForNull(cParamInitBody));
                     break;
 
                 case "short":
                 case "final short":
                 case "short[]":
-                    listAll.add(new fuzzeshort().getFuzze(cParamInitBody));
+                    listAll.add(new fuzzeshort().getFuzzeForNull(cParamInitBody));
                     break;
-                    
+
                 case "String":
                 case "final String":
                 case "String[]":
-                    listAll.add(new fuzzeString().getFuzze(cParamInitBody));
+                    listAll.add(new fuzzeString().getFuzzeForNull(cParamInitBody));
                     break;
 
                 case "Connection":
-                    listAll.add(new fuzzeConnection().getFuzze(cParamInitBody));
+                    listAll.add(new fuzzeConnection().getFuzzeForNull(cParamInitBody));
                     break;
 
                 default:
-                    listAll.add(new fuzzeCommon().getFuzze(cParamInitBody));
+                    listAll.add(new fuzzeCommon().getFuzzeForNull(cParamInitBody));
                     break;
             }
         }
@@ -284,7 +311,7 @@ public abstract class GenerateMethod {
         logger.debug("listParamInitBody.size()=" + listParamInitBody.size());
 
         while (listParamInitBody.size() > GenerateConst.Max_CaseCount_PerMethod) {
-            listParamInitBody.remove(listParamInitBody.size()-1);
+            listParamInitBody.remove(listParamInitBody.size() - 1);
         }
         logger.debug("after delete: listParamInitBody.size()=" + listParamInitBody.size());
         return listParamInitBody;

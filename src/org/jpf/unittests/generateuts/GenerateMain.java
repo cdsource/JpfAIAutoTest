@@ -1,9 +1,7 @@
-/** 
-* @author 吴平福 
-* E-mail:wupf@asiainfo.com 
-* @version 创建时间：2017年11月20日 下午2:09:25 
-* 类说明 
-*/ 
+/**
+ * @author 吴平福 E-mail:wupf@asiainfo.com
+ * @version 创建时间：2017年11月20日 下午2:09:25 类说明
+ */
 
 package org.jpf.unittests.generateuts;
 
@@ -20,13 +18,14 @@ import com.asiainfo.utils.ios.AiFileUtil;
 public class GenerateMain {
     private static final Logger logger = LogManager.getLogger();
 
+    private String strFileNameFilter = "DAO";
 
     /**
      * 
      */
     public GenerateMain(String strInputFile) {
         long start = System.currentTimeMillis();
-        GenerateUnitTests cGenerateUnitTests=new GenerateUnitTests();
+        GenerateUnitTests cGenerateUnitTests = new GenerateUnitTests();
         try {
             // String strFileName="D:\\jworkspaces\\jpfapp\\src\\org\\jpf\\ci\\rpts\\SonarAvg.java";
             if (AiFileUtil.isFile(strInputFile)) {
@@ -41,8 +40,11 @@ public class GenerateMain {
                 AiFileUtil.getFiles(strInputFile, vFiles, ".java");
                 GenerateConst.iTotalFileCount = vFiles.size();
                 while (vFiles.size() > 0) {
-                    if (cGenerateUnitTests.doGenerateFile(vFiles.get(vFiles.size() - 1))) {
-                        GenerateConst.iGenFileCount++;
+                    if (strFileNameFilter != null && strFileNameFilter.length() > 0
+                            && vFiles.get(vFiles.size() - 1).endsWith(strFileNameFilter + ".java")) {
+                        if (cGenerateUnitTests.doGenerateFile(vFiles.get(vFiles.size() - 1))) {
+                            GenerateConst.iGenFileCount++;
+                        }
                     }
                     vFiles.remove(vFiles.size() - 1);
                 }
@@ -73,10 +75,8 @@ public class GenerateMain {
     }
 
     /**
-     * @category 
-     * @author 吴平福 
-     * @param args
-     * update 2017年11月20日
+     * @category @author 吴平福
+     * @param args update 2017年11月20日
      */
 
     public static void main(String[] args) {
@@ -85,12 +85,21 @@ public class GenerateMain {
         // strFileName =
         // "D:\\jworkspaces\\jpfapp\\src\\org\\jpf\\unittests\\samples\\sampleclass.java";
         strFileName = "d:\\svn\\ecommerce-branch-20170912\\app-util\\src\\main\\java";
+        // strFileName = "d:\\svn\\ecommerce-branch-20170912\\poffice-util\\src\\main\\java";
+        // strFileName = "d:\\svn\\ecommerce-branch-20170912\\app-dao\\src\\main\\java";
         // 单列模式
         // strFileName =
-        // "D:\\svn\\ecommerce-branch-20170912\\app-util\\src\\main\\java\\com\\asiainfo\\ebiz\\util\\FtpUtils.java";
+        // "D:\\svn\\ecommerce-branch-20170912\\app-util\\src\\main\\java\\com\\asiainfo\\ebiz\\iposm\\util\\HiIposmConfig.java";
+        // strFileName =
+        // "D:\\svn\\ecommerce-branch-20170912\\app-util\\src\\main\\java\\com\\asiainfo\\ebiz\\util\\Des3New.java";
+        // ControlServiceInterceptorTest
         // import *
         // strFileName="D:\\svn\\ecommerce-branch-20170912\\app-util\\src\\main\\java\\com\\asiainfo\\ebiz\\log\\EbizDBAppender.java";
         // strFileName = "D:\\jworkspaces\\AI_CodeTest\\src\\com\\asiainfo\\utsample\\def.java";
+        // strFileName=
+        // "D:\\svn\\ecommerce-branch-20170912\\app-util\\src\\main\\java\\com\\asiainfo\\ebiz\\util\\ControlServiceInterceptorTest.java";
+        // strFileName="d:\\svn\\ecommerce-branch-20170912\\app-util\\src\\main\\java\\com\\asiainfo\\ebiz\\yyzf\\HiIposmResponse.java";
+        strFileName = "D:\\svn\\ecommerce-branch-20170912\\app-dao\\src\\main\\java\\com\\asiainfo\\ebiz";
         new GenerateMain(strFileName);
     }
 

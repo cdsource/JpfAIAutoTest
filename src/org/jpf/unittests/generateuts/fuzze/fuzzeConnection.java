@@ -30,7 +30,7 @@ public class fuzzeConnection implements IFuzze {
      * @see org.jpf.unittests.generateuts.fuzze.IFuzze#getFuzze(org.jpf.unittests.generateuts.ParamInitBody)
      */
     @Override
-    public ArrayList<String> getFuzze(ParamInitBody cParamInitBody) {
+    public ArrayList<String> getFuzzeForNull(ParamInitBody cParamInitBody) {
         mList.clear();
         
         logger.debug("strParamName="+cParamInitBody.getParamVariable());

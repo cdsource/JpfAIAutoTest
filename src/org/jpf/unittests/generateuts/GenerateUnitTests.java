@@ -12,7 +12,6 @@ package org.jpf.unittests.generateuts;
  * 
  */
 import java.util.List;
-import java.util.Vector;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,7 +26,6 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.jpf.codeanalysis.CodeAnalysisUtil;
 
 import com.asiainfo.utils.AiDateTimeUtil;
 import com.asiainfo.utils.ios.AiFileUtil;
@@ -37,9 +35,6 @@ import com.asiainfo.utils.ios.AiFileUtil;
  */
 public class GenerateUnitTests {
     private static final Logger logger = LogManager.getLogger();
-
-    public static int iMethodCount = 1;
-
 
     /**
      * 
@@ -69,6 +64,7 @@ public class GenerateUnitTests {
             GenerateConst.iExistUtFileCount++;
         } else {
             UtFileText cUtFileText = new UtFileText();
+            GenerateConst.iMethodCount=1;
             if (!ReadJavaFile(strFileName, cUtFileText)) {
                 logger.warn("waring: " + strFileName);
                 GenerateConst.iErrorFileCount++;
@@ -150,7 +146,7 @@ public class GenerateUnitTests {
 
         try {
             ConstructorGeneratorImpl cConstructorInfo = new ConstructorGeneratorImpl();
-            String sourceString = CodeAnalysisUtil.getFileTxt(sourceFileName, "GBK");
+            String sourceString =AiFileUtil.getFileTxt(sourceFileName, "GBK");
             ASTParser astParser = ASTParser.newParser(AST.JLS8);
             astParser.setKind(ASTParser.K_COMPILATION_UNIT);
             astParser.setResolveBindings(true);
@@ -192,7 +188,7 @@ public class GenerateUnitTests {
 
             cConstructorInfo.doGenerate(methodDec, typeDec.getName().toString(), cUtFileText);
 
-            MethodInfo cMethodInfo = new MethodInfo();
+            JpfMethodInfo cMethodInfo = new JpfMethodInfo();
             cMethodInfo.setClassName(typeDec.getName().toString());
 
             for (MethodDeclaration method : methodDec) {
