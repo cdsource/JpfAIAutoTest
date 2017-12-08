@@ -63,16 +63,14 @@ public class GenerateUnitTests {
             logger.warn("File Exist:" + strSaveUtFileName);
             GenerateConst.iExistUtFileCount++;
         } else {
-            UtFileText cUtFileText = new UtFileText();
+            JpfUtInfo cJpfUtInfo = new JpfUtInfo();
             GenerateConst.iMethodCount=1;
-            if (!ReadJavaFile(strFileName, cUtFileText)) {
+            if (!ReadJavaFile(strFileName, cJpfUtInfo)) {
                 logger.warn("waring: " + strFileName);
                 GenerateConst.iErrorFileCount++;
-                cUtFileText.clean();
                 return false;
             }
-            AiFileUtil.saveFile(strSaveUtFileName, cUtFileText.toString());
-            cUtFileText.clean();
+            AiFileUtil.saveFile(strSaveUtFileName, cJpfUtInfo.toString());
 
             return true;
         }
@@ -141,7 +139,7 @@ public class GenerateUnitTests {
      * @param cConstructorInfo
      * @return update 2017年9月30日
      */
-    public boolean ReadJavaFile(final String sourceFileName, UtFileText cUtFileText) {
+    public boolean ReadJavaFile(final String sourceFileName, JpfUtInfo cJpfUtInfo) {
         // TODO Auto-generated constructor stub
 
         try {
@@ -170,23 +168,24 @@ public class GenerateUnitTests {
                 GenerateConst.iAbstractFileCount++;
                 return false;
             }
-            if (typeDec.isInterface()) {
-                logger.info("接口类不能生产单元测试：" + sourceFileName);
-                GenerateConst.iInterfaceFileCount++;
-                return false;
-            }
+
             /*
              * if (!typeDec.isInterface()) { return null; }
              */
-
-            addPackage(cCompilationUnit.getPackage().getName().toString(), cUtFileText.sbPackage);
-            addImport(cCompilationUnit.imports(), cUtFileText);
-            addClassDesc(typeDec.getName().toString(), cUtFileText.sbClassDesc);
+            //addPackage
+            cJpfUtInfo.setUtPackage("package "+cCompilationUnit.getPackage().getName().toString()+";\n");
+            addImport(cCompilationUnit.imports(), cJpfUtInfo);
+            cJpfUtInfo.setUtFileDesc(addClassDesc(typeDec.getName().toString()));
+            
+            if (typeDec.isInterface()) {
+                GenerateMethodForDAOInterface cGenerateMethodForInterface=new GenerateMethodForDAOInterface();
+                cGenerateMethodForInterface.addExtraMethod(typeDec.getName().toString(), cJpfUtInfo);
+            }
 
             // show methods
             MethodDeclaration methodDec[] = typeDec.getMethods();
 
-            cConstructorInfo.doGenerate(methodDec, typeDec.getName().toString(), cUtFileText);
+            cConstructorInfo.doGenerate(methodDec, typeDec.getName().toString(), cJpfUtInfo);
 
             JpfMethodInfo cMethodInfo = new JpfMethodInfo();
             cMethodInfo.setClassName(typeDec.getName().toString());
@@ -216,30 +215,32 @@ public class GenerateUnitTests {
                 if (returnType != null) {
                     // addMethodDesc(typeDec.getName().toString(), methodName.toString(), param,
                     cMethodInfo.setStrReturn(returnType.toString());
-                    if (1 == method.getModifiers() || 3 == method.getModifiers()) {
+                    if (typeDec.isInterface()) {
+                        logger.info("接口类单元测试：" + sourceFileName);
+                        GenerateConst.iInterfaceFileCount++;
+                        GenerateMethodForDAOInterface cGenerateMethodForInterface=new GenerateMethodForDAOInterface();
+                        cGenerateMethodForInterface.doGenerateMethod(cMethodInfo, cJpfUtInfo);
+                        //return false;
+                    }else if (0== method.getModifiers() || 1 == method.getModifiers() || 3 == method.getModifiers()) {
                         // public:1 protected:3
                         GenerateMethodPublic cGenerateMethodPublic = new GenerateMethodPublic();
-                        cUtFileText.sbMethod.append(cGenerateMethodPublic.doGenerateMethod(cMethodInfo, cUtFileText));
-
-
+                        cGenerateMethodPublic.doGenerateMethod(cMethodInfo, cJpfUtInfo);
                     } else if (2 == method.getModifiers()) {
                         // private
                         GenerateMethodPrivate cGenerateMethodPrivate = new GenerateMethodPrivate();
-                        cUtFileText.sbMethod.append(cGenerateMethodPrivate.doGenerateMethod(cMethodInfo, cUtFileText));
-                        cUtFileText.addImport("import java.lang.reflect.Method;");
+                        cGenerateMethodPrivate.doGenerateMethod(cMethodInfo, cJpfUtInfo);
+                        cJpfUtInfo.addImport("import java.lang.reflect.Method;");
                     } else if (9 == method.getModifiers()) {
                         // public static
-
                         GenerateMethodPublicStatic cGenerateMethodPublic = new GenerateMethodPublicStatic();
-                        cUtFileText.sbMethod.append(cGenerateMethodPublic.doGenerateMethod(cMethodInfo, cUtFileText));
-
+                        cGenerateMethodPublic.doGenerateMethod(cMethodInfo, cJpfUtInfo);
                     }
 
                 }
 
             }
-
-            GenerateBaseMethods.addTestEnd(typeDec.getName().toString(), cUtFileText.sbBasic);
+            cJpfUtInfo.setUtBasic(GenerateBaseMethods.addTestEnd(typeDec.getName().toString()));
+            
             return true;
         } catch (Exception ex) {
             // TODO: handle exception
@@ -250,34 +251,22 @@ public class GenerateUnitTests {
 
     /**
      * 
-     * @category 增加PACKAGE
-     * @author 吴平福
-     * @param strPackage
-     * @param sb update 2017年9月28日
-     */
-    private void addPackage(String strPackage, StringBuffer sb) {
-        sb.setLength(0);
-        sb.append("package ").append(strPackage).append(";\n");
-    }
-
-    /**
-     * 
      * @category 增加IMPORT
      * @author 吴平福
      * @param importList
      * @param sb update 2017年9月29日
      */
-    private void addImport(List importList, UtFileText cUtFileText) {
+    private void addImport(List importList, JpfUtInfo cJpfUtInfo) {
 
         for (Object obj : importList) {
             ImportDeclaration importDec = (ImportDeclaration) obj;
             logger.debug(importDec.toString());
-            cUtFileText.addImport(importDec.toString().trim());
+            cJpfUtInfo.addImport(importDec.toString().trim());
         }
 
         // sb.append("import org.easymock.EasyMock;").append("\n");
-        cUtFileText.addImport("import org.junit.*;");
-        cUtFileText.addImport("import static org.junit.Assert.*;");
+        cJpfUtInfo.addImport("import org.junit.*;");
+        cJpfUtInfo.addImport("import static org.junit.Assert.*;");
         /*
          * sb.append("import java.lang.reflect.Method;").append("\n");
          * sb.append("import java.util.ArrayList;").append("\n");
@@ -293,8 +282,8 @@ public class GenerateUnitTests {
      * @param strClass
      * @param sb update 2017年9月29日
      */
-    private void addClassDesc(String strClass, StringBuffer sb) {
-
+    private String addClassDesc(String strClass) {
+        StringBuffer sb=new StringBuffer();
         sb.append("/**").append("\n");
         sb.append("* The class <code>").append(strClass)
                 .append("Test</code> contains tests for the class <code>{@link ").append(strClass).append("}</code>.")
@@ -307,6 +296,7 @@ public class GenerateUnitTests {
         sb.append("* @version $Revision: 1.0 $").append("\n");
         sb.append("*/").append("\n");
         sb.append("public class ").append(strClass).append("Test {\n");
+        return sb.toString();
     }
 
 

@@ -14,7 +14,7 @@ public class GenerateConst {
 
     public static final String GENERATE_AUTHOR="wupf@asiainfo.com";
     
-    public static final int Max_CaseCount_PerMethod=200;
+    public static final int Max_CaseCount_PerMethod=3;
     
     public static int iAbstractFileCount = 0;
     public static int iInterfaceFileCount = 0;

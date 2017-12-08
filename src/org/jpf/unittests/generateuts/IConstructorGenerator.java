@@ -13,5 +13,5 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
  * 
  */
 public interface IConstructorGenerator {
-    public void doGenerate(MethodDeclaration methodDec[], String strClass, UtFileText cUtFileText);
+    public void doGenerate(MethodDeclaration methodDec[], String strClass, JpfUtInfo cJpfUtInfo);
 }

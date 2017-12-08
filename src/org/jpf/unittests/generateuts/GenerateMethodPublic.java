@@ -21,10 +21,8 @@ public class GenerateMethodPublic extends GenerateMethod {
     }
 
     @Override
-    public StringBuffer addClassInstance(String strClass, List MethodParam,  UtFileText cUtFileText) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(cUtFileText.getMinConstructor());
-        return sb;
+    public String addClassInstance(String strClass, List MethodParam,  JpfUtInfo cJpfUtInfo) {
+        return cJpfUtInfo.getUtMinConstructor();
     }
 
     /*
@@ -34,10 +32,17 @@ public class GenerateMethodPublic extends GenerateMethod {
      * java.lang.StringBuffer)
      */
     @Override
-    public StringBuffer addMethodCaller(String strClass, String strMethod, List MethodParam, UtFileText cUtFileText) {
+    public String addMethodCaller(String strClass, String strMethod, List MethodParam, JpfUtInfo cJpfUtInfo) {
         // TODO Auto-generated method stub
-        StringBuffer sb = new StringBuffer();
-        sb.append("  fixture.").append(strMethod);
-        return sb;
+        return "  fixture."+strMethod;
+    }
+
+    /* (non-Javadoc)
+     * @see org.jpf.unittests.generateuts.GenerateMethod#addExtraMethod(org.jpf.unittests.generateuts.JpfUtInfo)
+     */
+    @Override
+    public void addExtraMethod(String strClassName, JpfUtInfo cJpfUtInfo) {
+        // TODO Auto-generated method stub
+        
     }
 }

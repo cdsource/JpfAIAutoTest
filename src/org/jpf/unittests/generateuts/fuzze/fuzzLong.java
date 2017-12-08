@@ -1,7 +1,7 @@
 /** 
 * @author 吴平福 
 * E-mail:wupf@asiainfo.com 
-* @version 创建时间：2017年10月26日 下午3:47:41 
+* @version 创建时间：2017年12月11日 上午11:50:47 
 * 类说明 
 */ 
 
@@ -16,7 +16,7 @@ import org.jpf.unittests.generateuts.ParamInitBody;
 /**
  * 
  */
-public class fuzzelong implements IFuzze{
+public class fuzzLong implements IFuzze{
     private static final Logger logger = LogManager.getLogger();
     
     public  ArrayList<String> getFuzzeForNull(ParamInitBody cParamInitBody) {
@@ -35,9 +35,8 @@ public class fuzzelong implements IFuzze{
             mList.add("    "+cParamInitBody.getParamType()+" "+cParamInitBody.getParamVariable()+" =  Long.MAX_VALUE;\n");
             mList.add("    "+cParamInitBody.getParamType()+" "+cParamInitBody.getParamVariable()+" =  Long.MIN_VALUE;\n");
             mList.add("    "+cParamInitBody.getParamType()+" "+cParamInitBody.getParamVariable()+" =  0L;\n");
-            mList.add("    char "+cParamInitBody.getParamVariable()+" =  'a';\n");
-
         }
         return mList;
     }
+
 }

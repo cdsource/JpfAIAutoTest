@@ -25,21 +25,30 @@ public class GenerateMethodPublicStatic extends GenerateMethod {
      * @see org.jpf.unittests.generateuts.GenerateMethod#addClassInstance(java.lang.String, java.lang.String, java.util.List, org.jpf.unittests.generateuts.UtFileText)
      */
     @Override
-    public StringBuffer addClassInstance( String strClass, List MethodParam,
-            UtFileText cUtFileText) {
+    public String addClassInstance( String strClass, List MethodParam,
+            JpfUtInfo cJpfUtInfo) {
         // TODO Auto-generated method stub
-        StringBuffer sb=new StringBuffer();
-        return sb;
+        return "";
     }
 
     /* (non-Javadoc)
      * @see org.jpf.unittests.generateuts.GenerateMethod#addMethodCaller(java.lang.String, java.lang.String, java.util.List, org.jpf.unittests.generateuts.UtFileText)
      */
     @Override
-    public StringBuffer addMethodCaller(String strClass, String strMethod, List MethodParam, UtFileText cUtFileText) {
+    public String addMethodCaller(String strClass, String strMethod, List MethodParam, JpfUtInfo cJpfUtInfo) {
         // TODO Auto-generated method stub
         StringBuffer sb=new StringBuffer();
         sb .append("    ").append(strClass) .append(".").append(strMethod);
-        return sb;
+        return sb.toString();
+    }
+
+    
+    /* (non-Javadoc)
+     * @see org.jpf.unittests.generateuts.GenerateMethod#addExtraMethod(org.jpf.unittests.generateuts.JpfUtInfo)
+     */
+    @Override
+    public void addExtraMethod(String strClassName, JpfUtInfo cJpfUtInfo) {
+        // TODO Auto-generated method stub
+        
     }
 }

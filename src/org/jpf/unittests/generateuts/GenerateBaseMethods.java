@@ -27,7 +27,8 @@ public class GenerateBaseMethods {
      * @param strClass
      * @param sb update 2017年9月29日
      */
-    public static void addTestEnd(String strClass, StringBuffer sb) {
+    public static String addTestEnd(String strClass) {
+        StringBuffer sb=new StringBuffer();
         sb.append("\n").append("  /**").append("\n");
         sb.append("  * 测试方法初始化.").append("\n");
         sb.append("  * ").append("\n");
@@ -98,5 +99,6 @@ public class GenerateBaseMethods {
         sb.append("  } ").append("\n");
         sb.append("} ").append("\n");
 
+        return sb.toString();
     }
 }

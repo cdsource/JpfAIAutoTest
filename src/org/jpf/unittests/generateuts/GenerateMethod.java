@@ -10,7 +10,11 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jdt.internal.compiler.codegen.CachedIndexEntry;
 import org.jpf.unittests.generateuts.fuzze.fuzzBoolean;
+import org.jpf.unittests.generateuts.fuzze.fuzzList;
+import org.jpf.unittests.generateuts.fuzze.fuzzLong;
+import org.jpf.unittests.generateuts.fuzze.fuzzMap;
 import org.jpf.unittests.generateuts.fuzze.fuzzeCommon;
 import org.jpf.unittests.generateuts.fuzze.fuzzeConnection;
 import org.jpf.unittests.generateuts.fuzze.fuzzeInt;
@@ -45,8 +49,8 @@ public abstract class GenerateMethod {
      * @param strReturn
      * @param sb update 2017年9月29日
      */
-    public abstract StringBuffer addMethodCaller(String strClass, String strMethod, List MethodParam,
-            UtFileText cUtFileText);
+    public abstract String addMethodCaller(String strClassName, String strMethod, List MethodParam,
+            JpfUtInfo cJpfUtInfo);
 
     /**
      * 
@@ -56,36 +60,40 @@ public abstract class GenerateMethod {
      * @param cUtFileText
      * @return update 2017年11月14日
      */
-    public abstract StringBuffer addClassInstance(String strClass, List MethodParam, UtFileText cUtFileText);
-
+    public abstract String addClassInstance(String strClassName, List MethodParam, JpfUtInfo cJpfUtInfo);
 
     /**
      * 
-     * @category 增加TRY 
-     * @author 吴平福 
-     * @return
-     * update 2017年12月9日
+     * @category 增加额外的公共方法
+     * @author 吴平福
+     * @param cJpfUtInf update 2017年12月9日
      */
-    public StringBuffer addTry() {
-        StringBuffer sb = new StringBuffer();
-        sb.append("    try{\n");
-        return sb;
-    }
+    public abstract void addExtraMethod(String strClassName, JpfUtInfo cJpfUtInfo);
+
     /**
      * 
-     * @category 增加CATCH 
-     * @author 吴平福 
+     * @category 增加TRY
+     * @author 吴平福
+     * @return update 2017年12月9日
+     */
+    public String addTry() {
+        return "    try{\n";
+    }
+
+
+    /**
+     * 
+     * @category 增加CATCH
+     * @author 吴平福
      * @param strClassName
-     * @return
-     * update 2017年12月9日
+     * @return update 2017年12月9日
      */
-    public StringBuffer addCatch(String strClassName) {
+    public String addCatch(String strClassName) {
         StringBuffer sb = new StringBuffer();
-        sb.append("    }catch(Exception ex){\n")
-        .append("        ex.printStackTrace();\n")
-        .append("      }\n");
-        return sb;
+        sb.append("    }catch(Exception ex){\n").append("        ex.printStackTrace();\n").append("      }\n");
+        return sb.toString();
     }
+
     /**
      * 
      * @category doGenerateMethod
@@ -94,51 +102,76 @@ public abstract class GenerateMethod {
      * @param cUtFileText
      * @return update 2017年11月13日
      */
-    public StringBuffer doGenerateMethod(JpfMethodInfo cMethodInfo, UtFileText cUtFileText) {
+    public void doGenerateMethod(JpfMethodInfo cMethodInfo, JpfUtInfo cJpfUtInfo) {
 
         StringBuffer sb = new StringBuffer();
         // 注释
         StringBuffer sbJavaDoc = new StringBuffer();
-        sbJavaDoc.append(GenerateUtils.addMethodJavaDoc(cMethodInfo.getModifiers(), cMethodInfo.getStrReturn(),
-                cMethodInfo.getMethodName(), cMethodInfo.getMethodParam(), cUtFileText));
+        sbJavaDoc.append(GenerateUtils.addMethodJavaDoc(cMethodInfo, cJpfUtInfo));
         // 方法声明
         // StringBuffer sbMethodName = new StringBuffer();
         // sbMethodName.append(addMethodDeclare(cMethodInfo.getMethodName(), cUtFileText));
 
-
         // 类声明
         StringBuffer sbClassName = new StringBuffer();
-        sbClassName.append(addClassInstance(cMethodInfo.getClassName(), cMethodInfo.getMethodParam(), cUtFileText));
+        sbClassName.append(addClassInstance(cMethodInfo.getClassName(), cMethodInfo.getMethodParam(), cJpfUtInfo));
 
         // 获取返回值
         StringBuffer sbReturnName = new StringBuffer();
         sbReturnName.append(addMethodReturn(cMethodInfo.getMethodName(), cMethodInfo.getStrReturn(),
-                cMethodInfo.getMethodParam(), cUtFileText));
+                cMethodInfo.getMethodParam(), cJpfUtInfo));
 
         // 调用方法
         StringBuffer sbCallMethod = new StringBuffer();
         sbCallMethod.append(addMethodCaller(cMethodInfo.getClassName(), cMethodInfo.getMethodName(),
-                cMethodInfo.getMethodParam(), cUtFileText));
+                cMethodInfo.getMethodParam(), cJpfUtInfo));
         sbCallMethod.append(GenerateUtils.addMethodParam2Method(cMethodInfo.getModifiers(),
-                cMethodInfo.getMethodParam(), cUtFileText));
+                cMethodInfo.getMethodParam(), cJpfUtInfo));
 
         // 判断
         StringBuffer sbAssert = new StringBuffer();
-        sbAssert.append(addMethodAssert(cMethodInfo.getStrReturn(), cUtFileText));
-
+        sbAssert.append(addMethodAssert(cMethodInfo.getStrReturn(), cJpfUtInfo));
 
         // 方法参数初始化
-        ArrayList<String> cParamInitBody = addMethodParamInit2(cMethodInfo.getMethodParam(), cUtFileText);
+        if (cMethodInfo.getMethodParam().size() == 0) {
+            // 方法无参数
+            sb.append(sbJavaDoc).append(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo)).append(addTry())
+                    .append(sbClassName).append(sbReturnName).append(sbCallMethod).append(sbAssert)
+                    .append(addCatch(cMethodInfo.getClassName()));
+            logger.trace(sb);
+            JpfUtMethodInfo cJpfUtMethodInfo = new JpfUtMethodInfo();
+            cJpfUtMethodInfo.setMethodJavaDoc(sbJavaDoc.toString());
+            cJpfUtMethodInfo.setMethodDeclare(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo));
+            cJpfUtMethodInfo.setMethodTry(addTry());
 
-        for (int i = 0; i < cParamInitBody.size(); i++) {
-            sb.append(sbJavaDoc).append(addMethodDeclare(cMethodInfo.getMethodName(), cUtFileText)).append(addTry())
-                    .append(cParamInitBody.get(i)).append(sbClassName).append(sbReturnName).append(sbCallMethod)
-                    .append(sbAssert).append(addCatch(cMethodInfo.getClassName())) ;
-            logger.trace(sb.length());
+            cJpfUtMethodInfo.setMethodCaller(sbReturnName.toString() + sbCallMethod.toString());
+            cJpfUtMethodInfo.setMethodAssert(sbAssert.toString());
+            cJpfUtMethodInfo.setMethodCatch(addCatch(cMethodInfo.getClassName()));
+            logger.trace(cJpfUtMethodInfo.toString());
+            cJpfUtInfo.getListUtMethodInfos().add(cJpfUtMethodInfo);
+        } else {
+            // 方法有参数
+            ArrayList<String> cParamInitBody = addMethodParamInit2(cMethodInfo.getMethodParam(), cJpfUtInfo);
+            logger.debug("cParamInitBody.size()=" + cParamInitBody.size());
+            for (int i = 0; i < cParamInitBody.size(); i++) {
+                sb.append(sbJavaDoc).append(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo)).append(addTry())
+                        .append(cParamInitBody.get(i)).append(sbClassName).append(sbReturnName).append(sbCallMethod)
+                        .append(sbAssert).append(addCatch(cMethodInfo.getClassName()));
+                logger.trace(sb);
+                JpfUtMethodInfo cJpfUtMethodInfo = new JpfUtMethodInfo();
+                cJpfUtMethodInfo.setMethodJavaDoc(sbJavaDoc.toString());
+                cJpfUtMethodInfo.setMethodDeclare(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo));
+                cJpfUtMethodInfo.setMethodTry(addTry());
+                cJpfUtMethodInfo.setMethodParam(cParamInitBody.get(i));
+                cJpfUtMethodInfo.setMethodCaller(sbReturnName.toString() + sbCallMethod.toString());
+                cJpfUtMethodInfo.setMethodAssert(sbAssert.toString());
+                cJpfUtMethodInfo.setMethodCatch(addCatch(cMethodInfo.getClassName()));
+                logger.trace(cJpfUtMethodInfo.toString());
+                cJpfUtInfo.getListUtMethodInfos().add(cJpfUtMethodInfo);
+            }
+
+            cParamInitBody.clear();
         }
-
-        cParamInitBody.clear();
-        return sb;
 
     }
 
@@ -150,7 +183,7 @@ public abstract class GenerateMethod {
      * @param strReturn
      * @param sb update 2017年9月29日
      */
-    public StringBuffer addMethodAssert(String strReturn, UtFileText cUtFileText) {
+    public String addMethodAssert(String strReturn, JpfUtInfo cJpfUtInfo) {
 
         StringBuffer sb = new StringBuffer();
         strReturn = strReturn.trim();
@@ -177,8 +210,7 @@ public abstract class GenerateMethod {
             sb.append("    assertEquals(1, result);").append("\n");
         }
 
-        sb.append("  }\n");
-        return sb;
+        return sb.toString();
     }
 
     /**
@@ -187,12 +219,12 @@ public abstract class GenerateMethod {
      * @param strReturn
      * @param sb update 2017年9月29日
      */
-    public StringBuffer addMethodReturn(String strMethod, String strReturn, List MethodParam, UtFileText cUtFileText) {
+    public String addMethodReturn(String strMethod, String strReturn, List MethodParam, JpfUtInfo cJpfUtInfo) {
         StringBuffer sb = new StringBuffer();
         if (!strReturn.equalsIgnoreCase("void")) {
             sb.append("    ").append(strReturn).append("  result=");
         }
-        return sb;
+        return sb.toString();
     }
 
 
@@ -207,11 +239,11 @@ public abstract class GenerateMethod {
      * @param strReturn
      * @param sb update 2017年9月29日
      */
-    private StringBuffer addMethodDeclare(String strMethodName, UtFileText cUtFileText) {
+    private String addMethodDeclare(String strMethodName, JpfUtInfo cJpfUtInfo) {
         StringBuffer sb = new StringBuffer();
         sb.append("  public void test").append(strMethodName).append("_").append(GenerateConst.iMethodCount++)
                 .append("() throws Exception\n").append("  {").append("\n");
-        return sb;
+        return sb.toString();
     }
 
     /**
@@ -221,7 +253,7 @@ public abstract class GenerateMethod {
      * @param MethodParam
      * @param sb update 2017年9月29日
      */
-    public ArrayList<String> addMethodParamInit2(List MethodParam, UtFileText cUtFileText) {
+    public ArrayList<String> addMethodParamInit2(List MethodParam, JpfUtInfo cJpfUtInfo) {
 
         ArrayList<ArrayList<String>> listAll = new ArrayList<ArrayList<String>>();
         for (int i = 0; i < MethodParam.size(); i++) {
@@ -264,13 +296,19 @@ public abstract class GenerateMethod {
                 case "int":
                 case "final int":
                 case "int[]":
-                    listAll.add(new fuzzeInt().getFuzze(cParamInitBody));
+                case "Interger":
+                case "Interger[]":
+                    listAll.add(new fuzzeInt().getFuzzeForNull(cParamInitBody));
                     break;
 
                 case "long":
                 case "final long":
                 case "long[]":
                     listAll.add(new fuzzelong().getFuzzeForNull(cParamInitBody));
+                    break;
+
+                case "Long":
+                    listAll.add(new fuzzLong().getFuzzeForNull(cParamInitBody));
                     break;
 
                 case "short":
@@ -289,8 +327,27 @@ public abstract class GenerateMethod {
                     listAll.add(new fuzzeConnection().getFuzzeForNull(cParamInitBody));
                     break;
 
+                case "Map":
+                    listAll.add(new fuzzMap().getFuzzeForNull(cParamInitBody));
+                    cJpfUtInfo.addImport("import java.util.HashMap;");
+                    cJpfUtInfo.addImport("import java.util.Map;");
+                    break;
+
                 default:
-                    listAll.add(new fuzzeCommon().getFuzzeForNull(cParamInitBody));
+                    if (cParamInitBody.getParamType().startsWith("Map")
+                            || cParamInitBody.getParamType().startsWith("Map")) {
+                        listAll.add(new fuzzMap().getFuzzeForNull(cParamInitBody));
+                        cJpfUtInfo.addImport("import java.util.HashMap;");
+                        cJpfUtInfo.addImport("import java.util.Map;");
+                    } else if (cParamInitBody.getParamType().startsWith("List")) {
+                        listAll.add(new fuzzList().getFuzzeForNull(cParamInitBody));
+                        cJpfUtInfo.addImport("import java.util.List;");
+                        cJpfUtInfo.addImport("import java.util.ArrayList;");
+
+                    } else {
+                        listAll.add(new fuzzeCommon().getFuzzeForNew(cParamInitBody));
+                    }
+
                     break;
             }
         }

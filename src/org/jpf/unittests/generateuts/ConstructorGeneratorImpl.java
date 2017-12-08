@@ -34,7 +34,7 @@ public class ConstructorGeneratorImpl implements IConstructorGenerator {
      * MethodDeclaration[], java.lang.String, org.jpf.unittests.generateuts.UtFileText)
      */
     @Override
-    public void doGenerate(MethodDeclaration[] methodDec, String strClass, UtFileText cUtFileText) {
+    public void doGenerate(MethodDeclaration[] methodDec, String strClass, JpfUtInfo cJpfUtInfo) {
         // TODO Auto-generated method stub
         /*
          * 先找构造函数 1 没有，默认使用空参数 2. 私有构造函数：不支持 3. 有构造函数，无参数 4. 有构造函数，有参数 5. 多个构造函数，以参数最少的为准。
@@ -58,7 +58,7 @@ public class ConstructorGeneratorImpl implements IConstructorGenerator {
                 // PUBLIC构造函数
                 if (method.getModifiers() == 1 || method.getModifiers() == 0) {
                     addConstructorMethodBody(method.getModifiers(), strClass, methodName.toString(), param,
-                            cUtFileText);
+                            cJpfUtInfo);
                 }else
                 {
                     logger.warn(method.getModifiers());
@@ -70,12 +70,12 @@ public class ConstructorGeneratorImpl implements IConstructorGenerator {
                  */
             } else if (method.getModifiers() == 9 && returnType.toString().equalsIgnoreCase(strClass)) {
                 logger.info("单例模式");
-                getSingletonInstance(method, strClass, cUtFileText);
+                getSingletonInstance(method, strClass, cJpfUtInfo);
             }
 
         }
-        if (cUtFileText.getMinConstructor().length() == 0 && cUtFileText.getSbPrivateConstructor().length()==0) {
-            cUtFileText.setMinConstructor("  " + strClass + " fixture = new " + strClass + "();");
+        if (cJpfUtInfo.getUtMinConstructor().length() == 0 && cJpfUtInfo.getUtPrivateConstructor().length()==0) {
+            cJpfUtInfo.setUtMinConstructor("  " + strClass + " fixture = new " + strClass + "();");
         }
     }
 
@@ -88,12 +88,12 @@ public class ConstructorGeneratorImpl implements IConstructorGenerator {
      * @param strClass
      * @return update 2017年10月19日
      */
-    private void getSingletonInstance(MethodDeclaration method, String strClass, UtFileText cUtFileText) {
+    private void getSingletonInstance(MethodDeclaration method, String strClass, JpfUtInfo cJpfUtInfo) {
         
         // PUBLIC返回本身类函数
         StringBuffer sbPrivateConstructor = new StringBuffer();
         List param = method.parameters();
-        ParamInitBody[] cParamInitBody = GenerateUtils.addMethodParamInit(param, cUtFileText);
+        ParamInitBody[] cParamInitBody = GenerateUtils.addMethodParamInit(param, cJpfUtInfo);
         if (cParamInitBody.length>0) {
             for (int i = 0; i < cParamInitBody.length; i++) {
 
@@ -106,10 +106,10 @@ public class ConstructorGeneratorImpl implements IConstructorGenerator {
         //logger.info(sbPrivateConstructor.toString());
         sbPrivateConstructor.append("    ").append(strClass).append(" fixture=").append(strClass).append(".")
                 .append(method.getName().toString());
-        sbPrivateConstructor.append(GenerateUtils.addMethodParam2Method(method.getModifiers(), param, cUtFileText));
+        sbPrivateConstructor.append(GenerateUtils.addMethodParam2Method(method.getModifiers(), param, cJpfUtInfo));
 
         logger.info(sbPrivateConstructor);
-        cUtFileText.setSbPrivateConstructor(sbPrivateConstructor);
+        cJpfUtInfo.setUtPrivateConstructor(sbPrivateConstructor.toString());
         
     }
 
@@ -122,22 +122,19 @@ public class ConstructorGeneratorImpl implements IConstructorGenerator {
      * @param param
      * @param sb update 2017年9月29日
      */
-    private void addConstructorMethodBody(int Modifiers, String strClass, String strMethod, List MethodParam,
-            UtFileText cUtFileText) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(GenerateUtils.addMethodJavaDoc(Modifiers, "", strMethod, MethodParam, cUtFileText));
-        // int Modifier,String strReturn, String strMethodName, List MethodParam, UtFileText
-        // cUtFileText
-        sb.append("  public void test").append(strMethod).append("_").append(GenerateConst.iMethodCount++)
-                .append("() throws Exception\n").append("  {").append("\n");
+    private void addConstructorMethodBody(int Modifiers, String strClass, String strMethodName, List MethodParam,
+            JpfUtInfo cJpfUtInfo) {
+       
+        JpfUtMethodInfo cJpfUtMethodInfo=new JpfUtMethodInfo();
+        cJpfUtMethodInfo.setMethodJavaDoc(GenerateUtils.addMethodJavaDoc(Modifiers, "", strMethodName, MethodParam, cJpfUtInfo));
+        GenerateConst.iMethodCount++;
+        cJpfUtMethodInfo.setMethodDeclare("  public void test" +strMethodName+"_"+GenerateConst.iMethodCount +" () throws Exception\n   {\n" );
         // instance
-        sb.append(analyseConstructor(Modifiers, strClass, strMethod, MethodParam, cUtFileText));
-
-        sb.append("    assertNotNull(result);").append("\n");
-        sb.append("  }").append("\n");
-        // logger.debug(sb);
-        cUtFileText.sbMethod.append(sb);
-
+        cJpfUtMethodInfo.setClassConstructor(analyseConstructor(Modifiers, strClass, strMethodName, MethodParam, cJpfUtInfo));
+        cJpfUtMethodInfo.setMethodAssert("    assertNotNull(result);\n");
+        logger.debug(cJpfUtMethodInfo.toString());
+        cJpfUtInfo.getListUtMethodInfos().add(cJpfUtMethodInfo);
+        
     }
 
 
@@ -151,21 +148,21 @@ public class ConstructorGeneratorImpl implements IConstructorGenerator {
      * @param MethodParam
      * @param cConstructorInfo update 2017年9月30日
      */
-    private StringBuffer analyseConstructor(int Modifiers, String strClass, String strMethod, List MethodParam,
-            UtFileText cUtFileText) {
+    private String analyseConstructor(int Modifiers, String strClass, String strMethod, List MethodParam,
+            JpfUtInfo cJpfUtInfo) {
 
         StringBuffer sbConstructor = new StringBuffer();
-        sbConstructor.append(addConstructorParamInit(MethodParam, cUtFileText));
+        sbConstructor.append(addConstructorParamInit(MethodParam, cJpfUtInfo));
         sbConstructor.append("    ").append(strClass).append(" result = new ").append(strClass);
-        sbConstructor.append(addConstructorParam2Constructor(Modifiers, MethodParam, cUtFileText));
+        sbConstructor.append(addConstructorParam2Constructor(Modifiers, MethodParam, cJpfUtInfo));
 
-        if (cUtFileText.getMinConstructor().length() == 0
-                || cUtFileText.getMinConstructor().length() > sbConstructor.length()) {
-            cUtFileText.setMinConstructor(sbConstructor);
+        if (cJpfUtInfo.getUtMinConstructor().length() == 0
+                || cJpfUtInfo.getUtMinConstructor().length() > sbConstructor.length()) {
+            cJpfUtInfo.setUtMinConstructor(sbConstructor.toString());
         }
         // cUtFileText.sbMinConstructor.append(sbConstructor);
         logger.debug(sbConstructor);
-        return sbConstructor;
+        return sbConstructor.toString();
     }
     /**
      * 
@@ -175,8 +172,8 @@ public class ConstructorGeneratorImpl implements IConstructorGenerator {
      * @param cUtFileText
      * @return update 2017年11月13日
      */
-    public StringBuffer addConstructorParamInit(List MethodParam, UtFileText cUtFileText) {
-        ParamInitBody[] cParamInitBodys = GenerateUtils.addMethodParamInit(MethodParam, cUtFileText);
+    public StringBuffer addConstructorParamInit(List MethodParam, JpfUtInfo cJpfUtInfo) {
+        ParamInitBody[] cParamInitBodys = GenerateUtils.addMethodParamInit(MethodParam, cJpfUtInfo);
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < cParamInitBodys.length; i++) {
             sb.append(cParamInitBodys[i].getParamType()).append(" c")
@@ -195,7 +192,7 @@ public class ConstructorGeneratorImpl implements IConstructorGenerator {
      * @param sb update 2017年9月29日
      */
     public StringBuilder addConstructorParam2Constructor(int Modifiers, List MethodParam,
-            UtFileText cUtFileText) {
+            JpfUtInfo cJpfUtInfo) {
 
         StringBuilder sb = new StringBuilder();
         if (Modifiers == 2) {

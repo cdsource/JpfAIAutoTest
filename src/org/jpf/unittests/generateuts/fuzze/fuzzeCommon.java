@@ -20,7 +20,7 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.jpf.unittests.generateuts.ClassInfoConst;
 import org.jpf.unittests.generateuts.ParamInitBody;
-import org.jpf.unittests.ibatis2x.AppParam;
+import org.jpf.unittests.generateuts.utils.AppParam;
 
 import com.asiainfo.utils.ios.AiFileUtil;
 
