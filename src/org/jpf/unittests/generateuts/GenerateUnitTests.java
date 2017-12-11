@@ -26,6 +26,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.jpf.unittests.generateuts.utils.ClassInfoConst;
 
 import com.asiainfo.utils.AiDateTimeUtil;
 import com.asiainfo.utils.ios.AiFileUtil;
@@ -143,7 +144,7 @@ public class GenerateUnitTests {
         // TODO Auto-generated constructor stub
 
         try {
-            ConstructorGeneratorImpl cConstructorInfo = new ConstructorGeneratorImpl();
+            GeneratorConstructorImpl cConstructorInfo = new GeneratorConstructorImpl();
             String sourceString =AiFileUtil.getFileTxt(sourceFileName, "GBK");
             ASTParser astParser = ASTParser.newParser(AST.JLS8);
             astParser.setKind(ASTParser.K_COMPILATION_UNIT);
@@ -175,7 +176,7 @@ public class GenerateUnitTests {
             //addPackage
             cJpfUtInfo.setUtPackage("package "+cCompilationUnit.getPackage().getName().toString()+";\n");
             addImport(cCompilationUnit.imports(), cJpfUtInfo);
-            cJpfUtInfo.setUtFileDesc(addClassDesc(typeDec.getName().toString()));
+            cJpfUtInfo.setUtFileDesc(GenerateBaseMethods.addClassDesc(typeDec.getName().toString()));
             
             if (typeDec.isInterface()) {
                 GenerateMethodForDAOInterface cGenerateMethodForInterface=new GenerateMethodForDAOInterface();
@@ -221,7 +222,7 @@ public class GenerateUnitTests {
                         GenerateMethodForDAOInterface cGenerateMethodForInterface=new GenerateMethodForDAOInterface();
                         cGenerateMethodForInterface.doGenerateMethod(cMethodInfo, cJpfUtInfo);
                         //return false;
-                    }else if (0== method.getModifiers() || 1 == method.getModifiers() || 3 == method.getModifiers()) {
+                    }else if (0== method.getModifiers() || 1 == method.getModifiers() || 3 == method.getModifiers() ||4==method.getModifiers()) {
                         // public:1 protected:3
                         GenerateMethodPublic cGenerateMethodPublic = new GenerateMethodPublic();
                         cGenerateMethodPublic.doGenerateMethod(cMethodInfo, cJpfUtInfo);
@@ -275,29 +276,7 @@ public class GenerateUnitTests {
 
     }
 
-    /**
-     * 
-     * @category 增加类说明
-     * @author 吴平福
-     * @param strClass
-     * @param sb update 2017年9月29日
-     */
-    private String addClassDesc(String strClass) {
-        StringBuffer sb=new StringBuffer();
-        sb.append("/**").append("\n");
-        sb.append("* The class <code>").append(strClass)
-                .append("Test</code> contains tests for the class <code>{@link ").append(strClass).append("}</code>.")
-                .append("\n");
-        sb.append("* <p>").append("\n");
-        sb.append("* Copyright (c) 2017").append("\n");
-        sb.append("* ").append("\n");
-        sb.append("* @generatedBy wupf@asiainfo.com at ").append(AiDateTimeUtil.getCurrDateTime()).append("\n");
-        sb.append("* @author Administrator").append("\n");
-        sb.append("* @version $Revision: 1.0 $").append("\n");
-        sb.append("*/").append("\n");
-        sb.append("public class ").append(strClass).append("Test {\n");
-        return sb.toString();
-    }
+
 
 
 }

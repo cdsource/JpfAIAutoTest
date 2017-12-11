@@ -101,4 +101,28 @@ public class GenerateBaseMethods {
 
         return sb.toString();
     }
+    
+    /**
+     * 
+     * @category 增加类说明
+     * @author 吴平福
+     * @param strClass
+     * @param sb update 2017年9月29日
+     */
+    public static  String addClassDesc(String strClass) {
+        StringBuffer sb=new StringBuffer();
+        sb.append("/**").append("\n");
+        sb.append("* The class <code>").append(strClass)
+                .append("Test</code> contains tests for the class <code>{@link ").append(strClass).append("}</code>.")
+                .append("\n");
+        sb.append("* <p>").append("\n");
+        sb.append("* Copyright (c) 2017").append("\n");
+        sb.append("* ").append("\n");
+        sb.append("* @generatedBy wupf@asiainfo.com at ").append(AiDateTimeUtil.getCurrDateTime()).append("\n");
+        sb.append("* @author Administrator").append("\n");
+        sb.append("* @version $Revision: 1.0 $").append("\n");
+        sb.append("*/").append("\n");
+        sb.append("public class ").append(strClass).append("Test {\n");
+        return sb.toString();
+    }
 }

@@ -38,7 +38,7 @@ public class fuzzeString implements IFuzze{
         //mList.add("    int "+strParamName+" =  1;");
         if (cParamInitBody.isArray())
         {
-            mList.add("    String "+cParamInitBody.getParamVariable()+" =  String byte[10];");
+            mList.add("     "+cParamInitBody.getParamType()+" "+cParamInitBody.getParamVariable()+" = new String[2];");
         }else
         {
             mList.add("    String "+cParamInitBody.getParamVariable()+" =  \"abc123\";\n");

@@ -27,7 +27,7 @@ public class fuzzList  implements IFuzze{
         {
         }else
         {
-            mList.add("    "+cParamInitBody.getParamType()+" "+cParamInitBody.getParamVariable()+" =  new "+cParamInitBody.getParamType().replaceAll("List", "ArrayList")+";\n");
+            mList.add("    "+cParamInitBody.getParamType()+" "+cParamInitBody.getParamVariable()+" =  new "+cParamInitBody.getParamType().replaceAll("List", "ArrayList")+"();\n");
         }
         return mList;
     }

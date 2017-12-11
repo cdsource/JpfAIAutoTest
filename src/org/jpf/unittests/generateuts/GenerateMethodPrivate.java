@@ -7,8 +7,9 @@ package org.jpf.unittests.generateuts;
 
 
 import java.util.List;
-
-import org.jpf.unittests.generateuts.utils.GenerateUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jpf.unittests.generateuts.utils.GenerateUtil;
 
 
 
@@ -16,7 +17,7 @@ import org.jpf.unittests.generateuts.utils.GenerateUtils;
  * 
  */
 public class GenerateMethodPrivate extends GenerateMethod {
-
+    private static final Logger logger = LogManager.getLogger();
     /**
      * 
      */
@@ -41,7 +42,7 @@ public class GenerateMethodPrivate extends GenerateMethod {
                 strParamType = strParamType.substring(5, strParamType.length()).trim();
             }
 
-            strParamType = GenerateUtils.replaceAngleBrackets(strParamType);
+            strParamType = GenerateUtil.replaceAngleBrackets(strParamType);
 
             strParamType = strParamType.substring(0, strParamType.indexOf(" ")).trim();
 
@@ -57,7 +58,7 @@ public class GenerateMethodPrivate extends GenerateMethod {
             // System.out.println(MethodParam.get(i));
             String strParamType = MethodParam.get(i).toString().trim();
 
-            strParamType = GenerateUtils.RemoveFinal(strParamType);
+            strParamType = GenerateUtil.RemoveFinal(strParamType);
             String strParamName = strParamType.substring(strParamType.indexOf(" ")).trim();
             sbParamInstance.append(strParamName).append(",");
 
@@ -66,6 +67,8 @@ public class GenerateMethodPrivate extends GenerateMethod {
             sbParamInstance.deleteCharAt(sbParamInstance.length() - 1);
         }
         sb.append("    ").append("Object objParams[] = { ").append(sbParamInstance).append(" };\n");
+        
+        logger.debug(sb.toString());
         return sb.toString();
 
     }

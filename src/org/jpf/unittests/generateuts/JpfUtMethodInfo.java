@@ -42,13 +42,13 @@ public class JpfUtMethodInfo {
         {
             sBuffer.append(methodTry).append("\n");
         }
-        if (classConstructor!=null && classConstructor.length()>0)
-        {
-            sBuffer.append(classConstructor).append("\n");
-        }
         if (methodParam!=null && methodParam.length()>0)
         {
             sBuffer.append(methodParam).append("\n");
+        }
+        if (classConstructor!=null && classConstructor.length()>0)
+        {
+            sBuffer.append(classConstructor).append("\n");
         }
         if (methodCaller!=null && methodCaller.length()>0)
         {

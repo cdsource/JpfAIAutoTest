@@ -10,11 +10,12 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.eclipse.jdt.internal.compiler.codegen.CachedIndexEntry;
 import org.jpf.unittests.generateuts.fuzze.fuzzBoolean;
+import org.jpf.unittests.generateuts.fuzze.fuzzHttpServletRequest;
 import org.jpf.unittests.generateuts.fuzze.fuzzList;
 import org.jpf.unittests.generateuts.fuzze.fuzzLong;
 import org.jpf.unittests.generateuts.fuzze.fuzzMap;
+import org.jpf.unittests.generateuts.fuzze.fuzzSet;
 import org.jpf.unittests.generateuts.fuzze.fuzzeCommon;
 import org.jpf.unittests.generateuts.fuzze.fuzzeConnection;
 import org.jpf.unittests.generateuts.fuzze.fuzzeInt;
@@ -26,7 +27,8 @@ import org.jpf.unittests.generateuts.fuzze.fuzzefloat;
 import org.jpf.unittests.generateuts.fuzze.fuzzelong;
 import org.jpf.unittests.generateuts.fuzze.fuzzeshort;
 import org.jpf.unittests.generateuts.utils.Descartes;
-import org.jpf.unittests.generateuts.utils.GenerateUtils;
+import org.jpf.unittests.generateuts.utils.FormatUtil;
+import org.jpf.unittests.generateuts.utils.GenerateUtil;
 
 
 
@@ -90,7 +92,9 @@ public abstract class GenerateMethod {
      */
     public String addCatch(String strClassName) {
         StringBuffer sb = new StringBuffer();
-        sb.append("    }catch(Exception ex){\n").append("        ex.printStackTrace();\n").append("      }\n");
+        sb.append("    }catch(Exception ex){\n")
+        //.append("        ex.printStackTrace();\n")
+        .append("      }\n");
         return sb.toString();
     }
 
@@ -107,7 +111,7 @@ public abstract class GenerateMethod {
         StringBuffer sb = new StringBuffer();
         // 注释
         StringBuffer sbJavaDoc = new StringBuffer();
-        sbJavaDoc.append(GenerateUtils.addMethodJavaDoc(cMethodInfo, cJpfUtInfo));
+        sbJavaDoc.append(GenerateUtil.addMethodJavaDoc(cMethodInfo, cJpfUtInfo));
         // 方法声明
         // StringBuffer sbMethodName = new StringBuffer();
         // sbMethodName.append(addMethodDeclare(cMethodInfo.getMethodName(), cUtFileText));
@@ -125,7 +129,7 @@ public abstract class GenerateMethod {
         StringBuffer sbCallMethod = new StringBuffer();
         sbCallMethod.append(addMethodCaller(cMethodInfo.getClassName(), cMethodInfo.getMethodName(),
                 cMethodInfo.getMethodParam(), cJpfUtInfo));
-        sbCallMethod.append(GenerateUtils.addMethodParam2Method(cMethodInfo.getModifiers(),
+        sbCallMethod.append(GenerateUtil.addMethodParam2Method(cMethodInfo.getModifiers(),
                 cMethodInfo.getMethodParam(), cJpfUtInfo));
 
         // 判断
@@ -143,7 +147,7 @@ public abstract class GenerateMethod {
             cJpfUtMethodInfo.setMethodJavaDoc(sbJavaDoc.toString());
             cJpfUtMethodInfo.setMethodDeclare(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo));
             cJpfUtMethodInfo.setMethodTry(addTry());
-
+            cJpfUtMethodInfo.setClassConstructor(sbClassName.toString());
             cJpfUtMethodInfo.setMethodCaller(sbReturnName.toString() + sbCallMethod.toString());
             cJpfUtMethodInfo.setMethodAssert(sbAssert.toString());
             cJpfUtMethodInfo.setMethodCatch(addCatch(cMethodInfo.getClassName()));
@@ -162,6 +166,7 @@ public abstract class GenerateMethod {
                 cJpfUtMethodInfo.setMethodJavaDoc(sbJavaDoc.toString());
                 cJpfUtMethodInfo.setMethodDeclare(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo));
                 cJpfUtMethodInfo.setMethodTry(addTry());
+                cJpfUtMethodInfo.setClassConstructor(sbClassName.toString());
                 cJpfUtMethodInfo.setMethodParam(cParamInitBody.get(i));
                 cJpfUtMethodInfo.setMethodCaller(sbReturnName.toString() + sbCallMethod.toString());
                 cJpfUtMethodInfo.setMethodAssert(sbAssert.toString());
@@ -259,7 +264,7 @@ public abstract class GenerateMethod {
         for (int i = 0; i < MethodParam.size(); i++) {
             // System.out.println(MethodParam.get(i));
             ParamInitBody cParamInitBody = new ParamInitBody();
-            GenerateUtils.formatToParamBody(cParamInitBody, MethodParam.get(i).toString());
+            FormatUtil.formatToParamBody(cParamInitBody, MethodParam.get(i).toString());
 
             switch (cParamInitBody.getParamType()) {
 
@@ -296,8 +301,8 @@ public abstract class GenerateMethod {
                 case "int":
                 case "final int":
                 case "int[]":
-                case "Interger":
-                case "Interger[]":
+                case "Integer": 
+                case "Integer[]":
                     listAll.add(new fuzzeInt().getFuzzeForNull(cParamInitBody));
                     break;
 
@@ -332,7 +337,19 @@ public abstract class GenerateMethod {
                     cJpfUtInfo.addImport("import java.util.HashMap;");
                     cJpfUtInfo.addImport("import java.util.Map;");
                     break;
-
+                    
+                case "Set":
+                    listAll.add(new fuzzSet().getFuzzeForNull(cParamInitBody));
+                    cJpfUtInfo.addImport("import java.util.HashSet;");
+                    cJpfUtInfo.addImport("import java.util.Set;");
+                    break;
+                    
+                case "HttpServletRequest":
+                case "HttpServletResponse":
+                    cJpfUtInfo.addImport("import org.easymock.EasyMock;");
+                    listAll.add(new fuzzHttpServletRequest().getFuzzeForNull(cParamInitBody));
+                    break;
+                    
                 default:
                     if (cParamInitBody.getParamType().startsWith("Map")
                             || cParamInitBody.getParamType().startsWith("Map")) {
@@ -343,7 +360,10 @@ public abstract class GenerateMethod {
                         listAll.add(new fuzzList().getFuzzeForNull(cParamInitBody));
                         cJpfUtInfo.addImport("import java.util.List;");
                         cJpfUtInfo.addImport("import java.util.ArrayList;");
-
+                    } else if (cParamInitBody.getParamType().startsWith("Set")) {
+                        listAll.add(new fuzzSet().getFuzzeForNull(cParamInitBody));
+                        cJpfUtInfo.addImport("import java.util.Set;");
+                        cJpfUtInfo.addImport("import java.util.HashSet;");
                     } else {
                         listAll.add(new fuzzeCommon().getFuzzeForNew(cParamInitBody));
                     }

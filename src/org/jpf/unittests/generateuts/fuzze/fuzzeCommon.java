@@ -18,10 +18,8 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.jpf.unittests.generateuts.ClassInfoConst;
 import org.jpf.unittests.generateuts.ParamInitBody;
 import org.jpf.unittests.generateuts.utils.AppParam;
-
 import com.asiainfo.utils.ios.AiFileUtil;
 
 /**
@@ -68,7 +66,7 @@ public class fuzzeCommon implements IFuzze {
             
         }else
         {
-            mList.add("    "+cParamInitBody.getParamType()+" "+cParamInitBody.getParamVariable()+" =  new "+cParamInitBody.getParamType()+"() ;\n");
+            mList.add("    "+cParamInitBody.getParamType()+" "+cParamInitBody.getParamVariable()+" =  new "+cParamInitBody.getParamType()+"() ;\n"+getClassSetMethodInit(cParamInitBody));
             
         }
         return mList;
@@ -83,19 +81,22 @@ public class fuzzeCommon implements IFuzze {
      * @return
      * update 2017年12月8日
      */
-    public StringBuffer getClassSetMethodInit(AppParam cAppParam, ParamInitBody cParamInitBody) {
+    public StringBuffer getClassSetMethodInit( ParamInitBody cParamInitBody) {
         StringBuffer sb = new StringBuffer();
 
         String strJavaFileName = "";
-        for (int i = 0; i < cAppParam.vFilesAll.size(); i++) {
-            if (cAppParam.vFilesAll.get(i).endsWith(cParamInitBody.getParamType() + ".java")) {
-                strJavaFileName = cAppParam.vFilesAll.get(i);
+        for (int i = 0; i < AppParam.vFilesAll.size(); i++) {
+            if (AppParam.vFilesAll.get(i).endsWith(cParamInitBody.getParamType() + ".java")) {
+                strJavaFileName = AppParam.vFilesAll.get(i);
                 break;
             }
         }
 
         logger.info(strJavaFileName);
-
+        if (strJavaFileName=="")
+        {
+            return sb;
+        }
         try {
             String sourceString = AiFileUtil.getFileTxt(strJavaFileName, "GBK");
             logger.trace(sourceString);
@@ -115,15 +116,6 @@ public class fuzzeCommon implements IFuzze {
             TypeDeclaration typeDec = (TypeDeclaration) types.get(0);
             logger.info("classname=" + typeDec.getName());
             logger.debug("typeDec.getModifiers()=" + typeDec.getModifiers());
-            if (typeDec.getModifiers() == ClassInfoConst.CLASS_TYPE_ABSTRACT) {
-                // abstract class
-                logger.info("抽象类不能生产单元测试：" + strJavaFileName);
-                return sb;
-            }
-            if (typeDec.isInterface()) {
-                logger.info("不处理非接口类单元测试：" + strJavaFileName);
-                return sb;
-            }
 
             // show methods
             MethodDeclaration methodDec[] = typeDec.getMethods();
