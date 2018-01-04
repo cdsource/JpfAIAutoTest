@@ -100,9 +100,48 @@ public abstract class GenerateMethod {
     public String addCatch(String strClassName) {
         StringBuffer sb = new StringBuffer();
         sb.append("    }catch(Exception ex){\n")
-        //.append("        ex.printStackTrace();\n")
-        .append("      }\n");
+                // .append(" ex.printStackTrace();\n")
+                .append("      }\n");
         return sb.toString();
+    }
+
+    /**
+     * 
+     * @category 根据声明产生初始化值
+     * @author 吴平福
+     * @param cMethodInfo
+     * @param cJpfUtInfo
+     * @return update 2018年1月23日
+     */
+    private void initParamByJavaDoc(JpfMethodInfo cMethodInfo, JpfUtMethodInfo cJpfUtMethodInfo) {
+        StringBuffer sb = new StringBuffer();
+        String[] strJavaDocs = cMethodInfo.getStrJavaDoc().split("\n");
+        int iFindCount = 0;
+
+        for (int i = 0; i < cMethodInfo.getMethodParam().size(); i++) {
+            for (int j = 0; j < strJavaDocs.length; j++) {
+
+                ParamInitBody cParamInitBody = new ParamInitBody();
+                FormatUtil.formatToParamBody(cParamInitBody, cMethodInfo.getMethodParam().get(i).toString());
+
+                if (strJavaDocs[j].trim().startsWith("@ " + cParamInitBody.getParamVariable())) {
+                    sb.append("    " + cParamInitBody.getParamType() + " " + cParamInitBody.getParamVariable()
+                            + " =  new boolean[]{true,true};\n");
+                    iFindCount++;
+                }
+            }
+        }
+        logger.debug(sb);
+        if (iFindCount == cMethodInfo.getMethodParam().size()) {
+            cJpfUtMethodInfo.setMethodParam(sb.toString());
+        }
+
+        for (int j = 0; j < strJavaDocs.length; j++) {
+
+            if (strJavaDocs[j].trim().startsWith("@ return")) {
+                cJpfUtMethodInfo.setMethodAssert("    assert()");
+            }
+        }
     }
 
     /**
@@ -117,8 +156,8 @@ public abstract class GenerateMethod {
 
         StringBuffer sb = new StringBuffer();
         // 注释
-        StringBuffer sbJavaDoc = new StringBuffer();
-        sbJavaDoc.append(GenerateUtil.addMethodJavaDoc(cMethodInfo, cJpfUtInfo));
+        StringBuffer sbJavaUtDoc = new StringBuffer();
+        sbJavaUtDoc.append(GenerateUtil.addMethodJavaDoc(cMethodInfo, cJpfUtInfo));
         // 方法声明
         // StringBuffer sbMethodName = new StringBuffer();
         // sbMethodName.append(addMethodDeclare(cMethodInfo.getMethodName(), cUtFileText));
@@ -136,8 +175,8 @@ public abstract class GenerateMethod {
         StringBuffer sbCallMethod = new StringBuffer();
         sbCallMethod.append(addMethodCaller(cMethodInfo.getClassName(), cMethodInfo.getMethodName(),
                 cMethodInfo.getMethodParam(), cJpfUtInfo));
-        sbCallMethod.append(GenerateUtil.addMethodParam2Method(cMethodInfo.getModifiers(),
-                cMethodInfo.getMethodParam(), cJpfUtInfo));
+        sbCallMethod.append(GenerateUtil.addMethodParam2Method(cMethodInfo.getModifiers(), cMethodInfo.getMethodParam(),
+                cJpfUtInfo));
 
         // 判断
         StringBuffer sbAssert = new StringBuffer();
@@ -146,12 +185,12 @@ public abstract class GenerateMethod {
         // 方法参数初始化
         if (cMethodInfo.getMethodParam().size() == 0) {
             // 方法无参数
-            sb.append(sbJavaDoc).append(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo)).append(addTry())
+            sb.append(sbJavaUtDoc).append(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo)).append(addTry())
                     .append(sbClassName).append(sbReturnName).append(sbCallMethod).append(sbAssert)
                     .append(addCatch(cMethodInfo.getClassName()));
             logger.trace(sb);
             JpfUtMethodInfo cJpfUtMethodInfo = new JpfUtMethodInfo();
-            cJpfUtMethodInfo.setMethodJavaDoc(sbJavaDoc.toString());
+            cJpfUtMethodInfo.setMethodJavaDoc(sbJavaUtDoc.toString());
             cJpfUtMethodInfo.setMethodDeclare(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo));
             cJpfUtMethodInfo.setMethodTry(addTry());
             cJpfUtMethodInfo.setClassConstructor(sbClassName.toString());
@@ -161,16 +200,38 @@ public abstract class GenerateMethod {
             logger.trace(cJpfUtMethodInfo.toString());
             cJpfUtInfo.getListUtMethodInfos().add(cJpfUtMethodInfo);
         } else {
+
             // 方法有参数
-            ArrayList<String> cParamInitBody = GenerateUtil.addMethodParamInit2(cMethodInfo.getMethodParam(), cJpfUtInfo,GenerateConst.Max_CaseCount_PerMethod);
+            // 根据JAVADOC产生
+            if (cMethodInfo.getStrJavaDoc() != null && cMethodInfo.getStrJavaDoc().trim().length() > 0) {
+                logger.debug("init param by javadoc");
+                logger.debug(cMethodInfo.getStrJavaDoc());
+                JpfUtMethodInfo cJpfUtMethodInfo = new JpfUtMethodInfo();
+                initParamByJavaDoc(cMethodInfo, cJpfUtMethodInfo);
+                if (cJpfUtMethodInfo.getMethodParam() != null && null != cJpfUtMethodInfo.getMethodAssert()) {
+
+                    cJpfUtMethodInfo.setMethodJavaDoc(sbJavaUtDoc.toString());
+                    cJpfUtMethodInfo.setMethodDeclare(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo));
+                    cJpfUtMethodInfo.setMethodTry(addTry());
+                    cJpfUtMethodInfo.setClassConstructor(sbClassName.toString());
+                    cJpfUtMethodInfo.setMethodCaller(sbReturnName.toString() + sbCallMethod.toString());
+                    cJpfUtMethodInfo.setMethodCatch(addCatch(cMethodInfo.getClassName()));
+                    logger.trace(cJpfUtMethodInfo.toString());
+                    cJpfUtInfo.getListUtMethodInfos().add(cJpfUtMethodInfo);
+                }
+            }
+            // 随机产生
+            ArrayList<String> cParamInitBody = GenerateUtil.addMethodParamInit2(cMethodInfo.getMethodParam(),
+                    cJpfUtInfo, GenerateConst.Max_CaseCount_PerMethod);
             logger.debug("cParamInitBody.size()=" + cParamInitBody.size());
+
             for (int i = 0; i < cParamInitBody.size(); i++) {
-                sb.append(sbJavaDoc).append(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo)).append(addTry())
-                        .append(cParamInitBody.get(i)).append(sbClassName).append(sbReturnName).append(sbCallMethod)
-                        .append(sbAssert).append(addCatch(cMethodInfo.getClassName()));
+                sb.append(sbJavaUtDoc).append(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo))
+                        .append(addTry()).append(cParamInitBody.get(i)).append(sbClassName).append(sbReturnName)
+                        .append(sbCallMethod).append(sbAssert).append(addCatch(cMethodInfo.getClassName()));
                 logger.trace(sb);
                 JpfUtMethodInfo cJpfUtMethodInfo = new JpfUtMethodInfo();
-                cJpfUtMethodInfo.setMethodJavaDoc(sbJavaDoc.toString());
+                cJpfUtMethodInfo.setMethodJavaDoc(sbJavaUtDoc.toString());
                 cJpfUtMethodInfo.setMethodDeclare(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo));
                 cJpfUtMethodInfo.setMethodTry(addTry());
                 cJpfUtMethodInfo.setClassConstructor(sbClassName.toString());
@@ -221,11 +282,11 @@ public abstract class GenerateMethod {
         } else {
             sb.append("    assertNotNull(result);").append("\n");
         }
-        //联通POC临时
+        // 联通POC临时
         sb.setLength(0);
 
-            sb.append("   //请在这里增加检查点:比如 assertEquals(true, result);").append("\n")
-            .append("    assertTrue(true);").append("\n");
+        sb.append("   //请在这里增加检查点:比如 assertEquals(true, result);").append("\n").append("    assertTrue(true);")
+                .append("\n");
 
         return sb.toString();
     }

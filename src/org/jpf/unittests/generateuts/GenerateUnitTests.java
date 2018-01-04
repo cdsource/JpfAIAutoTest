@@ -212,6 +212,7 @@ public class GenerateUnitTests {
                 cMethodInfo.setMethodParam(param);
                 if (method.getJavadoc() != null) {
                     cMethodInfo.setStrJavaDoc(method.getJavadoc().toString());
+                    
                 }
                 if (returnType != null) {
                     // addMethodDesc(typeDec.getName().toString(), methodName.toString(), param,

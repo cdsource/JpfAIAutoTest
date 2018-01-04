@@ -35,6 +35,7 @@ public class JpfUtInfo {
     private JpfUtMethodInfo MethodTearDownAfterClass=new JpfUtMethodInfo();
     private JpfUtMethodInfo MethodUtMain=new JpfUtMethodInfo();
     
+
     /**
      * 
      */

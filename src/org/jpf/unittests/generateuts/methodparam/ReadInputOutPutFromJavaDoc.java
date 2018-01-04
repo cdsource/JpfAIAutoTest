@@ -20,12 +20,13 @@ public class ReadInputOutPutFromJavaDoc {
      * 
      */
     public ReadInputOutPutFromJavaDoc() {
-        // TODO Auto-generated constructor stub
+        
     }
 
     public static void ReadParamValueFromJavaDoc(MethodDeclaration method) {
         if (method.getJavadoc() != null) {
             logger.info( method.getJavadoc().toString());
         }
+        
     }
 }
