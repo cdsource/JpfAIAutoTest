@@ -5,6 +5,7 @@
 
 package org.jpf.unittests.generateuts;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -94,16 +95,12 @@ public class GeneratorConstructorImpl implements IConstructorGenerator {
         // PUBLIC返回本身类函数
         StringBuffer sbPrivateConstructor = new StringBuffer();
         List param = method.parameters();
-        ParamInitBody[] cParamInitBody = GenerateUtil.addMethodParamInit(param, cJpfUtInfo);
-        if (cParamInitBody.length>0) {
-            for (int i = 0; i < cParamInitBody.length; i++) {
+        ArrayList<String> cParamInitBody  = GenerateUtil.addMethodParamInit2(param, cJpfUtInfo,1);
 
-                sbPrivateConstructor.append("    ").append(cParamInitBody[i].getParamType()).append(" ")
-                        .append(cParamInitBody[i].getParamVariable()).append(" = ")
-                        .append(cParamInitBody[i].getParamValue()).append(";\n");
+            for (int i = 0; i < cParamInitBody.size(); i++) {
+                sbPrivateConstructor.append("    ").append( cParamInitBody.get(i) ).append("\n");
             }
 
-        }
         //logger.info(sbPrivateConstructor.toString());
         sbPrivateConstructor.append("    ").append(strClass).append(" fixture=").append(strClass).append(".")
                 .append(method.getName().toString());
@@ -174,12 +171,12 @@ public class GeneratorConstructorImpl implements IConstructorGenerator {
      * @return update 2017年11月13日
      */
     public StringBuffer addConstructorParamInit(List MethodParam, JpfUtInfo cJpfUtInfo) {
-        ParamInitBody[] cParamInitBodys = GenerateUtil.addMethodParamInit(MethodParam, cJpfUtInfo);
+
         StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < cParamInitBodys.length; i++) {
-            sb.append(cParamInitBodys[i].getParamType()).append(" c")
-                    .append(cParamInitBodys[i].getParamVariable().trim()).append(" = ")
-                    .append(cParamInitBodys[i].getParamValue()).append(";\n");
+        ArrayList<String> cParamInitBody  = GenerateUtil.addMethodParamInit2(MethodParam, cJpfUtInfo,1);
+
+        for (int i = 0; i < cParamInitBody.size(); i++) {
+            sb.append("    ").append( cParamInitBody.get(i) ).append("\n");
         }
         logger.debug(sb);
         return sb;

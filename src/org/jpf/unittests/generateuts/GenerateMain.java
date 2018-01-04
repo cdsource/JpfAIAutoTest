@@ -19,7 +19,7 @@ import com.asiainfo.utils.ios.AiFileUtil;
 public class GenerateMain {
     private static final Logger logger = LogManager.getLogger();
 
-    private String strFileNameFilter = "";
+    private String strFileNameFilter = "DAO";
 
     /**
      * 
@@ -39,18 +39,18 @@ public class GenerateMain {
 
                 Vector<String> vFiles = new Vector<String>();
                 AiFileUtil.getFiles(strInputFile, vFiles, ".java");
-                AppParam.vFilesAll  = (Vector<String>) vFiles.clone();
+                AppParam.vFilesAll = (Vector<String>) vFiles.clone();
                 GenerateConst.iTotalFileCount = vFiles.size();
-                
-                
+
+
                 while (vFiles.size() > 0) {
-                    if ( strFileNameFilter.length() > 0
-                            && vFiles.get(vFiles.size() - 1).endsWith(strFileNameFilter + ".java")) {
-                        if (cGenerateUnitTests.doGenerateFile(vFiles.get(vFiles.size() - 1))) {
-                            GenerateConst.iGenFileCount++;
+                    if (strFileNameFilter.length() > 0) {
+                        if (vFiles.get(vFiles.size() - 1).endsWith(strFileNameFilter + ".java")) {
+                            if (cGenerateUnitTests.doGenerateFile(vFiles.get(vFiles.size() - 1))) {
+                                GenerateConst.iGenFileCount++;
+                            }
                         }
-                    }else
-                    {
+                    } else {
                         if (cGenerateUnitTests.doGenerateFile(vFiles.get(vFiles.size() - 1))) {
                             GenerateConst.iGenFileCount++;
                         }
@@ -108,8 +108,9 @@ public class GenerateMain {
         // strFileName=
         // "D:\\svn\\ecommerce-branch-20170912\\app-util\\src\\main\\java\\com\\asiainfo\\ebiz\\util\\ControlServiceInterceptorTest.java";
         // strFileName="d:\\svn\\ecommerce-branch-20170912\\app-util\\src\\main\\java\\com\\asiainfo\\ebiz\\yyzf\\HiIposmResponse.java";
-        //strFileName = "D:\\svn\\ecommerce-branch-20170912\\app-dao\\src\\main\\java\\com\\asiainfo\\ebiz";
-        strFileName = "F:\\svn\\svn10.1.248.101\\templateService\\src\\main\\java\\com\\asiainfo";
+        strFileName = "D:\\svn\\ecommerce-branch-20170912\\app-dao\\src\\main\\java\\com\\asiainfo\\ebiz";
+        // strFileName =
+        // "F:\\svn\\svn10.1.195.110\\trunk\\code-res\\templateInteApi\\templateCommon\\src\\main\\java\\com";
         new GenerateMain(strFileName);
     }
 

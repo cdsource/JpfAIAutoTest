@@ -7,15 +7,13 @@
 
 package org.jpf.unittests.generateuts.utils;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.ibatis.annotations.Param;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jpf.unittests.generateuts.ParamInitBody;
-
-import com.asiainfo.template.pojo.ActivityPo;
 
 /**
  * 
@@ -63,8 +61,14 @@ public class FormatUtil {
         cParamInitBody.setParamType(strParamName.substring(0, iPos));
         cParamInitBody.setParamVariable(strParamName.substring(iPos, strParamName.length()));
         cParamInitBody.setArray(isParamArray(strParamName));
+        
     }
     
+    public static String getParamVar(List MethodParam) {
+        ParamInitBody cParamInitBody = new ParamInitBody();
+        FormatUtil.formatToParamBody(cParamInitBody, MethodParam.get(0).toString());
+        return cParamInitBody.getParamVariable();
+    }
     /**
      * 
      * @category 判断是否有数组
@@ -104,5 +108,8 @@ public class FormatUtil {
         //strParamType.replaceAll("/\\*(.*?)\\*/", "");
         strParamType = strParamType.replaceAll("@Param(.*?) ", " ");
         System.out.println(strParamType);
+        
+        strParamType="Object array[]";
+        System.out.println(isParamArray(strParamType));
     }
 }

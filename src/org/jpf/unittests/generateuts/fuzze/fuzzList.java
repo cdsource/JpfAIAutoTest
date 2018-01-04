@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.appender.rolling.SizeBasedTriggeringPolicy;
 import org.jpf.unittests.generateuts.ParamInitBody;
 
 /**
@@ -27,9 +28,15 @@ public class fuzzList  implements IFuzze{
         {
         }else
         {
-            mList.add("    "+cParamInitBody.getParamType()+" "+cParamInitBody.getParamVariable()+" =  new "+cParamInitBody.getParamType().replaceAll("List", "ArrayList")+"();\n");
+            String strNewType=cParamInitBody.getParamType().replaceAll("List", "ArrayList").replaceAll("\\?", "");
+            mList.add("    "+cParamInitBody.getParamType()+" "+cParamInitBody.getParamVariable()+" =  new "+strNewType+"();\n");
         }
         return mList;
     }
-
+    public static void main(String[] args)
+    {
+        String strNewType="List<?> a";
+         strNewType=strNewType.replaceAll("List", "ArrayList").replaceAll("\\?", "");
+         System.out.println(strNewType);
+    }
 }

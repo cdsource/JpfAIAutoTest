@@ -45,7 +45,8 @@ public class GenerateMethodForDAOInterface  extends GenerateMethod{
     @Override
     public String addCatch(String strClassName) {
         StringBuffer sb = new StringBuffer();
-        sb.append("    }catch(DataAccessException ex){\n").append("        ex.printStackTrace();\n")
+        sb.append("    }catch(DataAccessException ex){\n")
+        .append("        ex.printStackTrace();\n")     
         .append("        fail(\"").append(strClassName).append(" error! ").append("\");\n")
         .append("      }\n");
         return sb.toString();

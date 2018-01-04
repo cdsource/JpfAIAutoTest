@@ -11,19 +11,26 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jpf.unittests.generateuts.fuzze.fuzzBoolean;
+import org.jpf.unittests.generateuts.fuzze.fuzzCalendar;
+import org.jpf.unittests.generateuts.fuzze.fuzzClass;
+import org.jpf.unittests.generateuts.fuzze.fuzzCollection;
+import org.jpf.unittests.generateuts.fuzze.fuzzFile;
 import org.jpf.unittests.generateuts.fuzze.fuzzHttpServletRequest;
+import org.jpf.unittests.generateuts.fuzze.fuzzInteger;
+import org.jpf.unittests.generateuts.fuzze.fuzzIterator;
 import org.jpf.unittests.generateuts.fuzze.fuzzList;
 import org.jpf.unittests.generateuts.fuzze.fuzzLong;
 import org.jpf.unittests.generateuts.fuzze.fuzzMap;
 import org.jpf.unittests.generateuts.fuzze.fuzzSet;
-import org.jpf.unittests.generateuts.fuzze.fuzzeCommon;
-import org.jpf.unittests.generateuts.fuzze.fuzzeConnection;
+import org.jpf.unittests.generateuts.fuzze.fuzzTimestamp;
+import org.jpf.unittests.generateuts.fuzze.fuzzCommon;
+import org.jpf.unittests.generateuts.fuzze.fuzzConnection;
 import org.jpf.unittests.generateuts.fuzze.fuzzeInt;
 import org.jpf.unittests.generateuts.fuzze.fuzzeString;
-import org.jpf.unittests.generateuts.fuzze.fuzzebyte;
-import org.jpf.unittests.generateuts.fuzze.fuzzechar;
-import org.jpf.unittests.generateuts.fuzze.fuzzedouble;
-import org.jpf.unittests.generateuts.fuzze.fuzzefloat;
+import org.jpf.unittests.generateuts.fuzze.fuzzbyte;
+import org.jpf.unittests.generateuts.fuzze.fuzzchar;
+import org.jpf.unittests.generateuts.fuzze.fuzzdouble;
+import org.jpf.unittests.generateuts.fuzze.fuzzfloat;
 import org.jpf.unittests.generateuts.fuzze.fuzzelong;
 import org.jpf.unittests.generateuts.fuzze.fuzzeshort;
 import org.jpf.unittests.generateuts.utils.Descartes;
@@ -155,7 +162,7 @@ public abstract class GenerateMethod {
             cJpfUtInfo.getListUtMethodInfos().add(cJpfUtMethodInfo);
         } else {
             // 方法有参数
-            ArrayList<String> cParamInitBody = addMethodParamInit2(cMethodInfo.getMethodParam(), cJpfUtInfo);
+            ArrayList<String> cParamInitBody = GenerateUtil.addMethodParamInit2(cMethodInfo.getMethodParam(), cJpfUtInfo,GenerateConst.Max_CaseCount_PerMethod);
             logger.debug("cParamInitBody.size()=" + cParamInitBody.size());
             for (int i = 0; i < cParamInitBody.size(); i++) {
                 sb.append(sbJavaDoc).append(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo)).append(addTry())
@@ -212,8 +219,13 @@ public abstract class GenerateMethod {
             sb.append("    Character ch = 'a';\n");
             sb.append("    assertEquals(ch, result);").append("\n");
         } else {
-            sb.append("    assertEquals(1, result);").append("\n");
+            sb.append("    assertNotNull(result);").append("\n");
         }
+        //联通POC临时
+        sb.setLength(0);
+
+            sb.append("   //请在这里增加检查点:比如 assertEquals(true, result);").append("\n")
+            .append("    assertTrue(true);").append("\n");
 
         return sb.toString();
     }
@@ -249,149 +261,6 @@ public abstract class GenerateMethod {
         sb.append("  public void test").append(strMethodName).append("_").append(GenerateConst.iMethodCount++)
                 .append("() throws Exception\n").append("  {").append("\n");
         return sb.toString();
-    }
-
-    /**
-     * 
-     * @category 增加方法的参数的初始化
-     * @author 吴平福
-     * @param MethodParam
-     * @param sb update 2017年9月29日
-     */
-    public ArrayList<String> addMethodParamInit2(List MethodParam, JpfUtInfo cJpfUtInfo) {
-
-        ArrayList<ArrayList<String>> listAll = new ArrayList<ArrayList<String>>();
-        for (int i = 0; i < MethodParam.size(); i++) {
-            // System.out.println(MethodParam.get(i));
-            ParamInitBody cParamInitBody = new ParamInitBody();
-            FormatUtil.formatToParamBody(cParamInitBody, MethodParam.get(i).toString());
-
-            switch (cParamInitBody.getParamType()) {
-
-                case "boolean":
-                case "final boolean":
-                case "boolean[]":
-                    listAll.add(new fuzzBoolean().getFuzzeForNull(cParamInitBody));
-                    break;
-
-                case "byte":
-                case "final byte":
-                case "byte[]":
-                    listAll.add(new fuzzebyte().getFuzzeForNull(cParamInitBody));
-                    break;
-
-                case "char":
-                case "final char":
-                case "char[]":
-                    listAll.add(new fuzzechar().getFuzzeForNull(cParamInitBody));
-                    break;
-
-                case "double":
-                case "final double":
-                case "double[]":
-                    listAll.add(new fuzzedouble().getFuzzeForNull(cParamInitBody));
-                    break;
-
-                case "float":
-                case "final float":
-                case "float[]":
-                    listAll.add(new fuzzefloat().getFuzzeForNull(cParamInitBody));
-                    break;
-
-                case "int":
-                case "final int":
-                case "int[]":
-                case "Integer": 
-                case "Integer[]":
-                    listAll.add(new fuzzeInt().getFuzzeForNull(cParamInitBody));
-                    break;
-
-                case "long":
-                case "final long":
-                case "long[]":
-                    listAll.add(new fuzzelong().getFuzzeForNull(cParamInitBody));
-                    break;
-
-                case "Long":
-                    listAll.add(new fuzzLong().getFuzzeForNull(cParamInitBody));
-                    break;
-
-                case "short":
-                case "final short":
-                case "short[]":
-                    listAll.add(new fuzzeshort().getFuzzeForNull(cParamInitBody));
-                    break;
-
-                case "String":
-                case "final String":
-                case "String[]":
-                    listAll.add(new fuzzeString().getFuzzeForNull(cParamInitBody));
-                    break;
-
-                case "Connection":
-                    listAll.add(new fuzzeConnection().getFuzzeForNull(cParamInitBody));
-                    break;
-
-                case "Map":
-                    listAll.add(new fuzzMap().getFuzzeForNull(cParamInitBody));
-                    cJpfUtInfo.addImport("import java.util.HashMap;");
-                    cJpfUtInfo.addImport("import java.util.Map;");
-                    break;
-                    
-                case "Set":
-                    listAll.add(new fuzzSet().getFuzzeForNull(cParamInitBody));
-                    cJpfUtInfo.addImport("import java.util.HashSet;");
-                    cJpfUtInfo.addImport("import java.util.Set;");
-                    break;
-                    
-                case "HttpServletRequest":
-                case "HttpServletResponse":
-                    cJpfUtInfo.addImport("import org.easymock.EasyMock;");
-                    listAll.add(new fuzzHttpServletRequest().getFuzzeForNull(cParamInitBody));
-                    break;
-                    
-                default:
-                    if (cParamInitBody.getParamType().startsWith("Map")
-                            || cParamInitBody.getParamType().startsWith("Map")) {
-                        listAll.add(new fuzzMap().getFuzzeForNull(cParamInitBody));
-                        cJpfUtInfo.addImport("import java.util.HashMap;");
-                        cJpfUtInfo.addImport("import java.util.Map;");
-                    } else if (cParamInitBody.getParamType().startsWith("List")) {
-                        listAll.add(new fuzzList().getFuzzeForNull(cParamInitBody));
-                        cJpfUtInfo.addImport("import java.util.List;");
-                        cJpfUtInfo.addImport("import java.util.ArrayList;");
-                    } else if (cParamInitBody.getParamType().startsWith("Set")) {
-                        listAll.add(new fuzzSet().getFuzzeForNull(cParamInitBody));
-                        cJpfUtInfo.addImport("import java.util.Set;");
-                        cJpfUtInfo.addImport("import java.util.HashSet;");
-                    } else {
-                        listAll.add(new fuzzeCommon().getFuzzeForNew(cParamInitBody));
-                    }
-
-                    break;
-            }
-        }
-
-        logger.debug("listAll.size()=" + listAll.size());
-        ArrayList<String> listParamInitBody = new ArrayList<String>();
-
-        new Descartes().run(listAll, listParamInitBody, 0, "");
-
-        for (int j = 0; j < listAll.size(); j++) {
-            listAll.get(j).clear();
-        }
-        int i = 1;
-        for (String s : listParamInitBody) {
-            logger.trace(i++ + ":" + s);
-        }
-
-        logger.debug("listParamInitBody.size()=" + listParamInitBody.size());
-
-        while (listParamInitBody.size() > GenerateConst.Max_CaseCount_PerMethod) {
-            listParamInitBody.remove(listParamInitBody.size() - 1);
-        }
-        logger.debug("after delete: listParamInitBody.size()=" + listParamInitBody.size());
-        return listParamInitBody;
     }
 
 
