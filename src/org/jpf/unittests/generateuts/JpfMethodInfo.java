@@ -23,9 +23,36 @@ public class JpfMethodInfo {
     private int Modifiers;
     private String ClassName;
     private String MethodName;
-    private List MethodParam;
+    private List MethodParams;
     private String strReturn;
     private String strJavaDoc;
+    private List MethodExceptions;
+    
+
+    /**
+     * @return the methodParams
+     */
+    public List getMethodParams() {
+        return MethodParams;
+    }
+    /**
+     * @param methodParams the methodParams to set
+     */
+    public void setMethodParams(List methodParams) {
+        MethodParams = methodParams;
+    }
+    /**
+     * @return the methodExceptions
+     */
+    public List getMethodExceptions() {
+        return MethodExceptions;
+    }
+    /**
+     * @param methodExceptions the methodExceptions to set
+     */
+    public void setMethodExceptions(List methodExceptions) {
+        MethodExceptions = methodExceptions;
+    }
     /**
      * @return the strJavaDoc
      */
@@ -80,14 +107,14 @@ public class JpfMethodInfo {
      * @return the methodParam
      */
     public List getMethodParam() {
-        return MethodParam;
+        return MethodParams;
     }
     /**
      * @param methodParam the methodParam to set
      */
     public void setMethodParam(List methodParam) {
         
-        MethodParam = methodParam;
+        MethodParams = methodParam;
     }
     /**
      * @return the strReturn

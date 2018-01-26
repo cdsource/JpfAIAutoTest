@@ -17,11 +17,14 @@ import com.asiainfo.utils.AiDateTimeUtil;
  */
 public class JpfUtInfo {
 
-    
-    private String utFileDesc="";
     private String utPackage="";
+    private String SourcePackage="";
+
+
     private String utImport="";
+    private String utFileJavaDoc="";
     private String utClassDeclare="";
+
     private String utBasic="";
 
     private String utClassEnd="";
@@ -35,7 +38,34 @@ public class JpfUtInfo {
     private JpfUtMethodInfo MethodTearDownAfterClass=new JpfUtMethodInfo();
     private JpfUtMethodInfo MethodUtMain=new JpfUtMethodInfo();
     
+    //R：随机，D： JAVADOC ,L：从日志  r: 运行
+    private String genType="R";
+    /**
+     * @return the genType
+     */
+    public String getGenType() {
+        return genType;
+    }
 
+    /**
+     * @param genType the genType to set
+     */
+    public void setGenType(String genType) {
+        this.genType = genType;
+    }
+    /**
+     * @return the sourcePackage
+     */
+    public String getSourcePackage() {
+        return SourcePackage;
+    }
+
+    /**
+     * @param sourcePackage the sourcePackage to set
+     */
+    public void setSourcePackage(String sourcePackage) {
+        SourcePackage = sourcePackage;
+    }
     /**
      * 
      */
@@ -82,13 +112,13 @@ public class JpfUtInfo {
      * @return the utFileDesc
      */
     public String getUtFileDesc() {
-        return utFileDesc;
+        return utFileJavaDoc;
     }
     /**
      * @param utFileDesc the utFileDesc to set
      */
     public void setUtFileDesc(String utFileDesc) {
-        this.utFileDesc = utFileDesc;
+        this.utFileJavaDoc = utFileDesc;
     }
     /**
      * @return the utClassDeclare
@@ -198,11 +228,17 @@ public class JpfUtInfo {
             utImport += strImport+"\n";
         }
     }
-    
+    public void removeImport(String strImport) {
+            utImport = utImport.replaceAll(strImport, "") ;
+    }
     public String toString() {
         StringBuffer  sbUtText=new StringBuffer();   
+        if (GenerateInputParam.New_Package_Name.length()>0)
+        {
+            utPackage=GenerateInputParam.New_Package_Name+"\n//"+utPackage;
+        }
         
-        sbUtText.append(utPackage).append("\n").append(utImport).append("\n").append(utFileDesc).append("\n").append(utClassDeclare).append("\n");
+        sbUtText.append(utPackage).append("\n").append(utImport).append("\n").append(utFileJavaDoc).append("\n").append(utClassDeclare).append("\n");
         
         for(int i=0;i<listUtMethodInfos.size();i++)
         {

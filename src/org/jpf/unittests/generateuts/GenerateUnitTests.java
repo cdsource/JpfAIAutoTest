@@ -26,9 +26,6 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.jpf.unittests.generateuts.utils.ClassInfoConst;
-
-import com.asiainfo.utils.AiDateTimeUtil;
 import com.asiainfo.utils.ios.AiFileUtil;
 
 /**
@@ -41,7 +38,7 @@ public class GenerateUnitTests {
      * 
      */
     public GenerateUnitTests() {
-;
+        ;
     }
 
     /**
@@ -60,13 +57,18 @@ public class GenerateUnitTests {
             // ant
             strSaveUtFileName = strFileName.replace(".java", "Test.java").replaceAll("src", "test");
         }
+        if (GenerateInputParam.Save_UT_Path.length() > 0) {
+            strSaveUtFileName = GenerateInputParam.Save_UT_Path + "/"
+                    + AiFileUtil.getFileName(strFileName).replaceAll(".java", "Test.java");
+        }
+        logger.info("save ut File :" + strSaveUtFileName);
         if (AiFileUtil.FileExist(strSaveUtFileName)) {
             logger.warn("File Exist:" + strSaveUtFileName);
             GenerateConst.iExistUtFileCount++;
         } else {
             JpfUtInfo cJpfUtInfo = new JpfUtInfo();
-            GenerateConst.iMethodCount=1;
-            if (!ReadJavaFile(strFileName, cJpfUtInfo)) {
+            GenerateRunResult.iMethodCount = 1;
+            if (!generateUTFromJavaFile(strFileName, cJpfUtInfo)) {
                 logger.warn("waring: " + strFileName);
                 GenerateConst.iErrorFileCount++;
                 return false;
@@ -135,17 +137,16 @@ public class GenerateUnitTests {
     /**
      * 
      * @category @author 吴平福
-     * @param sourceString
-     * @param sb
-     * @param cConstructorInfo
-     * @return update 2017年9月30日
+     * @param sourceFileName
+     * @param cJpfUtInfo
+     * @return update 2018年1月30日
      */
-    public boolean ReadJavaFile(final String sourceFileName, JpfUtInfo cJpfUtInfo) {
+    public boolean generateUTFromJavaFile(final String sourceFileName, JpfUtInfo cJpfUtInfo) {
         // TODO Auto-generated constructor stub
 
         try {
             GeneratorConstructorImpl cConstructorInfo = new GeneratorConstructorImpl();
-            String sourceString =AiFileUtil.getFileTxt(sourceFileName, "GBK");
+            String sourceString = AiFileUtil.getFileTxt(sourceFileName, "GBK");
             ASTParser astParser = ASTParser.newParser(AST.JLS8);
             astParser.setKind(ASTParser.K_COMPILATION_UNIT);
             astParser.setResolveBindings(true);
@@ -163,7 +164,7 @@ public class GenerateUnitTests {
             TypeDeclaration typeDec = (TypeDeclaration) types.get(0);
             logger.info("classname=" + typeDec.getName());
             logger.debug("typeDec.getModifiers()=" + typeDec.getModifiers());
-            if (typeDec.getModifiers() == ClassInfoConst.CLASS_TYPE_ABSTRACT) {
+            if (typeDec.getModifiers() == GenerateConst.CLASS_TYPE_ABSTRACT) {
                 // abstract class
                 logger.info("抽象类不能生产单元测试：" + sourceFileName);
                 GenerateConst.iAbstractFileCount++;
@@ -173,15 +174,16 @@ public class GenerateUnitTests {
             /*
              * if (!typeDec.isInterface()) { return null; }
              */
-            //addPackage
-            cJpfUtInfo.setUtPackage("package "+cCompilationUnit.getPackage().getName().toString()+";\n");
+            // addPackage
+            cJpfUtInfo.setUtPackage("package " + cCompilationUnit.getPackage().getName().toString() + ";\n");
+            cJpfUtInfo.setSourcePackage(cCompilationUnit.getPackage().getName().toString());
+            // add import
             addImport(cCompilationUnit.imports(), cJpfUtInfo);
+            // add class javadoc
             cJpfUtInfo.setUtFileDesc(GenerateBaseMethods.addClassDesc(typeDec.getName().toString()));
-            
-            if (typeDec.isInterface()) {
-                GenerateMethodForDAOInterface cGenerateMethodForInterface=new GenerateMethodForDAOInterface();
-                cGenerateMethodForInterface.addExtraMethod(typeDec.getName().toString(), cJpfUtInfo);
-            }
+            // add class declare
+            cJpfUtInfo.setUtClassDeclare(GenerateBaseMethods.addClassDeclare(typeDec.getName().toString()));
+
 
             // show methods
             MethodDeclaration methodDec[] = typeDec.getMethods();
@@ -190,6 +192,8 @@ public class GenerateUnitTests {
 
             JpfMethodInfo cMethodInfo = new JpfMethodInfo();
             cMethodInfo.setClassName(typeDec.getName().toString());
+
+            // addExtraMethod(typeDec.getName().toString(), cJpfUtInfo);
 
             for (MethodDeclaration method : methodDec) {
 
@@ -212,18 +216,25 @@ public class GenerateUnitTests {
                 cMethodInfo.setMethodParam(param);
                 if (method.getJavadoc() != null) {
                     cMethodInfo.setStrJavaDoc(method.getJavadoc().toString());
-                    
                 }
+                cMethodInfo.setMethodExceptions(method.thrownExceptionTypes());
+
+                for (int i = 0; i < cMethodInfo.getMethodExceptions().size(); i++) {
+                    logger.info(cMethodInfo.getMethodExceptions().get(i).toString());
+                }
+
                 if (returnType != null) {
                     // addMethodDesc(typeDec.getName().toString(), methodName.toString(), param,
                     cMethodInfo.setStrReturn(returnType.toString());
                     if (typeDec.isInterface()) {
                         logger.info("接口类单元测试：" + sourceFileName);
                         GenerateConst.iInterfaceFileCount++;
-                        GenerateMethodForDAOInterface cGenerateMethodForInterface=new GenerateMethodForDAOInterface();
+                        GenerateMethodForDAOInterface cGenerateMethodForInterface = new GenerateMethodForDAOInterface();
+
                         cGenerateMethodForInterface.doGenerateMethod(cMethodInfo, cJpfUtInfo);
-                        //return false;
-                    }else if (0== method.getModifiers() || 1 == method.getModifiers() || 3 == method.getModifiers() ||4==method.getModifiers()) {
+
+                    } else if (0 == method.getModifiers() || 1 == method.getModifiers() || 3 == method.getModifiers()
+                            || 4 == method.getModifiers()) {
                         // public:1 protected:3
                         GenerateMethodPublic cGenerateMethodPublic = new GenerateMethodPublic();
                         cGenerateMethodPublic.doGenerateMethod(cMethodInfo, cJpfUtInfo);
@@ -241,8 +252,14 @@ public class GenerateUnitTests {
                 }
 
             }
-            cJpfUtInfo.setUtBasic(GenerateBaseMethods.addTestEnd(typeDec.getName().toString()));
-            
+            if (typeDec.isInterface()) {
+                cJpfUtInfo.setUtBasic(
+                        GenerateBaseMethods.addExtraMethod(typeDec.getName().toString(), cJpfUtInfo.getUtPackage()));
+                cJpfUtInfo.addImport(cJpfUtInfo.getUtPackage().replaceAll("package", "import").replaceAll(";",
+                        "." + typeDec.getName().toString() + ";"));
+            } else {
+                cJpfUtInfo.setUtBasic(GenerateBaseMethods.addTestEnd(typeDec.getName().toString()));
+            }
             return true;
         } catch (Exception ex) {
             // TODO: handle exception
@@ -276,7 +293,6 @@ public class GenerateUnitTests {
          */
 
     }
-
 
 
 

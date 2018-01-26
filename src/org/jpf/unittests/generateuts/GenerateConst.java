@@ -18,10 +18,13 @@ public class GenerateConst {
     
     public static int iAbstractFileCount = 0;
     public static int iInterfaceFileCount = 0;
-    public static int iTotalFileCount = 0;
+
     public static int iGenFileCount = 0;
     public static int iExistUtFileCount = 0;
     public static int iErrorFileCount = 0;
     public static int iEnumFileCount = 0;
-    public static int iMethodCount = 1;
+
+    
+    //抽象类，不能生成单元测试
+    public final static int CLASS_TYPE_ABSTRACT =1025;
 }

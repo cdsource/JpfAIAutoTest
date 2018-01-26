@@ -1,18 +1,30 @@
-/** 
-* @author 吴平福 
-* E-mail:wupf@asiainfo.com 
-* @version 创建时间：2017年11月19日 下午10:16:58 
-* 类说明 
-*/ 
+/**
+ * @author 吴平福 E-mail:wupf@asiainfo.com
+ * @version 创建时间：2017年11月19日 下午10:16:58 类说明
+ */
 
 package org.jpf.unittests.generateuts;
 
+import java.util.HashMap;
+import java.util.Vector;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jpf.unittests.generateuts.utils.spring.Service2Bean;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
 import com.asiainfo.utils.AiDateTimeUtil;
+import com.asiainfo.utils.ios.AiFileUtil;
+import com.asiainfo.utils.xmls.AiXmlUtil;
+
+import opennlp.tools.stemmer.snowball.irishStemmer;
 
 /**
  * 
  */
 public class GenerateBaseMethods {
+    private static final Logger logger = LogManager.getLogger();
 
     /**
      * 
@@ -20,6 +32,7 @@ public class GenerateBaseMethods {
     public GenerateBaseMethods() {
         // TODO Auto-generated constructor stub
     }
+
     /**
      * 
      * @category 增加启动结束主函数
@@ -28,7 +41,7 @@ public class GenerateBaseMethods {
      * @param sb update 2017年9月29日
      */
     public static String addTestEnd(String strClass) {
-        StringBuffer sb=new StringBuffer();
+        StringBuffer sb = new StringBuffer();
         sb.append("\n").append("  /**").append("\n");
         sb.append("  * 测试方法初始化.").append("\n");
         sb.append("  * ").append("\n");
@@ -56,7 +69,7 @@ public class GenerateBaseMethods {
         sb.append("  { ").append("\n");
         sb.append("    // TODO: add additional clean-up code here").append("\n");
         sb.append("  }").append("\n");
-        
+
         sb.append("\n").append("  /**").append("\n");
         sb.append("  * 测试类初始化.").append("\n");
         sb.append("  * ").append("\n");
@@ -84,7 +97,7 @@ public class GenerateBaseMethods {
         sb.append("  { ").append("\n");
         sb.append("    // TODO: add additional clean-up code here").append("\n");
         sb.append("  }").append("\n");
-        
+
         sb.append("\n").append("  /**").append("\n");
         sb.append("  * Launch the test").append("\n");
         sb.append("  * ").append("\n");
@@ -101,7 +114,7 @@ public class GenerateBaseMethods {
 
         return sb.toString();
     }
-    
+
     /**
      * 
      * @category 增加类说明
@@ -109,8 +122,8 @@ public class GenerateBaseMethods {
      * @param strClass
      * @param sb update 2017年9月29日
      */
-    public static  String addClassDesc(String strClass) {
-        StringBuffer sb=new StringBuffer();
+    public static String addClassDesc(String strClass) {
+        StringBuffer sb = new StringBuffer();
         sb.append("/**").append("\n");
         sb.append("* The class <code>").append(strClass)
                 .append("Test</code> contains tests for the class <code>{@link ").append(strClass).append("}</code>.")
@@ -122,7 +135,42 @@ public class GenerateBaseMethods {
         sb.append("* @author Administrator").append("\n");
         sb.append("* @version $Revision: 1.0 $").append("\n");
         sb.append("*/").append("\n");
-        sb.append("public class ").append(strClass).append("Test {\n");
+
         return sb.toString();
     }
+
+    /**
+     * 
+     * @category 增加类说明
+     * @author 吴平福
+     * @param strClass
+     * @param sb update 2017年9月29日
+     */
+    public static String addClassDeclare(String strClass) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("public class ").append(strClass).append("Test ");
+        if (null != GenerateInputParam.UT_ExtendClassName && GenerateInputParam.UT_ExtendClassName.trim().length() > 0) {
+            sb.append(" extends ").append(GenerateInputParam.UT_ExtendClassName);
+        }
+        sb.append(" {\n");
+        return sb.toString();
+    }
+
+
+    public static String addExtraMethod(String strClassName, String strPackageName) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("  private static final Logger logger = Logger.getLogger(").append(strClassName)
+                .append("Test.class);").append("\n").append("  @Override").append("\n")
+                .append("  public Logger getLogger() {").append("\n").append("       return logger;").append("\n")
+                .append("   }").append("\n").append("  public ").append(strClassName)
+                .append("Test(JpfTestInfo cJpfTestInfo) {").append("\n").append("   super(cJpfTestInfo);").append("\n")
+                .append("  }").append("\n");
+        sb.append("        ").append(strClassName).append(" c").append(strClassName).append("= (").append(strClassName)
+                .append(") ContextManager.getContext().getBean(\"")
+                .append(Service2Bean.getInstance().findBeanIdFromXML(strClassName, strPackageName)).append("\");\n").append("  }");
+
+
+        return sb.toString();
+    }
+
 }

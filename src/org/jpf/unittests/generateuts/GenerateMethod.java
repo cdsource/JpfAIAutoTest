@@ -33,6 +33,8 @@ import org.jpf.unittests.generateuts.fuzzByParamType.fuzzeString;
 import org.jpf.unittests.generateuts.fuzzByParamType.fuzzelong;
 import org.jpf.unittests.generateuts.fuzzByParamType.fuzzeshort;
 import org.jpf.unittests.generateuts.fuzzByParamType.fuzzfloat;
+import org.jpf.unittests.generateuts.genbyjavadoc.ReadInfoFromJavaDoc;
+import org.jpf.unittests.generateuts.genbylog.GenParamValueFromLog;
 import org.jpf.unittests.generateuts.utils.Descartes;
 import org.jpf.unittests.generateuts.utils.FormatUtil;
 import org.jpf.unittests.generateuts.utils.GenerateUtil;
@@ -97,51 +99,20 @@ public abstract class GenerateMethod {
      * @param strClassName
      * @return update 2017年12月9日
      */
-    public String addCatch(String strClassName) {
+    public String addCatchException(List MethodExceptions) {
         StringBuffer sb = new StringBuffer();
+        if (null != MethodExceptions) {
+            for (int i = 0; i < MethodExceptions.size(); i++) {
+                if (!MethodExceptions.get(i).toString().equalsIgnoreCase("Exception")) {
+                    sb.append("    }catch(").append(MethodExceptions.get(i).toString()).append(" ex){\n")
+                            .append("    ex.printStackTrace();").append("    }\n");
+                }
+            }
+        }
         sb.append("    }catch(Exception ex){\n")
                 // .append(" ex.printStackTrace();\n")
                 .append("      }\n");
         return sb.toString();
-    }
-
-    /**
-     * 
-     * @category 根据声明产生初始化值
-     * @author 吴平福
-     * @param cMethodInfo
-     * @param cJpfUtInfo
-     * @return update 2018年1月23日
-     */
-    private void initParamByJavaDoc(JpfMethodInfo cMethodInfo, JpfUtMethodInfo cJpfUtMethodInfo) {
-        StringBuffer sb = new StringBuffer();
-        String[] strJavaDocs = cMethodInfo.getStrJavaDoc().split("\n");
-        int iFindCount = 0;
-
-        for (int i = 0; i < cMethodInfo.getMethodParam().size(); i++) {
-            for (int j = 0; j < strJavaDocs.length; j++) {
-
-                ParamInitBody cParamInitBody = new ParamInitBody();
-                FormatUtil.formatToParamBody(cParamInitBody, cMethodInfo.getMethodParam().get(i).toString());
-
-                if (strJavaDocs[j].trim().startsWith("@ " + cParamInitBody.getParamVariable())) {
-                    sb.append("    " + cParamInitBody.getParamType() + " " + cParamInitBody.getParamVariable()
-                            + " =  new boolean[]{true,true};\n");
-                    iFindCount++;
-                }
-            }
-        }
-        logger.debug(sb);
-        if (iFindCount == cMethodInfo.getMethodParam().size()) {
-            cJpfUtMethodInfo.setMethodParam(sb.toString());
-        }
-
-        for (int j = 0; j < strJavaDocs.length; j++) {
-
-            if (strJavaDocs[j].trim().startsWith("@ return")) {
-                cJpfUtMethodInfo.setMethodAssert("    assert()");
-            }
-        }
     }
 
     /**
@@ -154,22 +125,22 @@ public abstract class GenerateMethod {
      */
     public void doGenerateMethod(JpfMethodInfo cMethodInfo, JpfUtInfo cJpfUtInfo) {
 
-        StringBuffer sb = new StringBuffer();
+
         // 注释
-        StringBuffer sbJavaUtDoc = new StringBuffer();
-        sbJavaUtDoc.append(GenerateUtil.addMethodJavaDoc(cMethodInfo, cJpfUtInfo));
+
         // 方法声明
         // StringBuffer sbMethodName = new StringBuffer();
         // sbMethodName.append(addMethodDeclare(cMethodInfo.getMethodName(), cUtFileText));
 
         // 类声明
-        StringBuffer sbClassName = new StringBuffer();
-        sbClassName.append(addClassInstance(cMethodInfo.getClassName(), cMethodInfo.getMethodParam(), cJpfUtInfo));
+        // StringBuffer sbClassName = new StringBuffer();
+        // sbClassName.append(addClassInstance(cMethodInfo.getClassName(),
+        // cMethodInfo.getMethodParam(), cJpfUtInfo));
 
         // 获取返回值
-        StringBuffer sbReturnName = new StringBuffer();
-        sbReturnName.append(addMethodReturn(cMethodInfo.getMethodName(), cMethodInfo.getStrReturn(),
-                cMethodInfo.getMethodParam(), cJpfUtInfo));
+        // StringBuffer sbReturnName = new StringBuffer();
+        // sbReturnName.append(addMethodReturn(cMethodInfo.getMethodName(),
+        // cMethodInfo.getStrReturn(),cMethodInfo.getMethodParam(), cJpfUtInfo));
 
         // 调用方法
         StringBuffer sbCallMethod = new StringBuffer();
@@ -179,71 +150,104 @@ public abstract class GenerateMethod {
                 cJpfUtInfo));
 
         // 判断
-        StringBuffer sbAssert = new StringBuffer();
-        sbAssert.append(addMethodAssert(cMethodInfo.getStrReturn(), cJpfUtInfo));
+        // StringBuffer sbAssert = new StringBuffer();
+        // sbAssert.append(addMethodAssert(cMethodInfo.getClassName(),
+        // cMethodInfo.getMethodName(),cMethodInfo.getStrReturn(), cJpfUtInfo));
 
         // 方法参数初始化
         if (cMethodInfo.getMethodParam().size() == 0) {
             // 方法无参数
-            sb.append(sbJavaUtDoc).append(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo)).append(addTry())
-                    .append(sbClassName).append(sbReturnName).append(sbCallMethod).append(sbAssert)
-                    .append(addCatch(cMethodInfo.getClassName()));
-            logger.trace(sb);
             JpfUtMethodInfo cJpfUtMethodInfo = new JpfUtMethodInfo();
-            cJpfUtMethodInfo.setMethodJavaDoc(sbJavaUtDoc.toString());
+            cJpfUtInfo.setGenType("W");
+            cJpfUtMethodInfo.setMethodJavaDoc(GenerateUtil.addMethodJavaDoc(cMethodInfo, cJpfUtInfo));
             cJpfUtMethodInfo.setMethodDeclare(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo));
             cJpfUtMethodInfo.setMethodTry(addTry());
-            cJpfUtMethodInfo.setClassConstructor(sbClassName.toString());
-            cJpfUtMethodInfo.setMethodCaller(sbReturnName.toString() + sbCallMethod.toString());
-            cJpfUtMethodInfo.setMethodAssert(sbAssert.toString());
-            cJpfUtMethodInfo.setMethodCatch(addCatch(cMethodInfo.getClassName()));
+            cJpfUtMethodInfo.setClassConstructor(
+                    addClassInstance(cMethodInfo.getClassName(), cMethodInfo.getMethodParam(), cJpfUtInfo));
+            cJpfUtMethodInfo.setMethodReturn(addMethodReturn(cMethodInfo.getMethodName(), cMethodInfo.getStrReturn(),
+                    cMethodInfo.getMethodParam(), cJpfUtInfo));
+            cJpfUtMethodInfo.setMethodCaller(sbCallMethod.toString());
+            cJpfUtMethodInfo.setMethodAssert(addMethodAssert(cMethodInfo.getClassName(), cMethodInfo.getMethodName(),
+                    cMethodInfo.getStrReturn(), cJpfUtInfo));
+            cJpfUtMethodInfo.setMethodCatch(addCatchException(cMethodInfo.getMethodExceptions()));
             logger.trace(cJpfUtMethodInfo.toString());
             cJpfUtInfo.getListUtMethodInfos().add(cJpfUtMethodInfo);
         } else {
 
             // 方法有参数
             // 根据JAVADOC产生
+            cJpfUtInfo.setGenType("D");
+
             if (cMethodInfo.getStrJavaDoc() != null && cMethodInfo.getStrJavaDoc().trim().length() > 0) {
                 logger.debug("init param by javadoc");
                 logger.debug(cMethodInfo.getStrJavaDoc());
                 JpfUtMethodInfo cJpfUtMethodInfo = new JpfUtMethodInfo();
-                initParamByJavaDoc(cMethodInfo, cJpfUtMethodInfo);
+                ReadInfoFromJavaDoc.getInstance().initParamByJavaDoc(cMethodInfo, cJpfUtMethodInfo);
                 if (cJpfUtMethodInfo.getMethodParam() != null && null != cJpfUtMethodInfo.getMethodAssert()) {
 
-                    cJpfUtMethodInfo.setMethodJavaDoc(sbJavaUtDoc.toString());
+                    cJpfUtMethodInfo.setMethodJavaDoc(GenerateUtil.addMethodJavaDoc(cMethodInfo, cJpfUtInfo));
                     cJpfUtMethodInfo.setMethodDeclare(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo));
                     cJpfUtMethodInfo.setMethodTry(addTry());
-                    cJpfUtMethodInfo.setClassConstructor(sbClassName.toString());
-                    cJpfUtMethodInfo.setMethodCaller(sbReturnName.toString() + sbCallMethod.toString());
-                    cJpfUtMethodInfo.setMethodCatch(addCatch(cMethodInfo.getClassName()));
+                    cJpfUtMethodInfo.setClassConstructor(
+                            addClassInstance(cMethodInfo.getClassName(), cMethodInfo.getMethodParam(), cJpfUtInfo));
+                    cJpfUtMethodInfo.setMethodReturn(addMethodReturn(cMethodInfo.getMethodName(),
+                            cMethodInfo.getStrReturn(), cMethodInfo.getMethodParam(), cJpfUtInfo));
+                    cJpfUtMethodInfo.setMethodCaller(sbCallMethod.toString());
+                    cJpfUtMethodInfo.setMethodCatch(addCatchException(cMethodInfo.getMethodExceptions()));
                     logger.trace(cJpfUtMethodInfo.toString());
                     cJpfUtInfo.getListUtMethodInfos().add(cJpfUtMethodInfo);
                 }
             }
             // 随机产生
+            cJpfUtInfo.setGenType("R");
             ArrayList<String> cParamInitBody = GenerateUtil.addMethodParamInit2(cMethodInfo.getMethodParam(),
                     cJpfUtInfo, GenerateConst.Max_CaseCount_PerMethod);
             logger.debug("cParamInitBody.size()=" + cParamInitBody.size());
 
             for (int i = 0; i < cParamInitBody.size(); i++) {
-                sb.append(sbJavaUtDoc).append(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo))
-                        .append(addTry()).append(cParamInitBody.get(i)).append(sbClassName).append(sbReturnName)
-                        .append(sbCallMethod).append(sbAssert).append(addCatch(cMethodInfo.getClassName()));
-                logger.trace(sb);
+
                 JpfUtMethodInfo cJpfUtMethodInfo = new JpfUtMethodInfo();
-                cJpfUtMethodInfo.setMethodJavaDoc(sbJavaUtDoc.toString());
+                cJpfUtMethodInfo.setMethodJavaDoc(GenerateUtil.addMethodJavaDoc(cMethodInfo, cJpfUtInfo));
                 cJpfUtMethodInfo.setMethodDeclare(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo));
                 cJpfUtMethodInfo.setMethodTry(addTry());
-                cJpfUtMethodInfo.setClassConstructor(sbClassName.toString());
+                cJpfUtMethodInfo.setClassConstructor(
+                        addClassInstance(cMethodInfo.getClassName(), cMethodInfo.getMethodParam(), cJpfUtInfo));
                 cJpfUtMethodInfo.setMethodParam(cParamInitBody.get(i));
-                cJpfUtMethodInfo.setMethodCaller(sbReturnName.toString() + sbCallMethod.toString());
-                cJpfUtMethodInfo.setMethodAssert(sbAssert.toString());
-                cJpfUtMethodInfo.setMethodCatch(addCatch(cMethodInfo.getClassName()));
+                cJpfUtMethodInfo.setMethodReturn(addMethodReturn(cMethodInfo.getMethodName(),
+                        cMethodInfo.getStrReturn(), cMethodInfo.getMethodParam(), cJpfUtInfo));
+                cJpfUtMethodInfo.setMethodCaller(sbCallMethod.toString());
+                cJpfUtMethodInfo.setMethodAssert(addMethodAssert(cMethodInfo.getClassName(),
+                        cMethodInfo.getMethodName(), cMethodInfo.getStrReturn(), cJpfUtInfo));
+                cJpfUtMethodInfo.setMethodCatch(addCatchException(cMethodInfo.getMethodExceptions()));
+                logger.trace(cJpfUtMethodInfo.toString());
+                cJpfUtInfo.getListUtMethodInfos().add(cJpfUtMethodInfo);
+            }
+            cParamInitBody.clear();
+
+            // 根据日志产生
+            logger.debug(cJpfUtInfo.getSourcePackage());
+
+            String strParamValue = GenParamValueFromLog.getInstance().genParamValue(cJpfUtInfo.getSourcePackage() + "."
+                    + cMethodInfo.getClassName() + "." + cMethodInfo.getMethodName(), cMethodInfo);
+            if (null != strParamValue && strParamValue.trim().length() > 0) {
+                cJpfUtInfo.setGenType("L");
+                JpfUtMethodInfo cJpfUtMethodInfo = new JpfUtMethodInfo();
+                cJpfUtMethodInfo.setMethodJavaDoc(GenerateUtil.addMethodJavaDoc(cMethodInfo, cJpfUtInfo));
+                cJpfUtMethodInfo.setMethodDeclare(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo));
+                cJpfUtMethodInfo.setMethodTry(addTry());
+                cJpfUtMethodInfo.setClassConstructor(
+                        addClassInstance(cMethodInfo.getClassName(), cMethodInfo.getMethodParam(), cJpfUtInfo));
+                cJpfUtMethodInfo.setMethodParam(strParamValue);
+                cJpfUtMethodInfo.setMethodReturn(addMethodReturn(cMethodInfo.getMethodName(),
+                        cMethodInfo.getStrReturn(), cMethodInfo.getMethodParam(), cJpfUtInfo));
+                cJpfUtMethodInfo.setMethodCaller(sbCallMethod.toString());
+                cJpfUtMethodInfo.setMethodAssert(addMethodAssert(cMethodInfo.getClassName(),
+                        cMethodInfo.getMethodName(), cMethodInfo.getStrReturn(), cJpfUtInfo));
+                cJpfUtMethodInfo.setMethodCatch(addCatchException(cMethodInfo.getMethodExceptions()));
                 logger.trace(cJpfUtMethodInfo.toString());
                 cJpfUtInfo.getListUtMethodInfos().add(cJpfUtMethodInfo);
             }
 
-            cParamInitBody.clear();
         }
 
     }
@@ -256,7 +260,7 @@ public abstract class GenerateMethod {
      * @param strReturn
      * @param sb update 2017年9月29日
      */
-    public String addMethodAssert(String strReturn, JpfUtInfo cJpfUtInfo) {
+    public String addMethodAssert(String strClassName, String strMethod, String strReturn, JpfUtInfo cJpfUtInfo) {
 
         StringBuffer sb = new StringBuffer();
         strReturn = strReturn.trim();
@@ -319,11 +323,9 @@ public abstract class GenerateMethod {
      */
     private String addMethodDeclare(String strMethodName, JpfUtInfo cJpfUtInfo) {
         StringBuffer sb = new StringBuffer();
-        sb.append("  public void test").append(strMethodName).append("_").append(GenerateConst.iMethodCount++)
-                .append("() throws Exception\n").append("  {").append("\n");
+        sb.append("  public void test_").append(strMethodName).append("_").append(cJpfUtInfo.getGenType())
+                .append(++GenerateRunResult.iMethodCount).append("() throws Exception\n").append("  {").append("\n");
         return sb.toString();
     }
-
-
 
 }

@@ -25,6 +25,19 @@ public class JpfUtMethodInfo {
     private String classConstructor="";
     private String methodEnd="  }\n";
     private String methodParam="";
+    private String methodReturn="";
+    /**
+     * @return the methodReturn
+     */
+    public String getMethodReturn() {
+        return methodReturn;
+    }
+    /**
+     * @param methodReturn the methodReturn to set
+     */
+    public void setMethodReturn(String methodReturn) {
+        this.methodReturn = methodReturn;
+    }
     private String methodCaller="";
     private String methodAssert="";
     
@@ -49,6 +62,10 @@ public class JpfUtMethodInfo {
         if (classConstructor!=null && classConstructor.length()>0)
         {
             sBuffer.append(classConstructor).append("\n");
+        }
+        if (methodReturn!=null && methodReturn.length()>0)
+        {
+            sBuffer.append(methodReturn).append("\n");
         }
         if (methodCaller!=null && methodCaller.length()>0)
         {

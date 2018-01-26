@@ -9,7 +9,7 @@ import java.util.Vector;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jpf.unittests.generateuts.utils.AppParam;
+import org.jpf.unittests.generateuts.utils.FindClassInfoUtil;
 
 import com.asiainfo.utils.ios.AiFileUtil;
 
@@ -19,7 +19,7 @@ import com.asiainfo.utils.ios.AiFileUtil;
 public class GenerateMain {
     private static final Logger logger = LogManager.getLogger();
 
-    private String strFileNameFilter = "DAO";
+    private String strFileNameFilter = "**/serivce/*Manager.java";
 
     /**
      * 
@@ -33,14 +33,13 @@ public class GenerateMain {
                 if (cGenerateUnitTests.doGenerateFile(strInputFile)) {
                     GenerateConst.iGenFileCount++;
                 }
-                GenerateConst.iTotalFileCount++;
+                GenerateRunResult.iTotalFileCount++;
             }
             if (AiFileUtil.isDirectory(strInputFile)) {
 
                 Vector<String> vFiles = new Vector<String>();
                 AiFileUtil.getFiles(strInputFile, vFiles, ".java");
-                AppParam.vFilesAll = (Vector<String>) vFiles.clone();
-                GenerateConst.iTotalFileCount = vFiles.size();
+                GenerateRunResult.iTotalFileCount = vFiles.size();
 
 
                 while (vFiles.size() > 0) {
@@ -74,7 +73,7 @@ public class GenerateMain {
             // TODO: handle exception
             ex.printStackTrace();
         }
-        logger.info("处理文件个数 " + GenerateConst.iTotalFileCount);
+        logger.info("处理文件个数 " + GenerateRunResult.iTotalFileCount);
         logger.info("生成文件个数 " + GenerateConst.iGenFileCount);
         logger.info("抽象类文件个数 " + GenerateConst.iAbstractFileCount);
         logger.info("接口类文件个数 " + GenerateConst.iInterfaceFileCount);

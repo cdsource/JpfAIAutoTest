@@ -125,8 +125,8 @@ public class GeneratorConstructorImpl implements IConstructorGenerator {
        
         JpfUtMethodInfo cJpfUtMethodInfo=new JpfUtMethodInfo();
         cJpfUtMethodInfo.setMethodJavaDoc(GenerateUtil.addMethodJavaDoc(Modifiers, "", strMethodName, MethodParam, cJpfUtInfo));
-        GenerateConst.iMethodCount++;
-        cJpfUtMethodInfo.setMethodDeclare("  public void test" +strMethodName+"_"+GenerateConst.iMethodCount +" () throws Exception\n   {\n" );
+        GenerateRunResult.iMethodCount++;
+        cJpfUtMethodInfo.setMethodDeclare("  public void test" +strMethodName+"_"+GenerateRunResult.iMethodCount +" () throws Exception\n   {\n" );
         // instance
         cJpfUtMethodInfo.setClassConstructor(analyseConstructor(Modifiers, strClass, strMethodName, MethodParam, cJpfUtInfo));
         cJpfUtMethodInfo.setMethodAssert("    assertNotNull(result);\n");
