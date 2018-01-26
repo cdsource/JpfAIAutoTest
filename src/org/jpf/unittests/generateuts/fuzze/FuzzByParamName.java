@@ -39,7 +39,11 @@ public class FuzzByParamName implements IFuzze {
             mList.add("    String "+cParamInitBody.getParamVariable()+" =  \"abc@123\";\n");
             mList.add("    String "+cParamInitBody.getParamVariable()+" =  \"abc\1@344\";\n");
         }
-
+        if (cParamInitBody.getParamVariable().indexOf("phone")>=0)
+        {
+            mList.add("    String "+cParamInitBody.getParamVariable()+" =  18086848011\n");
+            mList.add("    String "+cParamInitBody.getParamVariable()+" =  18086848012;\n");
+        }
         return mList;
     }
 
