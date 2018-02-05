@@ -176,6 +176,7 @@ public abstract class GenerateMethod {
 
             // 方法有参数
             // 根据JAVADOC产生
+            /*
             cJpfUtInfo.setGenType("D");
 
             if (cMethodInfo.getStrJavaDoc() != null && cMethodInfo.getStrJavaDoc().trim().length() > 0) {
@@ -198,6 +199,7 @@ public abstract class GenerateMethod {
                     cJpfUtInfo.getListUtMethodInfos().add(cJpfUtMethodInfo);
                 }
             }
+            */
             // 随机产生
             cJpfUtInfo.setGenType("R");
             ArrayList<String> cParamInitBody = GenerateUtil.addMethodParamInit2(cMethodInfo.getMethodParam(),

@@ -5,20 +5,14 @@
 
 package org.jpf.unittests.generateuts;
 
-import java.util.HashMap;
-import java.util.Vector;
+
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jpf.unittests.generateuts.utils.spring.Service2Bean;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import com.asiainfo.utils.AiDateTimeUtil;
-import com.asiainfo.utils.ios.AiFileUtil;
-import com.asiainfo.utils.xmls.AiXmlUtil;
 
-import opennlp.tools.stemmer.snowball.irishStemmer;
 
 /**
  * 

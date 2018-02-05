@@ -428,12 +428,14 @@ public class GenerateUtil {
                 case "double":
                 case "final double":
                 case "double[]":
+                case "Double":
                     listAll.add(new fuzzdouble().getFuzzeForNull(cParamInitBody));
                     break;
 
                 case "float":
                 case "final float":
                 case "float[]":
+                case "Float":
                     listAll.add(new fuzzfloat().getFuzzeForNull(cParamInitBody));
                     break;
 
@@ -505,12 +507,7 @@ public class GenerateUtil {
                     break;
 
                 default:
-                    if (cParamInitBody.getParamType().startsWith("Map")
-                            || cParamInitBody.getParamType().startsWith("Map")) {
-                        listAll.add(new fuzzMap().getFuzzeForNull(cParamInitBody));
-                        cJpfUtInfo.addImport("import java.util.HashMap;");
-                        cJpfUtInfo.addImport("import java.util.Map;");
-                    } else if (cParamInitBody.getParamType().startsWith("List")) {
+                    if (cParamInitBody.getParamType().startsWith("List")) {
                         listAll.add(new fuzzList().getFuzzeForNull(cParamInitBody));
                         cJpfUtInfo.addImport("import java.util.List;");
                         cJpfUtInfo.addImport("import java.util.ArrayList;");

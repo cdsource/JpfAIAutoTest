@@ -58,7 +58,7 @@ public class GenerateUnitTests {
             strSaveUtFileName = strFileName.replace(".java", "Test.java").replaceAll("src", "test");
         }
         if (GenerateInputParam.Save_UT_Path.length() > 0) {
-            strSaveUtFileName = GenerateInputParam.Save_UT_Path + "/"
+            strSaveUtFileName = GenerateInputParam.Save_UT_Path + "\\"
                     + AiFileUtil.getFileName(strFileName).replaceAll(".java", "Test.java");
         }
         logger.info("save ut File :" + strSaveUtFileName);
