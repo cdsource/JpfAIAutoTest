@@ -9,7 +9,10 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+<<<<<<< HEAD
 import org.jpf.unittests.generateuts.GenerateInputParam;
+=======
+>>>>>>> f37f043b207f8d15c65da51508ced7d10104a70e
 
 import com.asiainfo.utils.ios.AiFileUtil;
 
@@ -60,9 +63,17 @@ public class HandleLogFromDebug {
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
+<<<<<<< HEAD
 
             new HandleLogFromDebug(GenerateInputParam.RUN_LOG_SOURCE_FILEPATH);
 
+=======
+        if (1 == args.length) {
+            new HandleLogFromDebug(args[0]);
+        } else {
+            logger.warn("no input");
+        }
+>>>>>>> f37f043b207f8d15c65da51508ced7d10104a70e
     }
     // DEBUG [java.sql.PreparedStatement] - {pstm-
     // Executing Statement:
@@ -99,7 +110,11 @@ public class HandleLogFromDebug {
                     {
                         strDateTime=line.substring(0,19);
                         line=line.substring(iPos+HandleLogConst.KEY_SQL_STATEMENT.length()+1, line.length()).trim();
+<<<<<<< HEAD
                         if (line.toUpperCase().startsWith("SELECT") && line.toUpperCase().endsWith(HandleLogConst.KEY_EXCLUDE_SQL))
+=======
+                        if (line.toUpperCase().startsWith("SELECT") && line.toUpperCase().endsWith(".NEXTVAL AS ID FROM DUAL"))
+>>>>>>> f37f043b207f8d15c65da51508ced7d10104a70e
                         {
                             continue;
                         }
@@ -129,7 +144,11 @@ public class HandleLogFromDebug {
             lFindCount+=lCount;
             if (sb.length()>0)
             {
+<<<<<<< HEAD
                 AiFileUtil.saveFile(GenerateInputParam.RUN_LOG_FILEPATH+ "//debug_run_format"+iFileCount+".log", sb);
+=======
+                AiFileUtil.saveFile("D:\\abc\\b\\abc"+iFileCount+".log", sb);
+>>>>>>> f37f043b207f8d15c65da51508ced7d10104a70e
             }
         } catch (Exception ex) {
             // TODO: handle exception

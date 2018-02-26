@@ -23,7 +23,10 @@ public class HandleLogConst {
     public final static String KEY_SQL_STATEMENT = "Executing Statement:";
     public final static String KEY_SQL_PARAM = "Parameters:";
     public final static Pattern p = Pattern.compile("\\s+");
+<<<<<<< HEAD
     public final static String KEY_EXCLUDE_SQL=".NEXTVAL AS ID FROM DUAL";
+=======
+>>>>>>> f37f043b207f8d15c65da51508ced7d10104a70e
     
     public final static String KEY_SelfTest_Method="JPFSELFTEST:";
 }
