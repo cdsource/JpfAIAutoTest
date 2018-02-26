@@ -26,8 +26,12 @@ public class GenerateInputParam {
     public static String UT_ExtendClassName="abstractJpfSelfTest";
     
     //生成的测试文件保存位置
+<<<<<<< HEAD
     public static String Save_UT_Path="D:\\svn\\ecommerce-branch-20170912\\app-web-wtld\\src\\main\\java\\com\\asiainfo\\ebiz\\selftestauto";
     //public static String Save_UT_Path="";
+=======
+    public static String Save_UT_Path="D:\\svn\\ecommerce-branch-20170912\\app-web-wtld\\src\\main\\java\\com\\asiainfo\\ebiz\\selftesta";
+>>>>>>> f37f043b207f8d15c65da51508ced7d10104a70e
     
     //生成的测试文件的包名，如果没有，则参考源文件
     public static String New_Package_Name="package com.asiainfo.ebiz.selftesta;";
@@ -60,7 +64,10 @@ public class GenerateInputParam {
     
     public static String SELF_LOG_FILEPATH="D:\\abc\\selftest";
     
+<<<<<<< HEAD
     //原始DEBUG日志
     public static String RUN_LOG_SOURCE_FILEPATH="D:\\abc\\debug_source";
+=======
+>>>>>>> f37f043b207f8d15c65da51508ced7d10104a70e
     
 }
