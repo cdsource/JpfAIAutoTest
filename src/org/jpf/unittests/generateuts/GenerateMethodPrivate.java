@@ -9,7 +9,7 @@ package org.jpf.unittests.generateuts;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jpf.unittests.generateuts.utils.GenerateUtil;
+import org.jpf.unittests.generateuts.utils.GenerateUtil2;
 
 
 
@@ -42,7 +42,7 @@ public class GenerateMethodPrivate extends GenerateMethod {
                 strParamType = strParamType.substring(5, strParamType.length()).trim();
             }
 
-            strParamType = GenerateUtil.replaceAngleBrackets(strParamType);
+            strParamType = GenerateUtil2.replaceAngleBrackets(strParamType);
 
             strParamType = strParamType.substring(0, strParamType.indexOf(" ")).trim();
 
@@ -58,7 +58,7 @@ public class GenerateMethodPrivate extends GenerateMethod {
             // System.out.println(MethodParam.get(i));
             String strParamType = MethodParam.get(i).toString().trim();
 
-            strParamType = GenerateUtil.RemoveFinal(strParamType);
+            strParamType = GenerateUtil2.RemoveFinal(strParamType);
             String strParamName = strParamType.substring(strParamType.indexOf(" ")).trim();
             sbParamInstance.append(strParamName).append(",");
 
@@ -113,9 +113,9 @@ public class GenerateMethodPrivate extends GenerateMethod {
      * @see org.jpf.unittests.generateuts.GenerateMethod#addExtraMethod(org.jpf.unittests.generateuts.JpfUtInfo)
      */
     @Override
-    public void addExtraMethod(String strClassName, JpfUtInfo cJpfUtInfo) {
+    public String addExtraMethod(String strClassName, String strPackageName) {
         // TODO Auto-generated method stub
-        
+        return "";
     }
 
 }

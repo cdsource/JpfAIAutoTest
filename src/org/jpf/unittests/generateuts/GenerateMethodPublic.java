@@ -41,8 +41,8 @@ public class GenerateMethodPublic extends GenerateMethod {
      * @see org.jpf.unittests.generateuts.GenerateMethod#addExtraMethod(org.jpf.unittests.generateuts.JpfUtInfo)
      */
     @Override
-    public void addExtraMethod(String strClassName, JpfUtInfo cJpfUtInfo) {
+    public String addExtraMethod(String strClassName, String strPackageName) {
         // TODO Auto-generated method stub
-        
+        return "";
     }
 }

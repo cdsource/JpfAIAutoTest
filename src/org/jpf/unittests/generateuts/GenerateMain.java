@@ -6,11 +6,11 @@
 package org.jpf.unittests.generateuts;
 
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jpf.unittests.generateuts.utils.FindClassInfoUtil;
-
 import com.asiainfo.utils.ios.AiFileUtil;
 
 /**
@@ -19,42 +19,62 @@ import com.asiainfo.utils.ios.AiFileUtil;
 public class GenerateMain {
     private static final Logger logger = LogManager.getLogger();
 
-    private String strFileNameFilter = "**/serivce/*Manager.java";
+
+    Pattern p = Pattern.compile(GenerateInputParam.FileNameFilter);
 
     /**
-     * 
+     * @category 构造函数
+     * @author wupf
+     * @param GenerateType 1：单元测试 2：DAO_interface
+     * @param strInputFile
      */
-    public GenerateMain(String strInputFile) {
+    public GenerateMain(int GenerateType, String strInputFile) {
+
+
         long start = System.currentTimeMillis();
-        GenerateUnitTests cGenerateUnitTests = new GenerateUnitTests();
+        GenerateTests cGenerateTests = null;
+        if (1 == GenerateType) {
+            cGenerateTests = new GenerateUnitTests();
+        } else if (2 == GenerateType) {
+            cGenerateTests = new GenerateInterfaceTests();
+        } else {
+            logger.warn("not support Generate type");
+            return;
+        }
+
         try {
             // String strFileName="D:\\jworkspaces\\jpfapp\\src\\org\\jpf\\ci\\rpts\\SonarAvg.java";
             if (AiFileUtil.isFile(strInputFile)) {
-                if (cGenerateUnitTests.doGenerateFile(strInputFile)) {
-                    GenerateConst.iGenFileCount++;
+                if (cGenerateTests.doGenerateFile(strInputFile)) {
+                    RunResult.iGenFileCount++;
                 }
-                GenerateRunResult.iTotalFileCount++;
+                RunResult.iTotalFileCount++;
             }
+
             if (AiFileUtil.isDirectory(strInputFile)) {
 
                 Vector<String> vFiles = new Vector<String>();
                 AiFileUtil.getFiles(strInputFile, vFiles, ".java");
-                GenerateRunResult.iTotalFileCount = vFiles.size();
-
+                RunResult.iTotalFileCount = vFiles.size();
 
                 while (vFiles.size() > 0) {
-                    if (strFileNameFilter.length() > 0) {
-                        if (vFiles.get(vFiles.size() - 1).endsWith(strFileNameFilter + ".java")) {
-                            if (cGenerateUnitTests.doGenerateFile(vFiles.get(vFiles.size() - 1))) {
-                                GenerateConst.iGenFileCount++;
+                    if (GenerateInputParam.FileNameFilter.length() > 0) {
+                        String strFileName = vFiles.get(vFiles.size() - 1);
+                        logger.debug(strFileName);
+                        Matcher m = p.matcher(strFileName);
+                        if (m.find()) {
+                            if (cGenerateTests.doGenerateFile(strFileName)) {
+                                RunResult.iGenFileCount++;
                             }
                         }
                     } else {
-                        if (cGenerateUnitTests.doGenerateFile(vFiles.get(vFiles.size() - 1))) {
-                            GenerateConst.iGenFileCount++;
+                        if (cGenerateTests.doGenerateFile(vFiles.get(vFiles.size() - 1))) {
+                            RunResult.iGenFileCount++;
                         }
                     }
+
                     vFiles.remove(vFiles.size() - 1);
+                    logger.info("exist files count:" + vFiles.size());
                 }
 
             }
@@ -72,14 +92,15 @@ public class GenerateMain {
         } catch (Exception ex) {
             // TODO: handle exception
             ex.printStackTrace();
+        } finally {
+            logger.info("处理文件个数 " + RunResult.iTotalFileCount);
+            logger.info("生成测试文件个数 " + RunResult.iGenFileCount);
+            logger.info("抽象类文件个数 " + RunResult.iAbstractFileCount);
+            logger.info("接口类文件个数 " + RunResult.iInterfaceFileCount);
+            logger.info("已存在单元测试文件个数 " + RunResult.iExistUtFileCount);
+            logger.info("处理异常文件个数 " + RunResult.iErrorFileCount);
+            logger.info("ExcuteTime " + (System.currentTimeMillis() - start) + "ms");
         }
-        logger.info("处理文件个数 " + GenerateRunResult.iTotalFileCount);
-        logger.info("生成文件个数 " + GenerateConst.iGenFileCount);
-        logger.info("抽象类文件个数 " + GenerateConst.iAbstractFileCount);
-        logger.info("接口类文件个数 " + GenerateConst.iInterfaceFileCount);
-        logger.info("已存在单元测试文件个数 " + GenerateConst.iExistUtFileCount);
-        logger.info("处理异常文件个数 " + GenerateConst.iErrorFileCount);
-        logger.info("ExcuteTime " + (System.currentTimeMillis() - start) + "ms");
     }
 
     /**
@@ -110,7 +131,7 @@ public class GenerateMain {
         strFileName = "D:\\svn\\ecommerce-branch-20170912\\app-dao\\src\\main\\java\\com\\asiainfo\\ebiz";
         // strFileName =
         // "F:\\svn\\svn10.1.195.110\\trunk\\code-res\\templateInteApi\\templateCommon\\src\\main\\java\\com";
-        new GenerateMain(strFileName);
+        new GenerateMain(1, strFileName);
     }
 
 }

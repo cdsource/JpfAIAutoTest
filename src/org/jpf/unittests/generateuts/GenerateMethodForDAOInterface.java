@@ -7,6 +7,8 @@ package org.jpf.unittests.generateuts;
 
 import java.util.List;
 
+import org.jpf.unittests.generateuts.utils.spring.Service2Bean;
+
 
 /**
  * 
@@ -43,8 +45,8 @@ public class GenerateMethodForDAOInterface extends GenerateMethod {
     public String addClassInstance(String strClassName, List MethodParam, JpfUtInfo cJpfUtInfo) {
         // TODO Auto-generated method stub
         // cJpfUtInfo.addImport("import org.springframework.dao.DataAccessException;\n");
-        cJpfUtInfo.removeImport("import org.junit.*;");
-        cJpfUtInfo.removeImport("import static org.junit.Assert.*;");
+        //cJpfUtInfo.removeImport("import org.junit.*;");
+        //cJpfUtInfo.removeImport("import static org.junit.Assert.*;");
         cJpfUtInfo.addImport("import org.apache.log4j.Logger;");
         cJpfUtInfo.addImport("import com.asiainfo.ebiz.exception.EbizException;");
         cJpfUtInfo.addImport("import java.sql.SQLException;");
@@ -58,7 +60,7 @@ public class GenerateMethodForDAOInterface extends GenerateMethod {
     public String addCatchException(List MethodExceptions) {
         StringBuffer sb = new StringBuffer();
         if (null != MethodExceptions && MethodExceptions.size()>=1) {
-            sb.append(GenerateInputParam.AddException());
+            sb.append(AddException());
         }
         sb.append("        } catch (Exception ex) {").append("\n").append("          ex.printStackTrace();")
                 .append("\n").append("          logger.error(ex);").append("\n")
@@ -87,8 +89,36 @@ public class GenerateMethodForDAOInterface extends GenerateMethod {
      * @see org.jpf.unittests.generateuts.GenerateMethod#addExtraMethod(java.lang.String, org.jpf.unittests.generateuts.JpfUtInfo)
      */
     @Override
-    public void addExtraMethod(String strClassName, JpfUtInfo cJpfUtInfo) {
+    public String addExtraMethod(String strClassName, String strPackageName) {
         // TODO Auto-generated method stub
-        
+        StringBuilder sb = new StringBuilder();
+        sb.append("  private static final Logger logger = Logger.getLogger(").append(strClassName)
+                .append("Test.class);").append("\n").append("  @Override").append("\n")
+                .append("  public Logger getLogger() {").append("\n").append("       return logger;").append("\n")
+                .append("   }").append("\n").append("  public ").append(strClassName)
+                .append("Test(JpfTestInfo cJpfTestInfo) {").append("\n").append("   super(cJpfTestInfo);").append("\n")
+                .append("  }").append("\n");
+        sb.append("        ").append(strClassName).append(" c").append(strClassName).append("= (").append(strClassName)
+                .append(") ContextManager.getContext().getBean(\"")
+                .append(Service2Bean.getInstance().findBeanIdFromXML(strClassName, strPackageName)).append("\");\n").append("  }");
+
+
+        return sb.toString();
+    }
+    
+    public StringBuffer AddException()
+    {
+        StringBuffer sb = new StringBuffer();
+        sb.append("        } catch (EbizException ex) { ").append("\n")
+                .append("          ex.printStackTrace();").append("\n")
+                .append("          logger.error(ex);").append("\n")
+                .append("          cSelfJpfTestInfo.addCountEbizException(1);").append("\n");
+        /*
+                .append("        } catch (SQLException ex) {").append("\n")
+                .append("          ex.printStackTrace();")                .append("\n")
+                .append("          logger.error(ex);").append("\n")
+                .append("          cSelfJpfTestInfo.addCountSQLException(1);").append("\n");
+        */
+        return sb;
     }
 }

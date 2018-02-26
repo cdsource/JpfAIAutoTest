@@ -27,4 +27,6 @@ public class GenerateConst {
     
     //抽象类，不能生成单元测试
     public final static int CLASS_TYPE_ABSTRACT =1025;
+    
+    public final static String SRC_KEY="src\\main\\java\\";
 }

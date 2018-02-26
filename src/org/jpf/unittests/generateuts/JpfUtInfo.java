@@ -8,20 +8,26 @@
 package org.jpf.unittests.generateuts;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import com.asiainfo.utils.AiDateTimeUtil;
 
 /**
  * 
  */
 public class JpfUtInfo {
-
+    private static final Logger logger = LogManager.getLogger();
     private String utPackage="";
     private String SourcePackage="";
 
-
-    private String utImport="";
+    private Map<String, String> mapImport=new HashMap<String, String>();
+    private String currentJavaFile="";
+    
     private String utFileJavaDoc="";
     private String utClassDeclare="";
 
@@ -32,11 +38,15 @@ public class JpfUtInfo {
     private String utMinConstructor="";
     private String utPrivateConstructor="";
     
+    //初始化参数的变量，避免重复
+    private Map<String, String> mapParamVar=new HashMap<String, String>();
+    
     private JpfUtMethodInfo MethodSetup =new JpfUtMethodInfo();
     private JpfUtMethodInfo MethodSetUpBeforeClass=new JpfUtMethodInfo();
     private JpfUtMethodInfo MethodTearDown=new JpfUtMethodInfo();
     private JpfUtMethodInfo MethodTearDownAfterClass=new JpfUtMethodInfo();
     private JpfUtMethodInfo MethodUtMain=new JpfUtMethodInfo();
+    
     
     //R：随机，D： JAVADOC ,L：从日志  r: 运行
     private String genType="R";
@@ -47,12 +57,76 @@ public class JpfUtInfo {
         return genType;
     }
 
+
     /**
      * @param genType the genType to set
      */
     public void setGenType(String genType) {
         this.genType = genType;
     }
+    
+    
+    /**
+     * @return the mapParamVar
+     */
+    public Map<String, String> getMapParamVar() {
+        return mapParamVar;
+    }
+
+
+    /**
+     * @param mapParamVar the mapParamVar to set
+     */
+    public void setMapParamVar(Map<String, String> mapParamVar) {
+        this.mapParamVar = mapParamVar;
+    }
+
+
+    /**
+     * @return the mapImport
+     */
+    public Map<String, String> getMapImport() {
+        return mapImport;
+    }
+
+
+    /**
+     * @param mapImport the mapImport to set
+     */
+    public void setMapImport(Map<String, String> mapImport) {
+        this.mapImport = mapImport;
+    }
+
+
+    /**
+     * @return the currentJavaFile
+     */
+    public String getCurrentJavaFile() {
+        return currentJavaFile;
+    }
+
+
+    /**
+     * @param currentJavaFile the currentJavaFile to set
+     */
+    public void setCurrentJavaFile(String currentJavaFile) {
+        int iPos=currentJavaFile.lastIndexOf("\\");
+        
+        if (iPos>0)
+        {
+            currentJavaFile=currentJavaFile.substring(0, iPos);
+        }
+        iPos=currentJavaFile.indexOf(GenerateConst.SRC_KEY);
+        if (iPos>0)
+        {
+            currentJavaFile=currentJavaFile.substring( iPos+GenerateConst.SRC_KEY.length(),currentJavaFile.length());
+        }
+        currentJavaFile=currentJavaFile.replaceAll("\\\\", ".");
+        logger.debug(currentJavaFile);
+        this.currentJavaFile = currentJavaFile;
+    }
+
+
     /**
      * @return the sourcePackage
      */
@@ -188,20 +262,6 @@ public class JpfUtInfo {
         this.utPrivateConstructor = utPrivateConstructor;
     }
 
-
-    /**
-     * @return the utImport
-     */
-    public String getUtImport() {
-        return utImport;
-    }
-
-    /**
-     * @param utImport the utImport to set
-     */
-    public void setUtImport(String utImport) {
-        this.utImport = utImport;
-    }
     
     /**
      * @return the utPackage
@@ -224,12 +284,52 @@ public class JpfUtInfo {
      * @param strImport update 2017年11月8日
      */
     public void addImport(String strImport) {
-        if (utImport.indexOf(strImport) < 0) {
-            utImport += strImport+"\n";
+
+        if (strImport==null || strImport.trim().length()==0)
+        {
+            return;
+        }
+
+        strImport=strImport.replaceAll("import ", "").replaceAll(";", "") .trim();
+        //logger.debug(strImport);
+        int iPos=strImport.lastIndexOf(".");
+        String strKey=strImport.substring(iPos+1,strImport.length()).trim();
+        //logger.debug(strKey);
+        mapImport.put(strKey, strImport);
+        
+        Iterator<Map.Entry<String, String>> it = mapImport.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, String> entry = it.next();
+            //logger.debug("key= " + entry.getKey() + " and value= " + entry.getValue());
         }
     }
+    
+    public String findImport(String strClassName)
+    {
+        Iterator<Map.Entry<String, String>> it = mapImport.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, String> entry = it.next();
+           // logger.debug("key= " + entry.getKey() + " and value= " + entry.getValue());
+            if (entry.getKey().equalsIgnoreCase(strClassName))
+            {
+                logger.debug("key= " + entry.getKey() + " and value= " + entry.getValue());
+                strClassName=entry.getValue();
+                break;
+            }
+        }
+        return strClassName;
+    }
     public void removeImport(String strImport) {
-            utImport = utImport.replaceAll(strImport, "") ;
+        Iterator<Map.Entry<String, String>> it = mapImport.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, String> entry = it.next();
+            System.out.println("key= " + entry.getKey() + " and value= " + entry.getValue());
+            if (entry.getValue().trim().equalsIgnoreCase(strImport))
+            {
+                mapImport.remove(entry.getKey());
+            }
+        }
+
     }
     public String toString() {
         StringBuffer  sbUtText=new StringBuffer();   
@@ -238,7 +338,14 @@ public class JpfUtInfo {
             utPackage=GenerateInputParam.New_Package_Name+"\n//"+utPackage;
         }
         
-        sbUtText.append(utPackage).append("\n").append(utImport).append("\n").append(utFileJavaDoc).append("\n").append(utClassDeclare).append("\n");
+        sbUtText.append(utPackage).append("\n");
+        
+        Iterator<Map.Entry<String, String>> it = mapImport.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<String, String> entry = it.next();
+            sbUtText.append("import ").append(entry.getValue()+";\n");
+        }
+        sbUtText.append("\n").append(utFileJavaDoc).append("\n").append(utClassDeclare).append("\n");
         
         for(int i=0;i<listUtMethodInfos.size();i++)
         {

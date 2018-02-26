@@ -10,34 +10,9 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzBoolean;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzCalendar;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzClass;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzCollection;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzCommon;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzConnection;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzFile;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzHttpServletRequest;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzInteger;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzIterator;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzList;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzLong;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzMap;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzSet;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzTimestamp;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzbyte;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzchar;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzdouble;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzeInt;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzeString;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzelong;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzeshort;
-import org.jpf.unittests.generateuts.fuzzByParamType.fuzzfloat;
-import org.jpf.unittests.generateuts.genbyjavadoc.ReadInfoFromJavaDoc;
 import org.jpf.unittests.generateuts.genbylog.GenParamValueFromLog;
-import org.jpf.unittests.generateuts.utils.Descartes;
-import org.jpf.unittests.generateuts.utils.FormatUtil;
-import org.jpf.unittests.generateuts.utils.GenerateUtil;
+
+import org.jpf.unittests.generateuts.utils.GenerateUtil2;
 
 
 
@@ -79,7 +54,7 @@ public abstract class GenerateMethod {
      * @author 吴平福
      * @param cJpfUtInf update 2017年12月9日
      */
-    public abstract void addExtraMethod(String strClassName, JpfUtInfo cJpfUtInfo);
+    public abstract String addExtraMethod(String strClassName, String strPackageName);
 
     /**
      * 
@@ -146,7 +121,7 @@ public abstract class GenerateMethod {
         StringBuffer sbCallMethod = new StringBuffer();
         sbCallMethod.append(addMethodCaller(cMethodInfo.getClassName(), cMethodInfo.getMethodName(),
                 cMethodInfo.getMethodParam(), cJpfUtInfo));
-        sbCallMethod.append(GenerateUtil.addMethodParam2Method(cMethodInfo.getModifiers(), cMethodInfo.getMethodParam(),
+        sbCallMethod.append(GenerateUtil2.addMethodParam2Method(cMethodInfo.getModifiers(), cMethodInfo.getMethodParam(),
                 cJpfUtInfo));
 
         // 判断
@@ -159,7 +134,7 @@ public abstract class GenerateMethod {
             // 方法无参数
             JpfUtMethodInfo cJpfUtMethodInfo = new JpfUtMethodInfo();
             cJpfUtInfo.setGenType("W");
-            cJpfUtMethodInfo.setMethodJavaDoc(GenerateUtil.addMethodJavaDoc(cMethodInfo, cJpfUtInfo));
+            cJpfUtMethodInfo.setMethodJavaDoc(GenerateUtil2.addMethodJavaDoc(cMethodInfo, cJpfUtInfo));
             cJpfUtMethodInfo.setMethodDeclare(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo));
             cJpfUtMethodInfo.setMethodTry(addTry());
             cJpfUtMethodInfo.setClassConstructor(
@@ -202,14 +177,14 @@ public abstract class GenerateMethod {
             */
             // 随机产生
             cJpfUtInfo.setGenType("R");
-            ArrayList<String> cParamInitBody = GenerateUtil.addMethodParamInit2(cMethodInfo.getMethodParam(),
+            ArrayList<String> cParamInitBody = GenerateUtil2.addMethodParamInit2(cMethodInfo.getMethodParam(),
                     cJpfUtInfo, GenerateConst.Max_CaseCount_PerMethod);
-            logger.debug("cParamInitBody.size()=" + cParamInitBody.size());
+            //logger.debug("cParamInitBody.size()=" + cParamInitBody.size());
 
             for (int i = 0; i < cParamInitBody.size(); i++) {
 
                 JpfUtMethodInfo cJpfUtMethodInfo = new JpfUtMethodInfo();
-                cJpfUtMethodInfo.setMethodJavaDoc(GenerateUtil.addMethodJavaDoc(cMethodInfo, cJpfUtInfo));
+                cJpfUtMethodInfo.setMethodJavaDoc(GenerateUtil2.addMethodJavaDoc(cMethodInfo, cJpfUtInfo));
                 cJpfUtMethodInfo.setMethodDeclare(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo));
                 cJpfUtMethodInfo.setMethodTry(addTry());
                 cJpfUtMethodInfo.setClassConstructor(
@@ -234,7 +209,7 @@ public abstract class GenerateMethod {
             if (null != strParamValue && strParamValue.trim().length() > 0) {
                 cJpfUtInfo.setGenType("L");
                 JpfUtMethodInfo cJpfUtMethodInfo = new JpfUtMethodInfo();
-                cJpfUtMethodInfo.setMethodJavaDoc(GenerateUtil.addMethodJavaDoc(cMethodInfo, cJpfUtInfo));
+                cJpfUtMethodInfo.setMethodJavaDoc(GenerateUtil2.addMethodJavaDoc(cMethodInfo, cJpfUtInfo));
                 cJpfUtMethodInfo.setMethodDeclare(addMethodDeclare(cMethodInfo.getMethodName(), cJpfUtInfo));
                 cJpfUtMethodInfo.setMethodTry(addTry());
                 cJpfUtMethodInfo.setClassConstructor(
@@ -326,7 +301,7 @@ public abstract class GenerateMethod {
     private String addMethodDeclare(String strMethodName, JpfUtInfo cJpfUtInfo) {
         StringBuffer sb = new StringBuffer();
         sb.append("  public void test_").append(strMethodName).append("_").append(cJpfUtInfo.getGenType())
-                .append(++GenerateRunResult.iMethodCount).append("() throws Exception\n").append("  {").append("\n");
+                .append(++RunResult.iMethodCount).append("() throws Exception\n").append("  {").append("\n");
         return sb.toString();
     }
 

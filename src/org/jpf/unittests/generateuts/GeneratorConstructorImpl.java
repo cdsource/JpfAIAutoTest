@@ -14,7 +14,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Type;
 import org.jpf.unittests.generateuts.utils.FormatUtil;
-import org.jpf.unittests.generateuts.utils.GenerateUtil;
+import org.jpf.unittests.generateuts.utils.GenerateUtil2;
 
 /**
  * 
@@ -95,7 +95,7 @@ public class GeneratorConstructorImpl implements IConstructorGenerator {
         // PUBLIC返回本身类函数
         StringBuffer sbPrivateConstructor = new StringBuffer();
         List param = method.parameters();
-        ArrayList<String> cParamInitBody  = GenerateUtil.addMethodParamInit2(param, cJpfUtInfo,1);
+        ArrayList<String> cParamInitBody  = GenerateUtil2.addMethodParamInit2(param, cJpfUtInfo,1);
 
             for (int i = 0; i < cParamInitBody.size(); i++) {
                 sbPrivateConstructor.append("    ").append( cParamInitBody.get(i) ).append("\n");
@@ -104,7 +104,7 @@ public class GeneratorConstructorImpl implements IConstructorGenerator {
         //logger.info(sbPrivateConstructor.toString());
         sbPrivateConstructor.append("    ").append(strClass).append(" fixture=").append(strClass).append(".")
                 .append(method.getName().toString());
-        sbPrivateConstructor.append(GenerateUtil.addMethodParam2Method(method.getModifiers(), param, cJpfUtInfo));
+        sbPrivateConstructor.append(GenerateUtil2.addMethodParam2Method(method.getModifiers(), param, cJpfUtInfo));
 
         logger.info(sbPrivateConstructor);
         cJpfUtInfo.setUtPrivateConstructor(sbPrivateConstructor.toString());
@@ -124,9 +124,9 @@ public class GeneratorConstructorImpl implements IConstructorGenerator {
             JpfUtInfo cJpfUtInfo) {
        
         JpfUtMethodInfo cJpfUtMethodInfo=new JpfUtMethodInfo();
-        cJpfUtMethodInfo.setMethodJavaDoc(GenerateUtil.addMethodJavaDoc(Modifiers, "", strMethodName, MethodParam, cJpfUtInfo));
-        GenerateRunResult.iMethodCount++;
-        cJpfUtMethodInfo.setMethodDeclare("  public void test" +strMethodName+"_"+GenerateRunResult.iMethodCount +" () throws Exception\n   {\n" );
+        cJpfUtMethodInfo.setMethodJavaDoc(GenerateUtil2.addMethodJavaDoc(Modifiers, "", strMethodName, MethodParam, cJpfUtInfo));
+        RunResult.iMethodCount++;
+        cJpfUtMethodInfo.setMethodDeclare("  public void test" +strMethodName+"_"+RunResult.iMethodCount +" () throws Exception\n   {\n" );
         // instance
         cJpfUtMethodInfo.setClassConstructor(analyseConstructor(Modifiers, strClass, strMethodName, MethodParam, cJpfUtInfo));
         cJpfUtMethodInfo.setMethodAssert("    assertNotNull(result);\n");
@@ -173,7 +173,7 @@ public class GeneratorConstructorImpl implements IConstructorGenerator {
     public StringBuffer addConstructorParamInit(List MethodParam, JpfUtInfo cJpfUtInfo) {
 
         StringBuffer sb = new StringBuffer();
-        ArrayList<String> cParamInitBody  = GenerateUtil.addMethodParamInit2(MethodParam, cJpfUtInfo,1);
+        ArrayList<String> cParamInitBody  = GenerateUtil2.addMethodParamInit2(MethodParam, cJpfUtInfo,1);
 
         for (int i = 0; i < cParamInitBody.size(); i++) {
             sb.append("    ").append( cParamInitBody.get(i) ).append("\n");
@@ -200,7 +200,7 @@ public class GeneratorConstructorImpl implements IConstructorGenerator {
         for (int i = 0; i < MethodParam.size(); i++) {
 
             String strParamName = FormatUtil.formatParam(MethodParam.get(i).toString());
-            strParamName = GenerateUtil.RemoveFinal(strParamName);
+            strParamName = GenerateUtil2.RemoveFinal(strParamName);
             strParamName = strParamName.substring(strParamName.indexOf(" ")).trim();
             int iPos = strParamName.indexOf("[");
             if (iPos > 0) {
