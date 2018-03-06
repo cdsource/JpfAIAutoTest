@@ -25,7 +25,7 @@ public class GenerateMain {
     /**
      * @category 构造函数
      * @author wupf
-     * @param GenerateType 1：单元测试 2：DAO_interface
+     * @param GenerateType 1：单元测试 ; 2：DAO_interface ;3：抽象类
      * @param strInputFile
      */
     public GenerateMain(int GenerateType, String strInputFile) {
@@ -37,6 +37,8 @@ public class GenerateMain {
             cGenerateTests = new GenerateUnitTests();
         } else if (2 == GenerateType) {
             cGenerateTests = new GenerateInterfaceTests();
+        } else if (3 == GenerateType) {
+            cGenerateTests = new GenerateAbstractTests();
         } else {
             logger.warn("not support Generate type");
             return;
@@ -63,14 +65,11 @@ public class GenerateMain {
                         logger.debug(strFileName);
                         Matcher m = p.matcher(strFileName);
                         if (m.find()) {
-                            if (cGenerateTests.doGenerateFile(strFileName)) {
-                                RunResult.iGenFileCount++;
-                            }
+                            cGenerateTests.doGenerateFile(strFileName);
                         }
                     } else {
-                        if (cGenerateTests.doGenerateFile(vFiles.get(vFiles.size() - 1))) {
-                            RunResult.iGenFileCount++;
-                        }
+                        cGenerateTests.doGenerateFile(vFiles.get(vFiles.size() - 1));
+
                     }
 
                     vFiles.remove(vFiles.size() - 1);

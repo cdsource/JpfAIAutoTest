@@ -18,29 +18,20 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.ImportDeclaration;
-import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.core.dom.SimpleName;
-import org.eclipse.jdt.core.dom.Type;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.jpf.unittests.generateuts.utils.AddImport;
 
-import com.asiainfo.utils.ios.AiFileUtil;
 
 /**
  * 
  */
-public class GenerateUnitTests  extends GenerateTests{
+public class GenerateUnitTests extends GenerateTests {
     private static final Logger logger = LogManager.getLogger();
 
     /**
      * 
      */
     public GenerateUnitTests() {
-        
+
     }
 
     /**
@@ -52,7 +43,7 @@ public class GenerateUnitTests  extends GenerateTests{
      */
     protected void addImport(List importList, JpfUtInfo cJpfUtInfo) {
 
-       super().addImport(importList, cJpfUtInfo);
+        super.addImport(importList, cJpfUtInfo);
 
         cJpfUtInfo.addImport("import org.junit.*;");
         cJpfUtInfo.addImport("import static org.junit.Assert.*;");
