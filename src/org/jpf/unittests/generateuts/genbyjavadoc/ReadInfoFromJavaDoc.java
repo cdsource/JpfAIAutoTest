@@ -50,8 +50,7 @@ public class ReadInfoFromJavaDoc {
         for (int i = 0; i < cMethodInfo.getMethodParam().size(); i++) {
             for (int j = 0; j < strJavaDocs.length; j++) {
 
-                ParamInitBody cParamInitBody = new ParamInitBody();
-                FormatUtil.formatToParamBody(cParamInitBody, cMethodInfo.getMethodParam().get(i).toString());
+                ParamInitBody cParamInitBody = new ParamInitBody(cMethodInfo.getMethodParam().get(i).toString());
 
                 if (strJavaDocs[j].trim().startsWith("@ " + cParamInitBody.getParamVariable())) {
                     sb.append("    " + cParamInitBody.getParamType() + " " + cParamInitBody.getParamVariable()

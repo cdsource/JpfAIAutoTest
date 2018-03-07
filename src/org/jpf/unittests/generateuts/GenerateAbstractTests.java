@@ -23,4 +23,22 @@ public class GenerateAbstractTests extends GenerateTests {
         // TODO Auto-generated constructor stub
     }
 
+    /* (non-Javadoc)
+     * @see org.jpf.unittests.generateuts.GenerateTests#addExtraImport(org.jpf.unittests.generateuts.JpfUtInfo)
+     */
+    @Override
+    protected void addExtraImport(JpfUtInfo cJpfUtInfo) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    /* (non-Javadoc)
+     * @see org.jpf.unittests.generateuts.GenerateTests#addExtraBasic(java.lang.String, org.jpf.unittests.generateuts.JpfUtInfo)
+     */
+    @Override
+    protected void addExtraBasic(String strClassName, JpfUtInfo cJpfUtInfo) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

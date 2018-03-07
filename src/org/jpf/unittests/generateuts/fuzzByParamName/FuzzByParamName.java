@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jpf.unittests.generateuts.ParamInitBody;
-import org.jpf.unittests.generateuts.fuzzByParamType.IFuzze;
+import org.jpf.unittests.generateuts.fuzzByParamType.IFuzz;
 
 /**
  * 
  */
-public class FuzzByParamName implements IFuzze {
+public class FuzzByParamName implements IFuzz {
     private static final Logger logger = LogManager.getLogger();
     
     private ArrayList<String> mList=new ArrayList<String>();

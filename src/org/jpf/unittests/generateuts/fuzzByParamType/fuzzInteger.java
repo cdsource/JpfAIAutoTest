@@ -16,7 +16,7 @@ import org.jpf.unittests.generateuts.ParamInitBody;
 /**
  * 
  */
-public class fuzzInteger implements IFuzze{
+public class fuzzInteger implements IFuzz{
     private static final Logger logger = LogManager.getLogger();
     
     public  ArrayList<String> getFuzzeForNull(ParamInitBody cParamInitBody) {
@@ -24,11 +24,11 @@ public class fuzzInteger implements IFuzze{
         logger.debug("strParamName="+cParamInitBody.getParamVariable());
         if (cParamInitBody.isArray())
         {
-            mList.add("    "+cParamInitBody.getParamType()+" " +cParamInitBody.getParamVariable()+" =  new "+cParamInitBody.getParamType()+"[]{1,2};\n");
-            mList.add("    "+cParamInitBody.getParamType()+" " +cParamInitBody.getParamVariable()+" =  new "+cParamInitBody.getParamType()+"[]{-11,-22};\n");
-            mList.add("    "+cParamInitBody.getParamType()+" " +cParamInitBody.getParamVariable()+" =  new "+cParamInitBody.getParamType()+"[]{0,0};\n");
-            mList.add("    "+cParamInitBody.getParamType()+" " +cParamInitBody.getParamVariable()+" =  new "+cParamInitBody.getParamType()+"[]{Integer.MAX_VALUE,Integer.MIN_VALUE};\n");
-            mList.add("    "+cParamInitBody.getParamType()+" " +cParamInitBody.getParamVariable()+" =  new "+cParamInitBody.getParamType()+"[]{Integer.MIN_VALUE,Integer.MAX_VALUE};\n");
+            mList.add("    "+cParamInitBody.getParamType()+" " +cParamInitBody.getParamVariable()+" =  new "+cParamInitBody.getParamType()+"{1,2};\n");
+            mList.add("    "+cParamInitBody.getParamType()+" " +cParamInitBody.getParamVariable()+" =  new "+cParamInitBody.getParamType()+"{-11,-22};\n");
+            mList.add("    "+cParamInitBody.getParamType()+" " +cParamInitBody.getParamVariable()+" =  new "+cParamInitBody.getParamType()+"{0,0};\n");
+            mList.add("    "+cParamInitBody.getParamType()+" " +cParamInitBody.getParamVariable()+" =  new "+cParamInitBody.getParamType()+"{Integer.MAX_VALUE,Integer.MIN_VALUE};\n");
+            mList.add("    "+cParamInitBody.getParamType()+" " +cParamInitBody.getParamVariable()+" =  new "+cParamInitBody.getParamType()+"{Integer.MIN_VALUE,Integer.MAX_VALUE};\n");
         }else
         {
             mList.add("    "+cParamInitBody.getParamType()+" "+cParamInitBody.getParamVariable()+" =  Integer.MAX_VALUE;\n");

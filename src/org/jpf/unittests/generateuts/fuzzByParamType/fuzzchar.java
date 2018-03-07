@@ -16,7 +16,7 @@ import org.jpf.unittests.generateuts.ParamInitBody;
 /**
  * 
  */
-public class fuzzchar implements IFuzze{
+public class fuzzchar implements IFuzz{
 
     private static final Logger logger = LogManager.getLogger();
 

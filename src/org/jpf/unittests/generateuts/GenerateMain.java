@@ -130,7 +130,7 @@ public class GenerateMain {
         strFileName = "D:\\svn\\ecommerce-branch-20170912\\app-dao\\src\\main\\java\\com\\asiainfo\\ebiz";
         // strFileName =
         // "F:\\svn\\svn10.1.195.110\\trunk\\code-res\\templateInteApi\\templateCommon\\src\\main\\java\\com";
-        new GenerateMain(1, strFileName);
+        new GenerateMain(2, strFileName);
     }
 
 }

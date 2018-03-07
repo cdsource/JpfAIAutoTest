@@ -16,13 +16,7 @@ public class GenerateConst {
     
     public static final int Max_CaseCount_PerMethod=5;
     
-    public static int iAbstractFileCount = 0;
-    public static int iInterfaceFileCount = 0;
 
-    public static int iGenFileCount = 0;
-    public static int iExistUtFileCount = 0;
-    public static int iErrorFileCount = 0;
-    public static int iEnumFileCount = 0;
 
     
     //抽象类，不能生成单元测试

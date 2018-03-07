@@ -41,9 +41,7 @@ public class GenerateUnitTests extends GenerateTests {
      * @param importList
      * @param sb update 2017年9月29日
      */
-    protected void addImport(List importList, JpfUtInfo cJpfUtInfo) {
-
-        super.addImport(importList, cJpfUtInfo);
+    protected void addExtraImport( JpfUtInfo cJpfUtInfo) {
 
         cJpfUtInfo.addImport("import org.junit.*;");
         cJpfUtInfo.addImport("import static org.junit.Assert.*;");
@@ -101,6 +99,15 @@ public class GenerateUnitTests extends GenerateTests {
          * assertNotNull("No found node", foundNode); assertEquals("wrong node", fragment,
          * foundNode);
          */
+    }
+
+    /* (non-Javadoc)
+     * @see org.jpf.unittests.generateuts.GenerateTests#addExtraBasic(java.lang.String, org.jpf.unittests.generateuts.JpfUtInfo)
+     */
+    @Override
+    protected void addExtraBasic(String strClassName, JpfUtInfo cJpfUtInfo) {
+        // TODO Auto-generated method stub
+        cJpfUtInfo.setUtBasic(GenerateBaseMethods.addTestEnd(strClassName));
     }
 
 

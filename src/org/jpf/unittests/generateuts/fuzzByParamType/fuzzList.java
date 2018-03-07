@@ -11,13 +11,12 @@ import java.util.ArrayList;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.appender.rolling.SizeBasedTriggeringPolicy;
 import org.jpf.unittests.generateuts.ParamInitBody;
 
 /**
  * 
  */
-public class fuzzList  implements IFuzze{
+public class fuzzList  implements IFuzz{
     private static final Logger logger = LogManager.getLogger();
     
     public  ArrayList<String> getFuzzeForNull(ParamInitBody cParamInitBody) {
@@ -28,7 +27,7 @@ public class fuzzList  implements IFuzze{
         {
         }else
         {
-            String strNewType=cParamInitBody.getParamType().replaceAll("List", "ArrayList").replaceAll("\\?", "");
+             String strNewType=cParamInitBody.getParamType().replaceFirst("List", "ArrayList").replaceAll("\\?", "");
             mList.add("    "+cParamInitBody.getParamType()+" "+cParamInitBody.getParamVariable()+" =  new "+strNewType+"();\n");
         }
         return mList;

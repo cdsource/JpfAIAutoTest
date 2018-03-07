@@ -56,7 +56,6 @@ public class ParamValueFromDebugLog {
             ex.printStackTrace();
         }
     }
-<<<<<<< HEAD
     public HashMap <String, LogCaseInfo> getAllData()throws Exception
     {
 
@@ -80,15 +79,6 @@ public class ParamValueFromDebugLog {
         } catch (Exception ex) {
             // TODO: handle exception
             logger.error(ex);
-=======
-
-    public String toString() {
-        Set<String> key = map.keySet();
-        for (Iterator it = key.iterator(); it.hasNext();) {
-            String s = (String) it.next();
-            System.out.println(s);
-            System.out.println(map.get(s));
->>>>>>> f37f043b207f8d15c65da51508ced7d10104a70e
         }
         return "";
     }
@@ -174,22 +164,14 @@ public class ParamValueFromDebugLog {
         strColName=strColName.replaceAll("_", "");
         String[] strKeys = strColName.split(",");
         logger.info(strColName);
-<<<<<<< HEAD
         logger.debug(strKeys.length);
-=======
-        logger.info(strKeys.length);
->>>>>>> f37f043b207f8d15c65da51508ced7d10104a70e
 
         String strMark = strSql.substring(iPos + 1, strSql.length());
         iPos = strMark.indexOf("(");
         strMark = strMark.substring(iPos + 1, strMark.length());
         iPos = strMark.lastIndexOf(")");
         strMark = strMark.substring(0, iPos);
-<<<<<<< HEAD
         logger.debug(strMark);
-=======
-        logger.info(strMark);
->>>>>>> f37f043b207f8d15c65da51508ced7d10104a70e
         //strMark=strMark.replaceAll(",.*?\\(.*?\\?.*?\\)", ",?");
         strMark=strMark.replaceAll(", *\\w+\\(.*?\\) *", ",?");
         //logger.info(strMark);

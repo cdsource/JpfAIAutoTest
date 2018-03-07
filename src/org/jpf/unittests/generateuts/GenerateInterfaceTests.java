@@ -21,5 +21,24 @@ public class GenerateInterfaceTests   extends GenerateTests{
     public GenerateInterfaceTests() {
         // TODO Auto-generated constructor stub
     }
+    /* (non-Javadoc)
+     * @see org.jpf.unittests.generateuts.GenerateTests#addExtraImport(org.jpf.unittests.generateuts.JpfUtInfo)
+     */
+    @Override
+    protected void addExtraImport(JpfUtInfo cJpfUtInfo) {
+        // TODO Auto-generated method stub
+        
+    }
+    /* (non-Javadoc)
+     * @see org.jpf.unittests.generateuts.GenerateTests#addExtraBasic(org.jpf.unittests.generateuts.JpfUtInfo)
+     */
+    @Override
+    protected void addExtraBasic(String strClassName,JpfUtInfo cJpfUtInfo) {
+        // TODO Auto-generated method stub
+        cJpfUtInfo.setUtBasic(
+                GenerateBaseMethods.addExtraMethod(strClassName, cJpfUtInfo.getUtPackage()));
+        cJpfUtInfo.addImport(cJpfUtInfo.getUtPackage().replaceAll("package", "import").replaceAll(";",
+                "." + strClassName + ";"));
+    }
 
 }

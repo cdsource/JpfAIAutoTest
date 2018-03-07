@@ -15,6 +15,8 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jdt.core.dom.ImportDeclaration;
+
 import com.asiainfo.utils.AiDateTimeUtil;
 
 /**
@@ -26,7 +28,7 @@ public class JpfUtInfo {
     private String SourcePackage="";
 
     private Map<String, String> mapImport=new HashMap<String, String>();
-    private String currentJavaFile="";
+    private String currentJavaFilePackage="";
     
     private String utFileJavaDoc="";
     private String utClassDeclare="";
@@ -101,15 +103,15 @@ public class JpfUtInfo {
     /**
      * @return the currentJavaFile
      */
-    public String getCurrentJavaFile() {
-        return currentJavaFile;
+    public String getCurrentJavaFilePackage() {
+        return currentJavaFilePackage;
     }
 
 
     /**
      * @param currentJavaFile the currentJavaFile to set
      */
-    public void setCurrentJavaFile(String currentJavaFile) {
+    public void setCurrentJavaFilePackage(String currentJavaFile) {
         int iPos=currentJavaFile.lastIndexOf("\\");
         
         if (iPos>0)
@@ -123,7 +125,7 @@ public class JpfUtInfo {
         }
         currentJavaFile=currentJavaFile.replaceAll("\\\\", ".");
         logger.debug(currentJavaFile);
-        this.currentJavaFile = currentJavaFile;
+        this.currentJavaFilePackage = currentJavaFile;
     }
 
 
@@ -304,6 +306,29 @@ public class JpfUtInfo {
         }
     }
     
+    /**
+     * 
+     * @category 增加IMPORT
+     * @author 吴平福
+     * @param importList
+     * @param sb update 2017年9月29日
+     */
+    public void addImport(List importList) {
+
+        for (Object obj : importList) {
+            ImportDeclaration importDec = (ImportDeclaration) obj;
+            //logger.debug(importDec.toString());
+            addImport(importDec.toString().trim());
+        }
+    }
+    /**
+     * 
+     * @category 
+     * @author 吴平福 
+     * @param strClassName
+     * @return
+     * update 2018年3月6日
+     */
     public String findImport(String strClassName)
     {
         Iterator<Map.Entry<String, String>> it = mapImport.entrySet().iterator();
@@ -319,6 +344,14 @@ public class JpfUtInfo {
         }
         return strClassName;
     }
+    
+    /**
+     * 
+     * @category 
+     * @author 吴平福 
+     * @param strImport
+     * update 2018年3月6日
+     */
     public void removeImport(String strImport) {
         Iterator<Map.Entry<String, String>> it = mapImport.entrySet().iterator();
         while (it.hasNext()) {

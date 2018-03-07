@@ -39,7 +39,6 @@ public class GenParamValueFromLog {
 
     public String genParamValue(String strFullClassName, JpfMethodInfo cMethodInfo) {
         logger.info(strFullClassName);
-<<<<<<< HEAD
         // find method from self test
         String strSql = ParamValueFromSelfLog.getInstance().findValueFromLog(strFullClassName);
         if (null == strSql || strSql.trim().length() == 0) {
@@ -49,19 +48,6 @@ public class GenParamValueFromLog {
         // find from log
         LogCaseInfo cLogCaseInfo = ParamValueFromDebugLog.getInstance().findValueFromLog(strSql);
         if (null == cLogCaseInfo) {
-=======
-        //find method from self test
-        String strSql=ParamValueFromSelfLog.getInstance().findValueFromLog(strFullClassName);
-        if (null==strSql || strSql.trim().length()==0)
-        {
-            return "";
-        }
-        
-        //find from log
-        LogCaseInfo cLogCaseInfo=ParamValueFromDebugLog.getInstance().findValueFromLog(strSql);
-        if (null==cLogCaseInfo)
-        {
->>>>>>> f37f043b207f8d15c65da51508ced7d10104a70e
             return "";
         }
         StringBuffer sBuffer = new StringBuffer();
@@ -69,9 +55,7 @@ public class GenParamValueFromLog {
 
             for (int i = 0; i < cMethodInfo.getMethodParam().size(); i++) {
 
-                ParamInitBody cParamInitBody = new ParamInitBody();
-                FormatUtil.formatToParamBody(cParamInitBody, cMethodInfo.getMethodParam().get(i).toString());
-<<<<<<< HEAD
+                ParamInitBody cParamInitBody = new ParamInitBody(cMethodInfo.getMethodParam().get(i).toString());
 
                 // 在基本类型里面找不到
                 boolean isFindType = true;
@@ -161,8 +145,7 @@ public class GenParamValueFromLog {
                         strValue = cLogCaseInfo.getParams().get(strShortMethodName);
                         if (null != strValue) {
                             logger.debug(strMethodName + ":" + strValue);
-                            ParamInitBody cParamInitBody2 = new ParamInitBody();
-                            FormatUtil.formatToParamBody(cParamInitBody2, method.parameters().get(0).toString());
+                            ParamInitBody cParamInitBody2 = new ParamInitBody(method.parameters().get(0).toString());
                             logger.debug(cParamInitBody2.getParamType());
                             sBuffer.append("  ").append(cParamInitBody.getParamVariable()).append(".")
                                     .append(strMethodName).append("(");
@@ -184,76 +167,6 @@ public class GenParamValueFromLog {
                         // 10 private static
 
                     }
-=======
-                
-                //在基本类型里面找不到
-                String strJavaFileName = FindClassInfoUtil.getInstance().findJavaFile(cParamInitBody.getParamType());
-                sBuffer.append("  ").append(cParamInitBody.getParamType()).append(" ").append(cParamInitBody.getParamVariable()).append(" = new ").append(cParamInitBody.getParamType()).append("();\n");
-                logger.info(strJavaFileName);
-                if (strJavaFileName == "") {
-                    logger.warn("not find java file:" + strJavaFileName);
-                    return "";
-                }
-
-                String sourceString = AiFileUtil.getFileTxt(strJavaFileName, "GBK");
-                logger.trace(sourceString);
-                ASTParser astParser = ASTParser.newParser(AST.JLS8);
-                astParser.setKind(ASTParser.K_COMPILATION_UNIT);
-                astParser.setResolveBindings(true);
-
-                astParser.setSource(sourceString.toCharArray());
-                CompilationUnit cCompilationUnit = (CompilationUnit) astParser.createAST(null);
-
-
-                List types = cCompilationUnit.types();
-                if (types.size() == 0) {
-                    logger.warn("type=null:" + strJavaFileName);
-                    return "";
-                }
-                TypeDeclaration typeDec = (TypeDeclaration) types.get(0);
-                logger.info("classname=" + typeDec.getName());
-                logger.debug("typeDec.getModifiers()=" + typeDec.getModifiers());
-
-                // show methods
-                MethodDeclaration methodDec[] = typeDec.getMethods();
- 
-                
-                for (MethodDeclaration method : methodDec) {
-
-                    String strMethodName = method.getName().toString();
-                    if (!strMethodName.startsWith("set")) {
-                        continue;
-                    }
-                    logger.debug(strMethodName);
-                    String strShortMethodName=strMethodName.substring(3,strMethodName.length()).toUpperCase();
-                    
-                    
-                    String strValue=cLogCaseInfo.getParams().get(strShortMethodName);
-                    if (null!=strValue)
-                    {
-                        logger.debug(strMethodName+":"+strValue);
-                        ParamInitBody cParamInitBody2 = new ParamInitBody();
-                        FormatUtil.formatToParamBody(cParamInitBody2, method.parameters().get(0).toString());
-                        logger.debug(cParamInitBody2.getParamType());
-                        sBuffer.append("  ").append(cParamInitBody.getParamVariable()).append(".") .append(strMethodName).append("(");
-                        if (cParamInitBody2.getParamType().equalsIgnoreCase("String"))
-                        {
-                            sBuffer.append("\"").append(strValue).append("\"");
-                        }else if (cParamInitBody2.getParamType().equalsIgnoreCase("Long"))
-                        {
-                            sBuffer.append(strValue).append("L");
-                        }else {
-                            sBuffer.append(strValue);
-                        }
-                        sBuffer.append(");\n");
-                    }
-                    // 1 public
-                    // 2 private
-                    // 9 public static
-                    // 10 private static
-
-
->>>>>>> f37f043b207f8d15c65da51508ced7d10104a70e
 
                 }
             }

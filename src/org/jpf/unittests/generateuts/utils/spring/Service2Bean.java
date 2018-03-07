@@ -57,6 +57,15 @@ public class Service2Bean {
         logger.info("service to bean size:" + map.size());
     }
 
+    /**
+     * 
+     * @category 
+     * @author 吴平福 
+     * @param strClassName
+     * @param strPackageName
+     * @return
+     * update 2018年3月6日
+     */
     public String findBeanIdFromXML(String strClassName, String strPackageName) {
         String strReturn = "";
         try {

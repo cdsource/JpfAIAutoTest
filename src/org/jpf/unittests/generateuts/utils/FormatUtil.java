@@ -65,8 +65,7 @@ public class FormatUtil {
     }
     
     public static String getParamVar(List MethodParam) {
-        ParamInitBody cParamInitBody = new ParamInitBody();
-        FormatUtil.formatToParamBody(cParamInitBody, MethodParam.get(0).toString());
+        ParamInitBody cParamInitBody = new ParamInitBody(MethodParam.get(0).toString());
         return cParamInitBody.getParamVariable();
     }
     /**
@@ -111,5 +110,24 @@ public class FormatUtil {
         
         strParamType="Object array[]";
         System.out.println(isParamArray(strParamType));
+    }
+    
+    public static String getParamValue(String strInit)
+    {
+        //logger.debug("strInit="+strInit);
+        if (strInit==null || strInit.trim().length()==0)
+        {
+            return "";
+        }
+        int iPos=strInit.indexOf("=");
+        if (iPos>0)
+        {
+            strInit = strInit.substring(strInit.indexOf("=") + 1, strInit.length()).trim();
+        }
+        if (strInit.endsWith(";")) {
+            strInit = strInit.substring(0, strInit.length() - 1);
+        }
+        //logger.debug("strInit="+strInit);
+        return strInit;
     }
 }
