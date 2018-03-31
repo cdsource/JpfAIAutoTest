@@ -11,7 +11,6 @@ import java.util.Vector;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jpf.xmls.JpfXmlUtil;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -19,6 +18,7 @@ import com.asiainfo.utils.AiDateTimeUtil;
 import com.asiainfo.utils.ios.AiFileUtil;
 import com.asiainfo.utils.mails.AiMail;
 import com.asiainfo.utils.scms.SVNUtil;
+import com.asiainfo.utils.xmls.AiXmlUtil;
 
 /**
  * 
@@ -84,7 +84,7 @@ public class UnitTestRpt
 				.append("<testsuites tests=\"5\" failures=\"2\" disabled=\"1\" errors=\"0\" time=\"0.261\" name=\"")
 				.append(strTestName).append("\">\n");
 
-		NodeList nl = JpfXmlUtil.getNodeList("test", strFileName);
+		NodeList nl = AiXmlUtil.getNodeList("test", strFileName);
 		// System.out.println(nl.getLength());
 		boolean IsAdd = false;
 		String testsuite = "";

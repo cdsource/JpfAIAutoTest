@@ -11,6 +11,11 @@ import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jpf.gts.gtf.GTFForAbstract;
+import org.jpf.gts.gtf.GTFForInterface;
+import org.jpf.gts.gtf.GTFForNormal;
+import org.jpf.gts.gtf.GenerateTests;
+
 import com.asiainfo.utils.ios.AiFileUtil;
 
 /**
@@ -34,11 +39,11 @@ public class GenerateMain {
         long start = System.currentTimeMillis();
         GenerateTests cGenerateTests = null;
         if (1 == GenerateType) {
-            cGenerateTests = new GenerateUnitTests();
+            cGenerateTests = new GTFForNormal();
         } else if (2 == GenerateType) {
-            cGenerateTests = new GenerateInterfaceTests();
+            cGenerateTests = new GTFForInterface();
         } else if (3 == GenerateType) {
-            cGenerateTests = new GenerateAbstractTests();
+            cGenerateTests = new GTFForAbstract();
         } else {
             logger.warn("not support Generate type");
             return;

@@ -26,10 +26,10 @@ public class UtRunCheck {
 	/**
 	 * 
 	 */
-	public UtRunCheck() {
+	public UtRunCheck(String strStartPath) {
 		// TODO Auto-generated constructor stub
         long start = System.currentTimeMillis();
-
+        this.strStartPath=strStartPath;
         try {
         	int iTryCount=0;
         	
@@ -113,8 +113,13 @@ public class UtRunCheck {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		new UtRunCheck();
-
+		if (1==args.length)
+		{
+			new UtRunCheck(args[0]);
+		}else
+		{
+			 logger.info("error input!");
+		}
 	}
 
 }

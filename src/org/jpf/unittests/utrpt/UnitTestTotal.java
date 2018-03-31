@@ -14,7 +14,7 @@ import java.io.InputStreamReader;
 import java.sql.Connection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jpf.common.AppConn;
+import org.jpf.dbs.common.AppConn;
 
 import com.asiainfo.utils.dbsql.AiDBUtil;
 import com.asiainfo.utils.ios.AiFileUtil;
