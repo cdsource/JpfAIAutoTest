@@ -17,7 +17,7 @@ import org.jpf.unittests.generateuts.utils.GenerateUtil2;
 /**
  * 
  */
-public class GenerateMethodPrivate extends GenerateMethod {
+public class GenerateMethodPrivate extends AbstractGenerateMethod {
     private static final Logger logger = LogManager.getLogger();
     /**
      * 

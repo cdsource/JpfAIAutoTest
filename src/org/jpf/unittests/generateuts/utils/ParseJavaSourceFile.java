@@ -64,4 +64,28 @@ public class ParseJavaSourceFile {
         return (CompilationUnit) astParser.createAST(null);
     }
 
+    /**
+     * 
+     * @category 
+     * @author 吴平福 
+     * @param sourceFileName
+     * @return
+     * @throws Exception
+     * update 2018年3月6日
+     */
+    public CompilationUnit parseJavaSourceFile18(String sourceFileName )throws Exception
+    {
+        logger.debug(sourceFileName);
+        String sourceString = AiFileUtil.getFileTxt(sourceFileName, "GBK");
+        ASTParser astParser = ASTParser.newParser(AST.JLS8);
+        astParser.setKind(ASTParser.K_COMPILATION_UNIT);
+        astParser.setResolveBindings(true);
+        astParser.setSource(sourceString.toCharArray());
+        
+        Map options = JavaCore.getOptions();
+        options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_8); // or newer version
+        astParser.setCompilerOptions(options);
+        
+        return (CompilationUnit) astParser.createAST(null);
+    }
 }

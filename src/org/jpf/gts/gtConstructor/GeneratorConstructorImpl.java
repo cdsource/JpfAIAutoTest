@@ -22,7 +22,7 @@ import org.jpf.unittests.generateuts.utils.GenerateUtil2;
 /**
  * 
  */
-public class GeneratorConstructorImpl implements InterfaceGTMForConstructor {
+public class GeneratorConstructorImpl implements IGTMForConstructor {
     private static final Logger logger = LogManager.getLogger();
 
     /**

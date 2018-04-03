@@ -17,7 +17,10 @@ import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jpf.gts.dbs.DbServer;
 import org.jpf.unittests.generateuts.GenerateInputParam;
+
+import com.asiainfo.utils.dbsql.AiDBUtil;
 
 
 /**
@@ -68,7 +71,7 @@ public class HandleLogFromDebugToDb {
     {
         Connection conn=null;
         try {
-            conn=H2ServerTest.getInstance().getConn();
+            conn=DbServer.getInstance().getConn();
             logger.info(conn==null);
             String strSql_SQL_INFO="insert into sql_info(SQL_STR,EXE_DATE) values(?,?) ";
             String strSql_SQL_ROW_VALUE="insert into sql_row_value(SQL_INFO_ID,COL_NAME,COL_VALUE) values(?,?,?) ";
@@ -109,20 +112,16 @@ public class HandleLogFromDebugToDb {
                 }
                 lFindCount++;
             }
-            conn.commit();
+            if (conn.getAutoCommit()==false)
+            {
+            	conn.commit();
+            }
         } catch (Exception ex) {
             // TODO: handle exception
             ex.printStackTrace();
             logger.error(ex);
         }finally {
-            try {
-                if (null!=conn)
-                {
-                    conn.close();
-                }
-            } catch (Exception ex2) {
-                // TODO: handle exception
-            }
+            AiDBUtil.doClear(conn);
         }
     }
 

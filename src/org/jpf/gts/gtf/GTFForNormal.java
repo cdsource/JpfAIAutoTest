@@ -18,14 +18,14 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.jpf.gts.gtm.GenerateBaseMethods;
+import org.jpf.gts.gtm.GenerateMethodUtil;
 import org.jpf.unittests.generateuts.JpfUtInfo;
 
 
 /**
  * 
  */
-public class GTFForNormal extends GenerateTests {
+public class GTFForNormal extends AbstractGenerateTests {
     private static final Logger logger = LogManager.getLogger();
 
     /**
@@ -108,7 +108,7 @@ public class GTFForNormal extends GenerateTests {
     @Override
     protected void addExtraBasic(String strClassName, JpfUtInfo cJpfUtInfo) {
         // TODO Auto-generated method stub
-        cJpfUtInfo.setUtBasic(GenerateBaseMethods.addTestEnd(strClassName));
+        cJpfUtInfo.setUtBasic(GenerateMethodUtil.addTestEnd(strClassName));
     }
 
 

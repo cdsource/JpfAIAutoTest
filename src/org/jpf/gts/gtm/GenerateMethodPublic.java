@@ -13,7 +13,7 @@ import org.jpf.unittests.generateuts.JpfUtInfo;
 /**
  * 
  */
-public class GenerateMethodPublic extends GenerateMethod {
+public class GenerateMethodPublic extends AbstractGenerateMethod {
 
     /**
      * 

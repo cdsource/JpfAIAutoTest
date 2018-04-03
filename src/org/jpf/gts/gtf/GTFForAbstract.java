@@ -14,7 +14,7 @@ import org.jpf.unittests.generateuts.JpfUtInfo;
 /**
  * 
  */
-public class GTFForAbstract extends GenerateTests {
+public class GTFForAbstract extends AbstractGenerateTests {
     private static final Logger logger = LogManager.getLogger();
 
     /**

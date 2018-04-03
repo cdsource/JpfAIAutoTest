@@ -9,13 +9,13 @@ package org.jpf.gts.gtf;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jpf.gts.gtm.GenerateBaseMethods;
+import org.jpf.gts.gtm.GenerateMethodUtil;
 import org.jpf.unittests.generateuts.JpfUtInfo;
 
 /**
  * 
  */
-public class GTFForInterface   extends GenerateTests{
+public class GTFForInterface   extends AbstractGenerateTests{
     private static final Logger logger = LogManager.getLogger();
     /**
      * 
@@ -38,7 +38,7 @@ public class GTFForInterface   extends GenerateTests{
     protected void addExtraBasic(String strClassName,JpfUtInfo cJpfUtInfo) {
         // TODO Auto-generated method stub
         cJpfUtInfo.setUtBasic(
-                GenerateBaseMethods.addExtraMethod(strClassName, cJpfUtInfo.getUtPackage()));
+                GenerateMethodUtil.addExtraMethod(strClassName, cJpfUtInfo.getUtPackage()));
         cJpfUtInfo.addImport(cJpfUtInfo.getUtPackage().replaceAll("package", "import").replaceAll(";",
                 "." + strClassName + ";"));
     }

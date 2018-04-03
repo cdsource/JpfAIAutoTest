@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 import org.jpf.gts.gtf.GTFForAbstract;
 import org.jpf.gts.gtf.GTFForInterface;
 import org.jpf.gts.gtf.GTFForNormal;
-import org.jpf.gts.gtf.GenerateTests;
+import org.jpf.gts.gtf.AbstractGenerateTests;
 
 import com.asiainfo.utils.ios.AiFileUtil;
 
@@ -37,7 +37,7 @@ public class GenerateMain {
 
 
         long start = System.currentTimeMillis();
-        GenerateTests cGenerateTests = null;
+        AbstractGenerateTests cGenerateTests = null;
         if (1 == GenerateType) {
             cGenerateTests = new GTFForNormal();
         } else if (2 == GenerateType) {

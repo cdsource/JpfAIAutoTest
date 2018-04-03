@@ -14,7 +14,7 @@ import org.jpf.unittests.plugins.spring.Service2Bean;
 /**
  * 
  */
-public class GenerateMethodForDAOInterface extends GenerateMethod {
+public class GenerateMethodForDAOInterface extends AbstractGenerateMethod {
 
     /**
      * 
