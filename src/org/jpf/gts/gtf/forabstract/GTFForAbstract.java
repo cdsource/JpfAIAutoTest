@@ -1,28 +1,30 @@
 /** 
 * @author 吴平福 
 * E-mail:wupf@asiainfo.com 
-* @version 创建时间：2018年3月6日 上午10:17:43 
+* @version 创建时间：2018年3月6日 上午11:33:03 
 * 类说明 
 */ 
 
-package org.jpf.gts.gtf;
+package org.jpf.gts.gtf.forabstract;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jpf.gts.gtm.GenerateMethodUtil;
+import org.jpf.gts.gtf.AbstractGenerateTests;
 import org.jpf.unittests.generateuts.JpfUtInfo;
 
 /**
  * 
  */
-public class GTFForInterface   extends AbstractGenerateTests{
+public class GTFForAbstract extends AbstractGenerateTests {
     private static final Logger logger = LogManager.getLogger();
+
     /**
      * 
      */
-    public GTFForInterface() {
+    public GTFForAbstract() {
         // TODO Auto-generated constructor stub
     }
+
     /* (non-Javadoc)
      * @see org.jpf.unittests.generateuts.GenerateTests#addExtraImport(org.jpf.unittests.generateuts.JpfUtInfo)
      */
@@ -31,16 +33,14 @@ public class GTFForInterface   extends AbstractGenerateTests{
         // TODO Auto-generated method stub
         
     }
+
     /* (non-Javadoc)
-     * @see org.jpf.unittests.generateuts.GenerateTests#addExtraBasic(org.jpf.unittests.generateuts.JpfUtInfo)
+     * @see org.jpf.unittests.generateuts.GenerateTests#addExtraBasic(java.lang.String, org.jpf.unittests.generateuts.JpfUtInfo)
      */
     @Override
-    protected void addExtraBasic(String strClassName,JpfUtInfo cJpfUtInfo) {
+    protected void addExtraBasic(String strClassName, JpfUtInfo cJpfUtInfo) {
         // TODO Auto-generated method stub
-        cJpfUtInfo.setUtBasic(
-                GenerateMethodUtil.addExtraMethod(strClassName, cJpfUtInfo.getUtPackage()));
-        cJpfUtInfo.addImport(cJpfUtInfo.getUtPackage().replaceAll("package", "import").replaceAll(";",
-                "." + strClassName + ";"));
+        
     }
 
 }

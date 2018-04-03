@@ -3,12 +3,12 @@
  * @version 创建时间：2017年12月9日 上午10:51:48 类说明
  */
 
-package org.jpf.gts.gtm;
+package org.jpf.gts.gtf.fordao;
 
 import java.util.List;
 
+import org.jpf.gts.gtm.AbstractGenerateMethod;
 import org.jpf.unittests.generateuts.JpfUtInfo;
-import org.jpf.unittests.plugins.spring.Service2Bean;
 
 
 /**

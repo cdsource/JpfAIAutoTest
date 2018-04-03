@@ -13,13 +13,12 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.jpf.gts.gtConstructor.GeneratorConstructorImpl;
-import org.jpf.gts.gtm.GenerateMethodUtil;
+import org.jpf.gts.gtf.fordao.GenerateMethodForDAOInterface;
 import org.jpf.gts.gtm.AbstractGenerateMethod;
-import org.jpf.gts.gtm.GenerateMethodForDAOInterface;
 import org.jpf.gts.gtm.GenerateMethodPrivate;
 import org.jpf.gts.gtm.GenerateMethodPublic;
 import org.jpf.gts.gtm.GenerateMethodPublicStatic;
+import org.jpf.gts.gtm.gtConstructor.GeneratorConstructorImpl;
 import org.jpf.unittests.generateuts.GenerateConst;
 import org.jpf.unittests.generateuts.GenerateInputParam;
 import org.jpf.unittests.generateuts.JpfMethodInfo;
@@ -28,6 +27,7 @@ import org.jpf.unittests.generateuts.RunResult;
 import org.jpf.unittests.generateuts.utils.AddImport;
 import org.jpf.unittests.generateuts.utils.ParseJavaSourceFile;
 
+import com.asiainfo.utils.AiDateTimeUtil;
 import com.asiainfo.utils.ios.AiFileUtil;
 
 /**
@@ -51,7 +51,10 @@ public abstract class AbstractGenerateTests {
      * @param sb update 2017年9月29日
      */
     protected abstract void addExtraImport(JpfUtInfo cJpfUtInfo);
-    protected abstract void addExtraBasic(String strClassName,JpfUtInfo cJpfUtInfo);
+    protected void addExtraBasic(String strClassName,JpfUtInfo cJpfUtInfo)
+    {
+    
+    }
     /**
      * 
      * @category 生成单个单元测试文件
@@ -135,9 +138,9 @@ public abstract class AbstractGenerateTests {
             addExtraImport(cJpfUtInfo);
 
             // add class javadoc
-            cJpfUtInfo.setUtFileDesc(GenerateMethodUtil.addClassDesc(typeDec.getName().toString()));
+            cJpfUtInfo.setUtFileDesc(addClassDesc(typeDec.getName().toString()));
             // add class declare
-            cJpfUtInfo.setUtClassDeclare(GenerateMethodUtil.addClassDeclare(typeDec.getName().toString()));
+            cJpfUtInfo.setUtClassDeclare(addClassDeclare(typeDec.getName().toString()));
 
 
             // show methods
@@ -231,5 +234,126 @@ public abstract class AbstractGenerateTests {
             ex.printStackTrace();
         }
         return false;
+    }
+    
+    /**
+     * 
+     * @category 增加类说明
+     * @author 吴平福
+     * @param strClass
+     * @param sb update 2017年9月29日
+     */
+    protected  String addClassDeclare(String strClass) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("public class ").append(strClass).append("Test ");
+
+        sb.append(" {\n");
+        return sb.toString();
+    }
+    
+    /**
+     * 
+     * @category 增加启动结束主函数
+     * @author 吴平福
+     * @param strClass
+     * @param sb update 2017年9月29日
+     */
+    public String addTestEnd(String strClass) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("\n").append("  /**").append("\n");
+        sb.append("  * 测试方法初始化.").append("\n");
+        sb.append("  * ").append("\n");
+        sb.append("  * @throws Exception ").append("\n");
+        sb.append("  *         if the initialization fails for some reason ").append("\n");
+        sb.append("  *  ").append("\n");
+        sb.append("  * @generatedBy wupf@asiainfo.com at ").append(AiDateTimeUtil.getCurrDateTime()).append("\n");
+        sb.append("  */  ").append("\n");
+        sb.append(" @Before ").append("\n");
+        sb.append("  public void setUp()  throws Exception ").append("\n");
+        sb.append("  { ").append("\n");
+        sb.append("     // TODO: add additional set up code here").append("\n");
+        sb.append("  }").append("\n");
+
+        sb.append("\n").append("  /**").append("\n");
+        sb.append("  *  如果有必须，测试方法退出清理工作.").append("\n");
+        sb.append("  * ").append("\n");
+        sb.append("  * @throws Exception ").append("\n");
+        sb.append("  * if the clean-up fails for some reason ").append("\n");
+        sb.append("  *  ").append("\n");
+        sb.append("  * @generatedBy wupf@asiainfo.com at ").append(AiDateTimeUtil.getCurrDateTime()).append("\n");
+        sb.append("  */  ").append("\n");
+        sb.append("  @After ").append("\n");
+        sb.append("  public void tearDown()  throws Exception ").append("\n");
+        sb.append("  { ").append("\n");
+        sb.append("    // TODO: add additional clean-up code here").append("\n");
+        sb.append("  }").append("\n");
+
+        sb.append("\n").append("  /**").append("\n");
+        sb.append("  * 测试类初始化.").append("\n");
+        sb.append("  * ").append("\n");
+        sb.append("  * @throws Exception ").append("\n");
+        sb.append("  *         if the initialization fails for some reason ").append("\n");
+        sb.append("  *  ").append("\n");
+        sb.append("  * @generatedBy wupf@asiainfo.com at ").append(AiDateTimeUtil.getCurrDateTime()).append("\n");
+        sb.append("  */  ").append("\n");
+        sb.append(" @BeforeClass ").append("\n");
+        sb.append("  public static void setUpBeforeClass()  throws Exception ").append("\n");
+        sb.append("  { ").append("\n");
+        sb.append("     // TODO: add additional set up code here").append("\n");
+        sb.append("  }").append("\n");
+
+        sb.append("\n").append("  /**").append("\n");
+        sb.append("  *  如果有必须，测试类退出清理工作.").append("\n");
+        sb.append("  * ").append("\n");
+        sb.append("  * @throws Exception ").append("\n");
+        sb.append("  * if the clean-up fails for some reason ").append("\n");
+        sb.append("  *  ").append("\n");
+        sb.append("  * @generatedBy wupf@asiainfo.com at ").append(AiDateTimeUtil.getCurrDateTime()).append("\n");
+        sb.append("  */  ").append("\n");
+        sb.append("  @AfterClass ").append("\n");
+        sb.append("  public static void tearDownAfterClass()  throws Exception ").append("\n");
+        sb.append("  { ").append("\n");
+        sb.append("    // TODO: add additional clean-up code here").append("\n");
+        sb.append("  }").append("\n");
+
+        sb.append("\n").append("  /**").append("\n");
+        sb.append("  * Launch the test").append("\n");
+        sb.append("  * ").append("\n");
+        sb.append("  * @param args the command line arguments ").append("\n");
+        sb.append("  *  ").append("\n");
+        sb.append("  * @generatedBy wupf@asiainfo.com at ").append(AiDateTimeUtil.getCurrDateTime()).append("\n");
+        sb.append("  * ").append("\n");
+        sb.append("  */").append("\n");
+        sb.append("  public static void main(String[] args) ").append("\n");
+        sb.append("  {").append("\n");
+        sb.append("    new org.junit.runner.JUnitCore().run(").append(strClass).append("Test.class);\n");
+        sb.append("  } ").append("\n");
+        sb.append("} ").append("\n");
+
+        return sb.toString();
+    }
+
+    /**
+     * 
+     * @category 增加类说明
+     * @author 吴平福
+     * @param strClass
+     * @param sb update 2017年9月29日
+     */
+    public String addClassDesc(String strClass) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("/**").append("\n");
+        sb.append("* The class <code>").append(strClass)
+                .append("Test</code> contains tests for the class <code>{@link ").append(strClass).append("}</code>.")
+                .append("\n");
+        sb.append("* <p>").append("\n");
+        sb.append("* Copyright (c) 2017").append("\n");
+        sb.append("* ").append("\n");
+        sb.append("* @generatedBy wupf@asiainfo.com at ").append(AiDateTimeUtil.getCurrDateTime()).append("\n");
+        sb.append("* @author Administrator").append("\n");
+        sb.append("* @version $Revision: 1.0 $").append("\n");
+        sb.append("*/").append("\n");
+
+        return sb.toString();
     }
 }

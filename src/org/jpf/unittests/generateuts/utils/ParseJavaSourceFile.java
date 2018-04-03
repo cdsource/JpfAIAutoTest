@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.jpf.unittests.generateuts.GenerateInputParam;
 
 import com.asiainfo.utils.ios.AiFileUtil;
 
@@ -51,7 +52,7 @@ public class ParseJavaSourceFile {
     public CompilationUnit parseJavaSourceFile17(String sourceFileName )throws Exception
     {
         logger.debug(sourceFileName);
-        String sourceString = AiFileUtil.getFileTxt(sourceFileName, "GBK");
+        String sourceString = AiFileUtil.getFileTxt(sourceFileName, GenerateInputParam.JAVA_ENCODE);
         ASTParser astParser = ASTParser.newParser(AST.JLS8);
         astParser.setKind(ASTParser.K_COMPILATION_UNIT);
         astParser.setResolveBindings(true);

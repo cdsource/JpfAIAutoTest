@@ -3,7 +3,7 @@
  * @version 创建时间：2017年10月18日 下午10:43:56 类说明
  */
 
-package org.jpf.gts.gtConstructor;
+package org.jpf.gts.gtm.gtConstructor;
 
 import java.util.ArrayList;
 import java.util.List;

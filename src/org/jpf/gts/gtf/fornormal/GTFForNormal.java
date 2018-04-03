@@ -3,7 +3,7 @@
  * @version 创建时间：2017年9月28日 下午11:40:54 类说明
  */
 
-package org.jpf.gts.gtf;
+package org.jpf.gts.gtf.fornormal;
 
 /*
  * 待完善 1. 抽象类里面的非抽象方法 2类里面定义的类
@@ -18,7 +18,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.jpf.gts.gtm.GenerateMethodUtil;
+import org.jpf.gts.gtf.AbstractGenerateTests;
 import org.jpf.unittests.generateuts.JpfUtInfo;
 
 
@@ -101,16 +101,6 @@ public class GTFForNormal extends AbstractGenerateTests {
          * foundNode);
          */
     }
-
-    /* (non-Javadoc)
-     * @see org.jpf.unittests.generateuts.GenerateTests#addExtraBasic(java.lang.String, org.jpf.unittests.generateuts.JpfUtInfo)
-     */
-    @Override
-    protected void addExtraBasic(String strClassName, JpfUtInfo cJpfUtInfo) {
-        // TODO Auto-generated method stub
-        cJpfUtInfo.setUtBasic(GenerateMethodUtil.addTestEnd(strClassName));
-    }
-
 
 
 }

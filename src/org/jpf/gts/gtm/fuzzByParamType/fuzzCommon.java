@@ -25,6 +25,7 @@ import org.jpf.unittests.generateuts.ParamInitBody;
 import org.jpf.unittests.generateuts.utils.FindClassInfoUtil;
 import org.jpf.unittests.generateuts.utils.FormatUtil;
 import org.jpf.unittests.generateuts.utils.GenerateUtil2;
+import org.jpf.unittests.generateuts.utils.ParseJavaSourceFile;
 
 import com.asiainfo.utils.ios.AiFileUtil;
 
@@ -142,10 +143,6 @@ public class fuzzCommon implements IFuzz {
             logger.debug(cJpfUtInfo.getCurrentJavaFilePackage());
             logger.debug(cParamInitBody.getParamType());
             //logger.debug(cJpfUtInfo.getUtImport());
-            if (cParamInitBody.getParamType().equalsIgnoreCase("WareTypeAttr"))
-            {
-                
-            }
             String strClassName=cJpfUtInfo.findImport(cParamInitBody.getParamType());
             logger.info(strClassName);
             if (strClassName.equalsIgnoreCase(cParamInitBody.getParamType()))
@@ -160,18 +157,7 @@ public class fuzzCommon implements IFuzz {
                 return null;
             }
 
-            String sourceString = AiFileUtil.getFileTxt(strJavaFileName, "GBK");
-            logger.trace(sourceString);
-            ASTParser astParser = ASTParser.newParser(AST.JLS8);
-            astParser.setKind(ASTParser.K_COMPILATION_UNIT);
-            astParser.setResolveBindings(true);
-            astParser.setSource(sourceString.toCharArray());
-            Map options = JavaCore.getOptions();
-            options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_7); // or newer version
-            astParser.setCompilerOptions(options);
-
-            return (CompilationUnit) astParser.createAST(null);
-
+            return ParseJavaSourceFile.getInstance().parseJavaSourceFile17(strJavaFileName);
 
         } catch (Exception ex) {
             // TODO: handle exception

@@ -3,7 +3,7 @@
  * @version 创建时间：2018年1月31日 下午6:53:35 
  * @类说明 北京移动电商SPRING
  */
-package org.jpf.unittests.plugins.spring;
+package org.jpf.gts.gtf.fordao;
 
 
 import java.util.HashMap;
@@ -45,7 +45,7 @@ public class Service2Bean {
     private void init() throws Exception {
         map = new HashMap<>();
         Vector<String> vXmlFiles = new Vector<>();
-        AiFileUtil.getFiles(GenerateInputParam.SPRING_XML_FILEPATH, vXmlFiles, ".xml");
+        AiFileUtil.getFiles(GForDAOParam.SPRING_XML_FILEPATH, vXmlFiles, ".xml");
         for (int j = 0; j < vXmlFiles.size(); j++) {
             String strXmlFileName = vXmlFiles.get(j);
             NodeList cNodeList = AiXmlUtil.getNodeList("bean", strXmlFileName);

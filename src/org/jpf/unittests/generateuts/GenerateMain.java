@@ -11,9 +11,9 @@ import java.util.regex.Pattern;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jpf.gts.gtf.GTFForAbstract;
-import org.jpf.gts.gtf.GTFForInterface;
-import org.jpf.gts.gtf.GTFForNormal;
+import org.jpf.gts.gtf.forabstract.GTFForAbstract;
+import org.jpf.gts.gtf.fordao.GForDAO;
+import org.jpf.gts.gtf.fornormal.GTFForNormal;
 import org.jpf.gts.gtf.AbstractGenerateTests;
 
 import com.asiainfo.utils.ios.AiFileUtil;
@@ -41,7 +41,7 @@ public class GenerateMain {
         if (1 == GenerateType) {
             cGenerateTests = new GTFForNormal();
         } else if (2 == GenerateType) {
-            cGenerateTests = new GTFForInterface();
+            cGenerateTests = new GForDAO();
         } else if (3 == GenerateType) {
             cGenerateTests = new GTFForAbstract();
         } else {

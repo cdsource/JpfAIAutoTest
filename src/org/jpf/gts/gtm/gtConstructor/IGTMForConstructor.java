@@ -5,7 +5,7 @@
 * 类说明 
 */ 
 
-package org.jpf.gts.gtConstructor;
+package org.jpf.gts.gtm.gtConstructor;
 
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.jpf.unittests.generateuts.JpfUtInfo;
@@ -13,6 +13,6 @@ import org.jpf.unittests.generateuts.JpfUtInfo;
 /**
  * 
  */
-public interface InterfaceGTMForConstructor {
+public interface IGTMForConstructor {
     public void doGenerate(MethodDeclaration methodDec[], String strClass, JpfUtInfo cJpfUtInfo);
 }

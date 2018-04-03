@@ -20,10 +20,9 @@ public class GenerateInputParam {
     }
     //单元测试函数超时设置
     public static boolean bNeedTimeOut=false;
-    
-    //生成的测试代码的基础类
-    public static String UT_ExtendClassName="abstractJpfSelfTest";
-    
+       
+    //JAVA文件编码
+    public final static String JAVA_ENCODE="GBK";
    
     //生成的测试文件保存位置
     public static String Save_UT_Path="D:\\svn\\ecommerce-branch-20170912\\app-web-wtld\\src\\main\\java\\com\\asiainfo\\ebiz\\selftestauto";
@@ -37,8 +36,7 @@ public class GenerateInputParam {
     public static String FileNameFilter = ".*Manager.java";
     
     
-    //根据类名查找BEAN ID
-    public static String SPRING_XML_FILEPATH="D:\\svn\\ecommerce-branch-20170912\\app-web-common\\src\\main\\java\\config";
+
     
     //根据日志查找参数
     public static String RUN_LOG_FILEPATH="D:\\abc\\debugrun";

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.jpf.unittests.generateuts.genbytool;
+package org.jpf.gts.genbytool;
 
 /**
  * @author Administrator
