@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.jpf.gts.samples;
+package org.jpf.unittests.samples;
 
 import java.util.List;
 
@@ -10,12 +10,12 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
+import org.jpf.gts.gtm.genbyjavadoc.ReadInfoFromJavaDoc;
 import org.jpf.gts.gtm.gtConstructor.GeneratorConstructorImpl;
 import org.jpf.unittests.generateuts.GenerateConst;
 import org.jpf.unittests.generateuts.JpfMethodInfo;
 import org.jpf.unittests.generateuts.JpfUtMethodInfo;
 import org.jpf.unittests.generateuts.RunResult;
-import org.jpf.unittests.generateuts.genbyjavadoc.ReadInfoFromJavaDoc;
 import org.jpf.unittests.generateuts.utils.ParseJavaSourceFile;
 
 /**

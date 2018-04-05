@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.jpf.gts.samples;
+package org.jpf.unittests.samples;
 
 /**
  * @author wupf@asiainfo.com
