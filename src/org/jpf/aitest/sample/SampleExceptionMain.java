@@ -25,7 +25,7 @@ public class SampleExceptionMain {
         
         
         //抓取运行异常
-        String strFileName="D:\\jworkspaces\\JpfUnitTest\\src\\org\\jpf\\aitest\\sample\\SampleException.java";
+        String strFileName="D:\\jworkspaces\\JpfUnitTest2\\src\\org\\jpf\\aitest\\sample\\SampleException.java";
                 
         new GenerateMain(1, strFileName);
     }

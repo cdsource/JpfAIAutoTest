@@ -23,7 +23,7 @@ public class SampleNLPMain {
         GenerateInputParam.bNeedTimeOut=true;
         GenerateInputParam.FileNameFilter="";
         
-        String strFileName="D:\\jworkspaces\\JpfUnitTest\\src\\org\\jpf\\aitest\\sample\\SampleNLP.java";
+        String strFileName="D:\\jworkspaces\\JpfUnitTest2\\src\\org\\jpf\\aitest\\sample\\SampleNLP.java";
         
         
         new GenerateMain(1, strFileName);

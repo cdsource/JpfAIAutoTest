@@ -23,7 +23,7 @@ public class SampleLogMain {
         GenerateInputParam.FileNameFilter="";
         
         //根据日志生成
-    	String strFileName = "D:\\jworkspaces\\JpfUnitTest\\src\\org\\jpf\\aitest\\sample\\SampleLog.java";
+    	String strFileName = "D:\\jworkspaces\\JpfUnitTest2\\src\\org\\jpf\\aitest\\sample\\SampleLog.java";
         
         new GenerateMain(1, strFileName);
     }

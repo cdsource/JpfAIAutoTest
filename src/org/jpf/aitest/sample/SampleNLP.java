@@ -14,6 +14,7 @@ public class SampleNLP {
 		return j;
 	}
 
+	
 	public int add(int ACCOUNTPAGEQUERYLOGID, int PAGEQUERYLOGID) {
 		return ACCOUNTPAGEQUERYLOGID;
 	}

@@ -19,7 +19,7 @@ public class SampleClassMain {
 
 	public static void main(String[] args) {
 
-		String strFileName = "D:\\jworkspaces\\JpfUnitTest\\src\\org\\jpf\\aitest\\sample\\SampleClass.java";
+		String strFileName = "D:\\jworkspaces\\JpfUnitTest2\\src\\org\\jpf\\aitest\\sample\\SampleClass.java";
 
 		GenerateInputParam.bNeedTimeOut = true;
 		GenerateInputParam.FileNameFilter = "";

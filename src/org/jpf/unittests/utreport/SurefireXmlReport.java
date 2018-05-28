@@ -14,7 +14,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.asiainfo.utils.ios.AiFileUtil;
-import com.asiainfo.utils.ios.CsvFileUtil;
 import com.asiainfo.utils.xmls.AiXmlUtil;
 
 /**
@@ -37,7 +36,8 @@ public class SurefireXmlReport {
             for (int i = 0; i < vFiles.size(); i++) {
                 handleUtReport(vFiles.get(i), sb);
             }
-            CsvFileUtil.writeToCsv("ut_result.csv", sb);
+           AiFileUtil.writeToCsv("ut_result.csv", sb);
+           
         } catch (Exception ex) {
             // TODO: handle exception
             ex.printStackTrace();

@@ -20,7 +20,7 @@ public class SampleJavaDocMain {
     public static void main(String[] args) {
         
         //根据日志生成
-        String strFileName = "D:\\jworkspaces\\JpfUnitTest\\src\\org\\jpf\\aitest\\sample\\SampleJavaDoc.java";
+        String strFileName = "D:\\jworkspaces\\JpfUnitTest2\\src\\org\\jpf\\aitest\\sample\\SampleJavaDoc.java";
         
         //根据注释生成
         GenerateInputParam.bNeedTimeOut=true;
