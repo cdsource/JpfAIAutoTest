@@ -1,0 +1,33 @@
+/**
+ * copyrigth by wupf@asiainfo.com
+ * 2018年7月2日
+ */
+package org.jpf.aut.gts.gtm.fuzzByParamType;
+
+import java.util.ArrayList;
+
+import org.jpf.aut.gts.gtm.MethodParamBody;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+/**
+ * @author wupf@asiainfo.com
+ *
+ */
+public class fuzzObjectType  implements IFuzz{
+    private static final Logger logger = LogManager.getLogger();
+    
+    public  ArrayList<String> getFuzzeForNull(MethodParamBody cParamInitBody) {
+        ArrayList<String> mList=new ArrayList<String>();
+       
+        if (cParamInitBody.isArray())
+        {
+            mList.add("    "+cParamInitBody.getParamType()+" " +cParamInitBody.getParamVariable()+" =  null;\n");
+        }else
+        {
+            mList.add("    "+cParamInitBody.getParamType()+" "+cParamInitBody.getParamVariable()+" =  null;\n");
+        }
+        return mList;
+    }
+
+}

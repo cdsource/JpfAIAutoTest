@@ -1,0 +1,120 @@
+*PACKAGE*
+
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import com.ibm.testCaseGenerator.common.SPProcessSample;
+import com.ibm.testCaseGenerator.common.ParmInfo;
+import com.ibm.testCaseGenerator.common.StoredProcedureInfo;
+
+import com.ibm.test.common.ProjectCactusStrutsTestCase;
+import com.ibm.test.common.ProjectMockStrutsTestCase;
+import com.ibm.test.common.SPTestResult;
+
+/**
+ * The <code>*CLASS_NAME*.java</code>
+ * 
+ * @author:  *AUTHOR*
+ * @version: 
+ * @see 1. Use spProcess.getReturnedObject(ParameterIndex) to get output parameter values.
+ *       2. Use spProcess.getReturnedValue() to get returned value if the SP is a user defined function.
+ *       3. Use Assert.assertEquals(valueExpected, valueReturned) to verify the returned values.
+         4. Remind: please write any assertion code under 'testResultList.add(result);', or else the result XML file can not be generated.
+ * Creation date: *CREATE_DATE*
+ * *CREATE_ERROR* 
+ */
+
+public class *CLASS_NAME* extends ProjectMockStrutsTestCase {
+
+	private SPProcessSample spProcess;
+	//Declare an ArrayList for SPTestResult, this will be used to build the output xml file.
+	private ArrayList testResultList;
+	private long currentTestStartTime;
+	public *CLASS_NAME*(String arg0) {
+		super(arg0);
+		testResultList = new ArrayList(10);
+	}
+
+	public static void main(String[] args) {
+		junit.textui.TestRunner.run(*CLASS_NAME*.class);
+	}
+	public static Test suite() {
+		TestSuite suite = new TestSuite("*CLASS_NAME*");
+		suite.addTest(new TestSuite(*CLASS_NAME*.class));
+		return suite;
+	}
+
+	/*
+	 * @see TestCase#setUp()
+	 */
+	protected void setUp() throws Exception {
+		super.setUp();
+		spProcess = new SPProcessSample("*DB_DRIVER*","*DB_URL*","*DB_USER*","*DB_PWD*");
+		if (testResultList == null)
+			testResultList = new ArrayList(10);
+
+	}
+
+	/*
+	 * @see TestCase#tearDown()
+	 */
+	protected void tearDown() throws Exception {
+	    spProcess.closeDB();
+		SimpleDateFormat formatter =
+				new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+		java.util.Date currentTime_1 = new java.util.Date();
+		String dateString = formatter.format(currentTime_1);
+		writeToFile(
+			"*CLASS_NAME*_"+dateString, 
+			getDurationAsString(
+				System.currentTimeMillis() - currentTestStartTime),
+			testResultList);
+	}
+	*FIRST_TEST_CASE_BEGIN*
+	final public void do*ROUTINESCHEMA*_*ROUTINENAME*() {
+		SPTestResult result = new SPTestResult();
+		result.setNames(
+			"*CLASS_NAME*",
+			"do*ROUTINESCHEMA*_*ROUTINENAME*",
+			"*ROUTINESCHEMA*.*ROUTINENAME*");
+		int rows = 0;
+		StoredProcedureInfo spInfo = new StoredProcedureInfo("*ROUTINETYPE*");
+		spInfo.setRoutineSchema("*ROUTINESCHEMA*");
+		spInfo.setRoutineName("*ROUTINENAME*");
+		//TODO If this procedure has a parameter returning the rows of the result set, please change the parm_id to the real id, int value is needed.
+		//spInfo.setRowsReturnedParmId(parm_id);
+		ArrayList parms=new ArrayList();
+		//TODO Please modify the last parameter of the 'new ParmInfo()' function to set the proper parameters.
+		*PARAMETERS_LIST*
+		spInfo.setParmList(parms);
+		try {
+			rows = spProcess.runSP(spInfo);
+			result.setDurationTime(spProcess.getDurationTime());
+			if(spProcess.getErrMsg()!=null){
+			  result.setMemo(spProcess.getErrMsg());
+			}
+			else
+			  result.setMemo(spInfo.getParmString());
+			result.setRowsReturned(rows);
+			testResultList.add(result);
+            // You can assert your SP results in the following
+			
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+			result.setMemo(e.getMessage());
+		}
+	}
+	*FIRST_TEST_CASE_END*
+	
+	*TEST_CASE_BODY*
+	
+	public void testSP() {
+		currentTestStartTime = System.currentTimeMillis();
+		SPTestResult result = new SPTestResult();
+		*REF_ALL_TEST_CASE*
+	}
+
+}

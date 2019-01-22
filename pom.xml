@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.jpf</groupId>
+		<artifactId>jpf</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>org.jpf.autounittest</groupId>
+	<artifactId>autounittest</artifactId>
+	<version>0.0.4</version>
+	<name>autounittest</name>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<verion.aut.common>0.0.2</verion.aut.common>
+		<junit.version>4.12</junit.version>
+	</properties>
+	<packaging>pom</packaging>
+	<dependencies>
+		<dependency>
+			<groupId>org.jpf</groupId>
+			<artifactId>jpfshare</artifactId>
+			<version>1.3</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<modules>
+		<module>aut_common</module>
+		<module>aut_nlp</module>
+		<module>aut_gts</module>
+		<!-- <module>aut_runtest</module> 
+			<module>aut_proctest</module> -->
+		<module>aut_tools</module>
+	</modules>
+</project>
