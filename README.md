@@ -11,4 +11,4 @@ JpfAIAutoTest：
 
 # Using jpf_unittests
 
-by wupf@asiainfo.com
+by wupflove@aliyun.com
