@@ -4,7 +4,7 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 /**
- * The class <code>AiTestConstTest</code> contains tests for the class <code>{@link AiTestConst}</code>.
+ * The class <code>AiTestConstTest</code> contains tests for the class <code>{@link AutConst}</code>.
  *
  * @generatedBy wupf@ at 18-7-8 上午12:26
  * @author wupfl
@@ -19,7 +19,7 @@ public class AiTestConstTest {
 	@Test
 	public void testAiTestConst_1()
 		throws Exception {
-		AiTestConst result = new AiTestConst();
+		AutConst result = new AutConst();
 		assertNotNull(result);
 		// add additional test code here
 	}
@@ -35,7 +35,7 @@ public class AiTestConstTest {
 	public void testGetJarConn_1()
 		throws Exception {
 
-		String result = AiTestConst.getJarConn();
+		String result = AutConst.getJarConn();
 
 		// add additional test code here
 		assertEquals(";", result);
@@ -52,7 +52,7 @@ public class AiTestConstTest {
 	public void testGetJarConn_2()
 		throws Exception {
 
-		String result = AiTestConst.getJarConn();
+		String result = AutConst.getJarConn();
 
 		// add additional test code here
 		assertEquals(";", result);

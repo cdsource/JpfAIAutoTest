@@ -172,7 +172,7 @@ public class GenUnitTestW {
     try {
       if (AiFileUtil.isFile(strInputFile)) {
         if (cGenerateTests.doGenerateFile(strInputFile)) {
-          RunResult.GenFileCount++;
+          RunResult.addFinishFileCount();
         }
         RunResult.TotalJavaSrcFileCount++;
       } else if (AiFileUtil.isDirectory(strInputFile)) {

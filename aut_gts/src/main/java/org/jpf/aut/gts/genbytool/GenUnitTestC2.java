@@ -10,12 +10,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jpf.aut.base.GenerateInputParam;
 import org.jpf.aut.base.RunResult;
-import org.jpf.aut.common.consts.AiTestConst;
+import org.jpf.aut.common.consts.AutConst;
 import org.jpf.aut.utils.AutUtil;
 import org.jpf.utils.ios.AiFileUtil;
 import org.jpf.utils.ios.AiOsUtil;
-import org.jpf.utils.ios.ProcessUtil;
 import org.jpf.utils.mavens.JpfMvnUtil;
+import org.jpf.utils.process.ProcessUtil;
 
 /**
  * @author wupf@asiainfo.com
@@ -24,9 +24,6 @@ import org.jpf.utils.mavens.JpfMvnUtil;
 public class GenUnitTestC2 {
   private static final Logger logger = LogManager.getLogger();
 
-  private synchronized void addFinishFileCount() {
-    RunResult.GenFileCount++;
-  }
 
   class generateThread extends Thread {
     String strCmd = "";
@@ -37,6 +34,7 @@ public class GenUnitTestC2 {
       this.strJavaFileName = strJavaFileName;
     }
 
+    @Override
     public void run() {
       long start = System.currentTimeMillis();
       try {
@@ -45,7 +43,7 @@ public class GenUnitTestC2 {
       } catch (Exception e) {
         e.printStackTrace();
       } finally {
-        addFinishFileCount();
+        RunResult.addFinishFileCount();
       }
       logger.info(
           strJavaFileName + " finish ExcuteTime " + (System.currentTimeMillis() - start) + "ms");
@@ -61,14 +59,14 @@ public class GenUnitTestC2 {
    */
   public String getProjectCp(String strPomFilePath) {
     String strProjectCp = " -projectCP " + strPomFilePath + java.io.File.separator + "target"
-        + java.io.File.separator + "classes" + AiTestConst.getJarConn();
+        + java.io.File.separator + "classes" + AutConst.getJarConn();
 
     File f = new File(strPomFilePath + java.io.File.separator + "lib");
     if (f.exists() && f.isDirectory()) {
       for (String strFileName : f.list()) {
         if (!strFileName.endsWith(GenerateInputParam.WORK_JAR)) {
           strProjectCp += strPomFilePath + java.io.File.separator + "lib" + java.io.File.separator
-              + strFileName + AiTestConst.getJarConn();
+              + strFileName + AutConst.getJarConn();
         }
         // check length
         if (strProjectCp.length() > 500) {
@@ -76,7 +74,7 @@ public class GenUnitTestC2 {
         }
       }
     }
-    if (strProjectCp.endsWith(AiTestConst.getJarConn())) {
+    if (strProjectCp.endsWith(AutConst.getJarConn())) {
       strProjectCp = strProjectCp.substring(0, strProjectCp.length() - 1);
     }
 
@@ -93,18 +91,18 @@ public class GenUnitTestC2 {
    */
   public String getCpFilePath(String strPomFilePath) {
     String strProjectCp = strPomFilePath + java.io.File.separator + "target"
-        + java.io.File.separator + "classes" + AiTestConst.getJarConn();
+        + java.io.File.separator + "classes" + AutConst.getJarConn();
 
     File f = new File(strPomFilePath + java.io.File.separator + "lib");
     if (f.exists() && f.isDirectory()) {
       for (String strFileName : f.list()) {
         if (!strFileName.endsWith(GenerateInputParam.WORK_JAR) && strFileName.endsWith(".jar")) {
           strProjectCp += strPomFilePath + java.io.File.separator + "lib" + java.io.File.separator
-              + strFileName + AiTestConst.getJarConn();
+              + strFileName + AutConst.getJarConn();
         }
       }
     }
-    if (strProjectCp.endsWith(AiTestConst.getJarConn())) {
+    if (strProjectCp.endsWith(AutConst.getJarConn())) {
       strProjectCp = strProjectCp.substring(0, strProjectCp.length() - 1);
     }
 

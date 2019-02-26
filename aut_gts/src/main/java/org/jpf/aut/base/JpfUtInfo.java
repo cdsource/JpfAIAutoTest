@@ -17,9 +17,9 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jpf.aut.common.consts.AiTestConst;
-import org.jpf.aut.utils.FindClassInfoUtil;
+import org.jpf.aut.common.consts.AutConst;
 import org.jpf.utils.AiDateTimeUtil;
+import org.jpf.utils.classes.FindClassInfoUtil;
 
 
 
@@ -126,9 +126,9 @@ public class JpfUtInfo {
 		if (iPos > 0) {
 			currentJavaFile = currentJavaFile.substring(0, iPos);
 		}
-		iPos = currentJavaFile.indexOf(AiTestConst.MAIN_SRC);
+		iPos = currentJavaFile.indexOf(AutConst.MAIN_SRC);
 		if (iPos > 0) {
-			currentJavaFile = currentJavaFile.substring(iPos + AiTestConst.MAIN_SRC.length() + 1,
+			currentJavaFile = currentJavaFile.substring(iPos + AutConst.MAIN_SRC.length() + 1,
 					currentJavaFile.length());
 		}
 		currentJavaFile = currentJavaFile.replaceAll("\\\\", ".");

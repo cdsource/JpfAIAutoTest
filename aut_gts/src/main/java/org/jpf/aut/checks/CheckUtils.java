@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.jpf.aut.base.RunResult;
-import org.jpf.aut.common.consts.AiTestConst;
+import org.jpf.aut.common.consts.AutConst;
 
 
 /**
@@ -86,7 +86,7 @@ public class CheckUtils {
 
 		TypeDeclaration typeDec = (TypeDeclaration)cAbstractTypeDeclaration;
 
-		if (typeDec.getModifiers() == AiTestConst.CLASS_TYPE_ABSTRACT) {
+		if (typeDec.getModifiers() == AutConst.CLASS_TYPE_ABSTRACT) {
 			logger.info("抽象类不能生产单元测试：" + cAbstractTypeDeclaration.getName());
 			RunResult.AbstractFileCount++;
 			return -4;

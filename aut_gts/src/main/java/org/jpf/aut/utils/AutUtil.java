@@ -5,18 +5,13 @@ package org.jpf.aut.utils;
 
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.util.List;
 import java.util.Vector;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.jpf.aut.base.GenerateInputParam;
-import org.jpf.aut.base.RunResult;
-import org.jpf.aut.common.consts.AiTestConst;
+import org.jpf.aut.common.consts.AutConst;
 import org.jpf.utils.MatchUtil;
-import org.jpf.utils.classes.ParseJavaSourceFile;
 import org.jpf.utils.ios.AiOsUtil;
 
 /**
@@ -43,7 +38,7 @@ public class AutUtil {
 
     for (int i = 0; i < v.size(); i++) {
       String strJavaFile = v.get(i);
-      if (strJavaFile.indexOf(AiTestConst.MAIN_SRC) == -1) {
+      if (strJavaFile.indexOf(AutConst.MAIN_SRC) == -1) {
         // logger.warn("maybe not source file:" + strJavaFile);
         v.remove(i);
         i--;
@@ -75,7 +70,7 @@ public class AutUtil {
         continue;
       }
       if (strJavaFile
-          .indexOf(java.io.File.separator + AiTestConst.AITEST_PATH + java.io.File.separator) > 0) {
+          .indexOf(java.io.File.separator + AutConst.AITEST_PATH + java.io.File.separator) > 0) {
         // logger.warn("maybe not source file:" + strJavaFile);
         v.remove(i);
         i--;
@@ -97,42 +92,6 @@ public class AutUtil {
     }
   }
 
-  public static String getClassName(String sourceFileName) {
-    String strExistMain = "";
-    try {
-
-      CompilationUnit cCompilationUnit = ParseJavaSourceFile.getInstance()
-          .parseJavaSourceFile17(sourceFileName, GenerateInputParam.JAVA_ENCODE);
-
-      List types = cCompilationUnit.types();
-      if (types.size() == 0) {
-        logger.warn("type=null:" + sourceFileName);
-        return "";
-      }
-      TypeDeclaration typeDec = (TypeDeclaration) types.get(0);
-      logger.info("classname=" + typeDec.getName());
-
-      if (typeDec.getModifiers() == AiTestConst.CLASS_TYPE_ABSTRACT) {
-        // abstract class
-        logger.info("抽象类不能生产单元测试：" + sourceFileName);
-        RunResult.AbstractFileCount++;
-        return "";
-      }
-      if (typeDec.isInterface()) {
-        logger.info("接口类单元测试：" + sourceFileName);
-        RunResult.InterfaceFileCount++;
-        return "";
-      }
-
-      strExistMain =
-          cCompilationUnit.getPackage().getName().toString() + "." + typeDec.getName().toString();
-
-    } catch (Exception ex) {
-      logger.error(ex);
-      ex.printStackTrace();
-    }
-    return strExistMain;
-  }
 
 
   /**
@@ -187,17 +146,6 @@ public class AutUtil {
     }
   }
 
-  /**
-   * 
-   * @category: 从类名获取包名
-   * @Title: getPackageFromClass
-   * @author:wupf@asiainfo.com
-   * @date:2019年1月14日
-   * @param strClassName
-   * @return
-   */
-  public static String getPackageFromClass(String strClassName) {
-    return strClassName.substring(0, strClassName.lastIndexOf("."));
-  }
+
 
 }

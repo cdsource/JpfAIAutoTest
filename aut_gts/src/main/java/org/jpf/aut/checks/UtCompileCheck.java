@@ -12,9 +12,9 @@ import java.io.LineNumberReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jpf.aut.common.consts.AiTestConst;
+import org.jpf.aut.common.consts.AutConst;
 import org.jpf.utils.ios.AiOsUtil;
-import org.jpf.utils.ios.ProcessUtil;
+import org.jpf.utils.process.ProcessUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

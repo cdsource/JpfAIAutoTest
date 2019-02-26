@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 import org.jpf.aut.base.JpfMethodInfo;
 import org.jpf.aut.base.JpfUtInfo;
-import org.jpf.aut.common.consts.AiTestConst;
+import org.jpf.aut.common.consts.AutConst;
 import org.jpf.aut.base.GenerateInputParam;
 import org.jpf.aut.gts.gtm.MethodParamBody;
 import org.jpf.aut.gts.gtm.fuzzByParamType.fuzzBigDecimal;
@@ -44,6 +44,8 @@ import org.jpf.aut.gts.gtm.fuzzByParamType.fuzzdouble;
 import org.jpf.aut.gts.gtm.fuzzByParamType.fuzzfloat;
 import org.jpf.aut.gts.gtm.fuzzByParamType.fuzzshort;
 import org.jpf.utils.AiDateTimeUtil;
+import org.jpf.utils.classes.AddImport;
+import org.jpf.utils.classes.FormatUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jpf.algorithm.Descartes;
@@ -298,7 +300,7 @@ public class GenerateUtil2 {
 				return null;
 			}
 			if (1 == MaxCond) {
-				cParamInitBody.setParamVariable(AiTestConst.CONSTRUCTOR_VAL_PREFIX + cParamInitBody.getParamVariable());
+				cParamInitBody.setParamVariable(AutConst.CONSTRUCTOR_VAL_PREFIX + cParamInitBody.getParamVariable());
 			}
 			
 			//logger.debug(cParamInitBody.getParamType());

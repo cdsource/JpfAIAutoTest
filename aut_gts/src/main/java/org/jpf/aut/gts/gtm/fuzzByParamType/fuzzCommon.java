@@ -10,8 +10,6 @@ import java.util.List;
 
 import org.jpf.aut.base.GenerateInputParam;
 import org.jpf.aut.gts.gtm.MethodParamBody;
-import org.jpf.aut.utils.FindClassInfoUtil;
-import org.jpf.aut.utils.FormatUtil;
 import org.jpf.aut.utils.GenerateUtil2;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +19,9 @@ import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.jpf.utils.classes.ParseJavaSourceFile;
+import org.jpf.utils.classes.FindClassInfoUtil;
+import org.jpf.utils.classes.FormatUtil;
+import org.jpf.utils.classes.ParseJavaByJdt;
 import org.jpf.aut.base.JpfUtInfo;
 
 
@@ -163,7 +163,7 @@ public class fuzzCommon implements IFuzz {
 				return null;
 			}
 
-			return ParseJavaSourceFile.getInstance().parseJavaSourceFile17(strJavaFileName,GenerateInputParam.JAVA_ENCODE);
+			return ParseJavaByJdt.getInstance().parseJavaSourceFile17(strJavaFileName,GenerateInputParam.JAVA_ENCODE);
 
 		} catch (Exception ex) {
 			// TODO: handle exception

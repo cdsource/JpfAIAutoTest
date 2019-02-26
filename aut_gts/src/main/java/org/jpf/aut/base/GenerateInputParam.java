@@ -7,7 +7,7 @@
 
 package org.jpf.aut.base;
 
-import org.jpf.aut.common.consts.AiTestConst;
+import org.jpf.aut.common.consts.AutConst;
 import org.jpf.utils.ios.WuFileUtil;
 
 /**
@@ -25,8 +25,8 @@ public class GenerateInputParam {
   // 备份已经存在的文件目录 0：不操作，1：备份，移除
   public static int DelExistTestFiles = 0;
 
-  public static String PROC_JVM_XMS = " -Xms512m";
-  public static String PROC_JVM_XMX = " -Xmx512m";
+  public static String PROC_JVM_XMS = " -Xms1024m";
+  public static String PROC_JVM_XMX = " -Xmx1024m";
   // 单元测试函数超时设置
   public static int UtTimeOut = 1000;
 
@@ -110,7 +110,7 @@ public class GenerateInputParam {
 
 
   public static String getAiTestPath() {
-    return POM_PATH + java.io.File.separator + AiTestConst.AITEST_PATH;
+    return POM_PATH + java.io.File.separator + AutConst.AITEST_PATH;
   }
 
   public static String getSrcMainPathKey() {

@@ -10,8 +10,7 @@
   <groupId>org.jpf.autounittest</groupId>
   <artifactId>aut_tools</artifactId>
   <version>0.0.4</version>
-  <name>aut_tools</name>
-  <url>http://maven.apache.org</url>
+  <name>aut_tools</name> 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>

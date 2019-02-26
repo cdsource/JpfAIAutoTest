@@ -1,9 +1,0 @@
-com\asiainfo\aitest\procgeneratecase\common\DBConn.class
-com\asiainfo\aitest\procgeneratecase\common\Java_constants.class
-com\asiainfo\aitest\procgeneratecase\common\ParmInfo.class
-com\asiainfo\aitest\procgeneratecase\common\StoredProcedureInfo.class
-com\asiainfo\aitest\procgeneratecase\tcgenerate\CodeGenerator.class
-org\jpf\aut\procaut\JpfDbConn.class
-com\asiainfo\aitest\procgeneratecase\common\SPTestSuiteProperties.class
-com\asiainfo\aitest\procgeneratecase\common\DBInfoObject.class
-com\asiainfo\aitest\procgeneratecase\common\SPProcessSample.class

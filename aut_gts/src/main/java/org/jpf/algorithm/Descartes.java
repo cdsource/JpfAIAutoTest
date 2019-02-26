@@ -9,7 +9,7 @@ package org.jpf.algorithm;
 
 import java.util.ArrayList;
 
-import org.jpf.aut.common.consts.AiTestConst;
+import org.jpf.aut.common.consts.AutConst;
 
 /**
  * 
@@ -20,7 +20,7 @@ public class Descartes {
     {
     	
         //大于一个集合时：
-        if (result.size()>AiTestConst.Max_CaseCount_PerMethod)
+        if (result.size()>AutConst.Max_CaseCount_PerMethod)
         {
             return;
         }

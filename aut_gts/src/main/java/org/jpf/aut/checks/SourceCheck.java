@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-import org.jpf.aut.common.consts.AiTestConst;
+import org.jpf.aut.common.consts.AutConst;
 import org.jpf.aut.base.GenerateInputParam;
 import org.jpf.aut.gts.gtm.MethodParamBody;
 import org.apache.logging.log4j.LogManager;
@@ -23,7 +23,7 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.jpf.utils.MatchUtil;
-import org.jpf.utils.classes.ParseJavaSourceFile;
+import org.jpf.utils.classes.ParseJavaByJdt;
 
 import org.jpf.aut.base.RunResult;
 import org.jpf.utils.ios.AiFileUtil;
@@ -99,7 +99,7 @@ public class SourceCheck {
 			RunResult.iPublicMethodCount = 0;
 			RunResult.iNoParamMethodCount = 0;
 
-			CompilationUnit cCompilationUnit = ParseJavaSourceFile.getInstance().parseJavaSourceFile17(sourceFileName,GenerateInputParam.JAVA_ENCODE);
+			CompilationUnit cCompilationUnit = ParseJavaByJdt.getInstance().parseJavaSourceFile17(sourceFileName,GenerateInputParam.JAVA_ENCODE);
 
 
 			
@@ -126,7 +126,7 @@ public class SourceCheck {
 			logger.info("classname=" + typeDec.getName());
 			//logger.debug("typeDec.getModifiers()=" + typeDec.getModifiers());
 
-			if (typeDec.getModifiers() == AiTestConst.CLASS_TYPE_ABSTRACT) {
+			if (typeDec.getModifiers() == AutConst.CLASS_TYPE_ABSTRACT) {
 				// abstract class
 				logger.info("抽象类不能生产单元测试：" + sourceFileName);
 				RunResult.AbstractFileCount++;

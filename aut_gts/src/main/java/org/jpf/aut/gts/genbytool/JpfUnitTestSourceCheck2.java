@@ -18,8 +18,8 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.jpf.aut.base.GenerateInputParam;
 import org.jpf.aut.base.RunResult;
-import org.jpf.aut.common.consts.AiTestConst;
-import org.jpf.utils.classes.ParseJavaSourceFile;
+import org.jpf.aut.common.consts.AutConst;
+import org.jpf.utils.classes.ParseJavaByJdt;
 import org.jpf.utils.ios.AiFileUtil;
 import org.jpf.utils.ios.WuFileUtil;
 import org.jpf.utils.mavens.JpfMvnUtil;
@@ -109,7 +109,7 @@ public class JpfUnitTestSourceCheck2 {
 			String newJavaTestsPath = JpfMvnUtil.getTestPath(strPomFilePath);
 			logger.debug(newJavaTestsPath);
 
-			String oldJavaTestsPath = strPomFilePath + java.io.File.separator +AiTestConst.AITEST_PATH;
+			String oldJavaTestsPath = strPomFilePath + java.io.File.separator +AutConst.AITEST_PATH;
 			// logger.debug(oldJavaTestsPath);
 			copyDir(oldJavaTestsPath, newJavaTestsPath);
 
@@ -122,7 +122,7 @@ public class JpfUnitTestSourceCheck2 {
 
 			AiFileUtil.getFiles(newJavaTestsPath, vFiles, ".java");
 			logger.info("find java files count:" + vFiles.size());
-			logger.info(AiTestConst.AITEST_HC_Suffix+".java");
+			logger.info(AutConst.AITEST_HC_Suffix+".java");
 			for (int i = 0; i < vFiles.size(); i++) {
 				String strFileName = vFiles.get(i).trim();
 				String strNewFileName = strFileName;
@@ -154,7 +154,7 @@ public class JpfUnitTestSourceCheck2 {
 				}
 		        */
 				
-				if (AiTestConst.checkAutoTestFile(strNewFileName)) {
+				if (AutConst.checkAutoTestFile(strNewFileName)) {
 					changeUtFile(strNewFileName);
 					delNoMethodUtFile(strNewFileName);
 					continue;
@@ -183,7 +183,7 @@ public class JpfUnitTestSourceCheck2 {
 			return;
 		}
 		
-		if (AiTestConst.checkAutoTestFile(strUTFileName)==false)
+		if (AutConst.checkAutoTestFile(strUTFileName)==false)
 		{
 			return;
 		}
@@ -282,7 +282,7 @@ public class JpfUnitTestSourceCheck2 {
 				}
 
 				if (line.startsWith("public class")) {
-					if (line.indexOf(AiTestConst.AITEST_HC_TYPE) > 0) {
+					if (line.indexOf(AutConst.AITEST_HC_TYPE) > 0) {
 						//line = line.replace("_ESTest", AiTestConst.AITEST_HC_TYPE);
 						int iPos = line.indexOf("extends");
 						if (iPos > 0) {
@@ -353,7 +353,7 @@ public class JpfUnitTestSourceCheck2 {
 			if (!AiFileUtil.FileExist(strUTFileName)) {
 				return;
 			}
-			CompilationUnit cCompilationUnit = ParseJavaSourceFile.getInstance().parseJavaSourceFile18(strUTFileName,
+			CompilationUnit cCompilationUnit = ParseJavaByJdt.getInstance().parseJavaSourceFile18(strUTFileName,
 					GenerateInputParam.JAVA_ENCODE);
 
 			List types = cCompilationUnit.types();
@@ -363,7 +363,7 @@ public class JpfUnitTestSourceCheck2 {
 			}
 			TypeDeclaration typeDec = (TypeDeclaration) types.get(0);
 
-			if (typeDec.getModifiers() == AiTestConst.CLASS_TYPE_ABSTRACT) {
+			if (typeDec.getModifiers() == AutConst.CLASS_TYPE_ABSTRACT) {
 				// abstract class
 					return;
 			}

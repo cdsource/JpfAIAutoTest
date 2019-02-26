@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.Vector;
 
 import org.jpf.aut.base.GenerateInputParam;
-import org.jpf.aut.common.consts.AiTestConst;
+import org.jpf.aut.common.consts.AutConst;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.jpf.utils.classes.ParseJavaSourceFile;
+import org.jpf.utils.classes.ParseJavaByJdt;
 import org.jpf.utils.mavens.JpfMvnUtil;
 
 import org.jpf.utils.ios.AiFileUtil;
@@ -111,7 +111,7 @@ public class JptUTSourceModify {
 			// logger.debug(oldJavaTestsPath);
 			copyDir(oldJavaTestsPath, newJavaTestsPath);
 
-			oldJavaTestsPath = strPrjPath + java.io.File.separator + AiTestConst.AITEST_PATH;
+			oldJavaTestsPath = strPrjPath + java.io.File.separator + AutConst.AITEST_PATH;
 			copyDir(oldJavaTestsPath, newJavaTestsPath);
 
 			delTmpPath(strPrjPath + java.io.File.separator + "evosuite-report");
@@ -331,7 +331,7 @@ public class JptUTSourceModify {
 			if (!AiFileUtil.FileExist(strUTFileName)) {
 				return;
 			}
-			CompilationUnit cCompilationUnit = ParseJavaSourceFile.getInstance().parseJavaSourceFile17(strUTFileName,GenerateInputParam.JAVA_ENCODE);
+			CompilationUnit cCompilationUnit = ParseJavaByJdt.getInstance().parseJavaSourceFile17(strUTFileName,GenerateInputParam.JAVA_ENCODE);
 
 			List types = cCompilationUnit.types();
 			if (types.size() == 0) {
@@ -340,7 +340,7 @@ public class JptUTSourceModify {
 			}
 			TypeDeclaration typeDec = (TypeDeclaration) types.get(0);
 
-			if (typeDec.getModifiers() == AiTestConst.CLASS_TYPE_ABSTRACT) {
+			if (typeDec.getModifiers() == AutConst.CLASS_TYPE_ABSTRACT) {
 				// abstract class
 				logger.info("抽象类不能生产单元测试：" + strUTFileName);
 				return;

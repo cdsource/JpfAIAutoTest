@@ -15,7 +15,7 @@ import org.jpf.aut.base.JpfMethodInfo;
 import org.jpf.aut.base.JpfUtInfo;
 import org.jpf.aut.base.JpfUtMethodInfo;
 import org.jpf.aut.base.RunResult;
-import org.jpf.aut.common.consts.AiTestConst;
+import org.jpf.aut.common.consts.AutConst;
 import org.jpf.aut.gts.gtm.genbydb.GenInfoFromDB;
 import org.jpf.aut.gts.gtm.genbyjavadoc.GenInfoFromJavaDoc;
 import org.jpf.aut.gts.gtm.genbylog.GenParamValueFromLogByDb;
@@ -209,7 +209,7 @@ public abstract class AbstractGenerateMethod {
 	private void generateRandom(JpfUtInfo cJpfUtInfo, JpfMethodInfo cJpfMethodInfo, StringBuffer sbCallMethod) {
 		// 随机产生
 		ArrayList<String> cParamInitBody = GenerateUtil2.addMethodParamInit2(cJpfMethodInfo.getMethodParam(),
-				cJpfUtInfo, AiTestConst.Max_CaseCount_PerMethod);
+				cJpfUtInfo, AutConst.Max_CaseCount_PerMethod);
 		// logger.debug("cParamInitBody " + cParamInitBody == null);
 
 		if (cParamInitBody == null) {

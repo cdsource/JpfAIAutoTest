@@ -16,7 +16,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.SimpleName;
 
 import org.eclipse.jdt.core.dom.TypeDeclaration;
-import org.jpf.utils.classes.ParseJavaSourceFile;
+import org.jpf.utils.classes.ParseJavaByJdt;
 import org.jpf.utils.ios.AiFileUtil;
 import org.jpf.aut.base.RunResult;
 
@@ -72,7 +72,7 @@ public class JpfUtRemoveSameMethod {
 
 			//format 
 			
-			CompilationUnit cCompilationUnit = ParseJavaSourceFile.getInstance().parseJavaSourceFile18(strUtFileName,"GBK");
+			CompilationUnit cCompilationUnit = ParseJavaByJdt.getInstance().parseJavaSourceFile18(strUtFileName,"GBK");
 
 			List types = cCompilationUnit.types();
 			if (types.size() == 0) {

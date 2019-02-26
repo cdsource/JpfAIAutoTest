@@ -13,12 +13,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jpf.aut.base.GenerateInputParam;
 import org.jpf.aut.base.RunResult;
-import org.jpf.aut.common.consts.AiTestConst;
+import org.jpf.aut.common.consts.AutConst;
 import org.jpf.aut.utils.AutUtil;
+import org.jpf.utils.classes.ClassUtil;
 import org.jpf.utils.ios.AiFileUtil;
 import org.jpf.utils.ios.AiOsUtil;
-import org.jpf.utils.ios.ProcessUtil;
 import org.jpf.utils.mavens.JpfMvnUtil;
+import org.jpf.utils.process.ProcessUtil;
 
 /**
  * @author wupf@asiainfo.com
@@ -29,10 +30,6 @@ public class GenUnitTestC1 {
   // private volatile int iFileCount = 0;
   // private volatile int iRunFileCount = 0;
   // private int iFileSucc = 0;
-
-  private synchronized void addFinishFileCount() {
-    RunResult.GenFileCount++;
-  }
 
   class generateThread extends Thread {
     String strCmd = "";
@@ -65,12 +62,13 @@ public class GenUnitTestC1 {
         e.printStackTrace();
 
       } finally {
-        addFinishFileCount();
+        RunResult.addFinishFileCount();
         logger.info("generate finish:" + strJavaFileName);
       }
       logger.info("ExcuteTime " + (System.currentTimeMillis() - start) + "ms");
     }
 
+    @Override
     public void run() {
       long start = System.currentTimeMillis();
       try {
@@ -79,7 +77,7 @@ public class GenUnitTestC1 {
       } catch (Exception e) {
         e.printStackTrace();
       } finally {
-        addFinishFileCount();
+        RunResult.addFinishFileCount();
       }
       logger.info(
           strJavaFileName + " finish ExcuteTime " + (System.currentTimeMillis() - start) + "ms");
@@ -165,7 +163,7 @@ public class GenUnitTestC1 {
         e.printStackTrace();
 
       } finally {
-        addFinishFileCount();
+        RunResult.addFinishFileCount();
       }
       logger.info(
           strJavaFileName + " finish ExcuteTime " + (System.currentTimeMillis() - start) + "ms");
@@ -180,14 +178,14 @@ public class GenUnitTestC1 {
    */
   public String getProjectCp(String strPomFilePath) {
     String strProjectCp = " -projectCP " + strPomFilePath + java.io.File.separator + "target"
-        + java.io.File.separator + "classes" + AiTestConst.getJarConn();
+        + java.io.File.separator + "classes" + AutConst.getJarConn();
 
     File f = new File(strPomFilePath + java.io.File.separator + "lib");
     if (f.exists() && f.isDirectory()) {
       for (String strFileName : f.list()) {
         if (!strFileName.endsWith(GenerateInputParam.WORK_JAR)) {
           strProjectCp += strPomFilePath + java.io.File.separator + "lib" + java.io.File.separator
-              + strFileName + AiTestConst.getJarConn();
+              + strFileName + AutConst.getJarConn();
         }
         // check length
         if (strProjectCp.length() > 500) {
@@ -195,7 +193,7 @@ public class GenUnitTestC1 {
         }
       }
     }
-    if (strProjectCp.endsWith(AiTestConst.getJarConn())) {
+    if (strProjectCp.endsWith(AutConst.getJarConn())) {
       strProjectCp = strProjectCp.substring(0, strProjectCp.length() - 1);
     }
 
@@ -212,18 +210,18 @@ public class GenUnitTestC1 {
    */
   public String getCpFilePath(String strPomFilePath) {
     String strProjectCp = strPomFilePath + java.io.File.separator + "target"
-        + java.io.File.separator + "classes" + AiTestConst.getJarConn();
+        + java.io.File.separator + "classes" + AutConst.getJarConn();
 
     File f = new File(strPomFilePath + java.io.File.separator + "lib");
     if (f.exists() && f.isDirectory()) {
       for (String strFileName : f.list()) {
         if (!strFileName.endsWith(GenerateInputParam.WORK_JAR) && strFileName.endsWith(".jar")) {
           strProjectCp += strPomFilePath + java.io.File.separator + "lib" + java.io.File.separator
-              + strFileName + AiTestConst.getJarConn();
+              + strFileName + AutConst.getJarConn();
         }
       }
     }
-    if (strProjectCp.endsWith(AiTestConst.getJarConn())) {
+    if (strProjectCp.endsWith(AutConst.getJarConn())) {
       strProjectCp = strProjectCp.substring(0, strProjectCp.length() - 1);
     }
 
@@ -293,10 +291,10 @@ public class GenUnitTestC1 {
         strClassPath = "java -Xms512m -Xmx512m -jar $HOME/aitest/aitest-master-1.0.6.jar ";
       }
       // String strClassPath = "java -jar $HOME/aitest/aitest-gen_1.3.jar "
-      strClassPath += " -generateSuite -Dtest_dir=" + AiTestConst.AITEST_PATH + " -base_dir="
+      strClassPath += " -generateSuite -Dtest_dir=" + AutConst.AITEST_PATH + " -base_dir="
           + strPomFilePath.trim()
           + " -Dno_runtime_dependency=true -Dlog.level=error -Dseed_dir=aitest-seeds -Dsandbox=false -Dreport_dir=aitest-report -Djunit_suffix="
-          + AiTestConst.AITEST_HC_TYPE + " -Dsearch_budget=30 ";
+          + AutConst.AITEST_HC_TYPE + " -Dsearch_budget=30 ";
 
       if (!AiFileUtil.isDirectory(strPomFilePath)) {
         logger.info("file does not exist :" + strPomFilePath);
@@ -312,12 +310,11 @@ public class GenUnitTestC1 {
       // GenByToolUtil cGenByToolUtil = new GenByToolUtil();
       RunResult.TotalJavaSrcFileCount = v.size();
       RunResult.CanGenFileCount = 0;
-      RunResult.GenFileCount = 0;
       for (String strJavaFile : v) {
 
         // System.out.println("handle file:" + strJavaFile);
 
-        String strClassName = AutUtil.getClassName(strJavaFile);
+        String strClassName = ClassUtil.getClassName(strJavaFile);
         if (strClassName.trim().length() == 0) {
           continue;
         }
@@ -329,7 +326,7 @@ public class GenUnitTestC1 {
 
         while (Thread.currentThread().activeCount() > GenerateInputParam.THREAD_MAX) {
           logger.info("activeCount() =" + Thread.currentThread().activeCount() + "  "
-              + (RunResult.GenFileCount + "/" + RunResult.CanGenFileCount + "/"
+              + (RunResult.getGenFileCount() + "/" + RunResult.CanGenFileCount + "/"
                   + RunResult.TotalJavaSrcFileCount));
           Thread.sleep(3000);
         }
@@ -343,16 +340,16 @@ public class GenUnitTestC1 {
        * while (Thread.currentThread().activeCount() > 1) { logger.debug("activeCount() =" +
        * Thread.currentThread().activeCount()); Thread.sleep(5000); }
        */
-      while (RunResult.GenFileCount < RunResult.CanGenFileCount
+      while (RunResult.getGenFileCount() < RunResult.CanGenFileCount
           && Thread.currentThread().activeCount() > 1) {
-        logger.info(
-            "activeCount() =" + Thread.currentThread().activeCount() + " " + RunResult.GenFileCount
-                + "/" + RunResult.CanGenFileCount + "/" + RunResult.TotalJavaSrcFileCount);
+        logger.info("activeCount() =" + Thread.currentThread().activeCount() + " "
+            + RunResult.getGenFileCount() + "/" + RunResult.CanGenFileCount + "/"
+            + RunResult.TotalJavaSrcFileCount);
         Thread.sleep(3000);
       }
 
       logger.info("activeCount() =" + Thread.currentThread().activeCount());
-      logger.info(RunResult.GenFileCount + "/" + RunResult.CanGenFileCount + "/"
+      logger.info(RunResult.getGenFileCount() + "/" + RunResult.CanGenFileCount + "/"
           + RunResult.TotalJavaSrcFileCount);
       v.clear();
       doClear(strPomFilePath);

@@ -24,7 +24,7 @@ import org.jpf.aut.base.GenerateInputParam;
 import org.jpf.aut.base.JpfMethodInfo;
 import org.jpf.aut.base.JpfUtInfo;
 import org.jpf.aut.base.RunResult;
-import org.jpf.aut.common.consts.AiTestConst;
+import org.jpf.aut.common.consts.AutConst;
 import org.jpf.aut.gts.gtm.AbstractGenerateMethod;
 import org.jpf.aut.gts.gtm.GenerateMethodPrivate;
 import org.jpf.aut.gts.gtm.GenerateMethodPrivateStatic;
@@ -32,9 +32,9 @@ import org.jpf.aut.gts.gtm.GenerateMethodPublic;
 import org.jpf.aut.gts.gtm.GenerateMethodPublicStatic;
 import org.jpf.aut.gts.gtm.gtConstructor.GeneratorConstructorImpl;
 import org.jpf.aut.gts.plugins.springs.gtm.GTMForDAOInterface;
-import org.jpf.aut.utils.AddImport;
 import org.jpf.utils.AiDateTimeUtil;
-import org.jpf.utils.classes.ParseJavaSourceFile;
+import org.jpf.utils.classes.AddImport;
+import org.jpf.utils.classes.ParseJavaByJdt;
 import org.jpf.utils.ios.AiFileUtil;
 
 /**
@@ -136,7 +136,7 @@ public abstract class AbstractGenerateTests {
     }
     // RunResult.iGenFileCount++;
     saveFile(strSaveUtFileName, cJpfUtInfo.toString(), GenerateInputParam.JAVA_ENCODE);
-    RunResult.GenFileCount++;
+    RunResult.addFinishFileCount();
     return true;
 
   }
@@ -202,7 +202,7 @@ public abstract class AbstractGenerateTests {
     try {
       GeneratorConstructorImpl cGeneratorConstructorImpl = new GeneratorConstructorImpl();
 
-      CompilationUnit cCompilationUnit = ParseJavaSourceFile.getInstance()
+      CompilationUnit cCompilationUnit = ParseJavaByJdt.getInstance()
           .parseJavaSourceFile17(sourceFileName, GenerateInputParam.JAVA_ENCODE);
 
       List types = cCompilationUnit.types();
@@ -226,7 +226,7 @@ public abstract class AbstractGenerateTests {
       logger.info("classname=" + typeDec.getName());
       logger.debug("typeDec.getModifiers()=" + typeDec.getModifiers());
 
-      if (typeDec.getModifiers() == AiTestConst.CLASS_TYPE_ABSTRACT) {
+      if (typeDec.getModifiers() == AutConst.CLASS_TYPE_ABSTRACT) {
         // abstract class
         logger.info("抽象类不能生产单元测试：" + sourceFileName);
         RunResult.AbstractFileCount++;

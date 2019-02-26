@@ -11,7 +11,7 @@ import java.util.List;
 import org.jpf.aut.base.JpfUtInfo;
 import org.jpf.aut.base.JpfUtMethodInfo;
 import org.jpf.aut.base.RunResult;
-import org.jpf.aut.common.consts.AiTestConst;
+import org.jpf.aut.common.consts.AutConst;
 import org.jpf.aut.gts.gtm.MethodParamBody;
 import org.jpf.aut.utils.GenerateUtil2;
 import org.apache.logging.log4j.LogManager;
@@ -208,7 +208,7 @@ public class GeneratorConstructorImpl implements IGTMForConstructor {
 
     			MethodParamBody cParamInitBody = new MethodParamBody(MethodParam.get(i).toString());
     			
-            sb.append(AiTestConst.CONSTRUCTOR_VAL_PREFIX).append(cParamInitBody.getParamVariable() ).append(",");
+            sb.append(AutConst.CONSTRUCTOR_VAL_PREFIX).append(cParamInitBody.getParamVariable() ).append(",");
         }
 
         if (MethodParam.size() > 0) {
