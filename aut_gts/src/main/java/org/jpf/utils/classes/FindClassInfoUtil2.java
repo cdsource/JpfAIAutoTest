@@ -15,7 +15,7 @@ import java.util.Vector;
 import org.jpf.aut.base.GenerateInputParam;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jpf.utils.ios.AiFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 
 /**
  * 
@@ -49,13 +49,13 @@ public class FindClassInfoUtil2 {
         String[] strFindJavaPaths=GenerateInputParam.FilePath_Find_Java_Source.split(";");
         for(String strFindJavaPath: strFindJavaPaths)
         {
-            AiFileUtil.getFiles(strFindJavaPath, vJavaFilesAll, ".java");
+            JpfFileUtil.getFiles(strFindJavaPath, vJavaFilesAll, ".java");
         }
         logger.info("can find java file size:" + vJavaFilesAll.size());
         map = new HashMap<>();
         for (int i = 0; i < vJavaFilesAll.size(); i++) {
             if (vJavaFilesAll.get(i).indexOf("target") == -1 || vJavaFilesAll.get(i).indexOf("classes") == -1) {
-                map.put(  vJavaFilesAll.get(i),AiFileUtil.getFileName(vJavaFilesAll.get(i)));
+                map.put(  vJavaFilesAll.get(i),JpfFileUtil.getFileName(vJavaFilesAll.get(i)));
             }
         }
         vJavaFilesAll.clear();

@@ -10,10 +10,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jpf.aut.base.GenerateInputParam;
 import org.jpf.aut.base.RunResult;
-import org.jpf.aut.common.consts.AutConst;
 import org.jpf.aut.utils.AutUtil;
-import org.jpf.utils.ios.AiFileUtil;
-import org.jpf.utils.ios.AiOsUtil;
+import org.jpf.utils.ios.JpfFileUtil;
+import org.jpf.utils.ios.JpfOsUtil;
 import org.jpf.utils.mavens.JpfMvnUtil;
 import org.jpf.utils.process.ProcessUtil;
 
@@ -59,14 +58,14 @@ public class GenUnitTestC2 {
    */
   public String getProjectCp(String strPomFilePath) {
     String strProjectCp = " -projectCP " + strPomFilePath + java.io.File.separator + "target"
-        + java.io.File.separator + "classes" + AutConst.getJarConn();
+        + java.io.File.separator + "classes" + JpfMvnUtil.getJarConn();
 
     File f = new File(strPomFilePath + java.io.File.separator + "lib");
     if (f.exists() && f.isDirectory()) {
       for (String strFileName : f.list()) {
         if (!strFileName.endsWith(GenerateInputParam.WORK_JAR)) {
           strProjectCp += strPomFilePath + java.io.File.separator + "lib" + java.io.File.separator
-              + strFileName + AutConst.getJarConn();
+              + strFileName + JpfMvnUtil.getJarConn();
         }
         // check length
         if (strProjectCp.length() > 500) {
@@ -74,7 +73,7 @@ public class GenUnitTestC2 {
         }
       }
     }
-    if (strProjectCp.endsWith(AutConst.getJarConn())) {
+    if (strProjectCp.endsWith(JpfMvnUtil.getJarConn())) {
       strProjectCp = strProjectCp.substring(0, strProjectCp.length() - 1);
     }
 
@@ -91,22 +90,22 @@ public class GenUnitTestC2 {
    */
   public String getCpFilePath(String strPomFilePath) {
     String strProjectCp = strPomFilePath + java.io.File.separator + "target"
-        + java.io.File.separator + "classes" + AutConst.getJarConn();
+        + java.io.File.separator + "classes" + JpfMvnUtil.getJarConn();
 
     File f = new File(strPomFilePath + java.io.File.separator + "lib");
     if (f.exists() && f.isDirectory()) {
       for (String strFileName : f.list()) {
         if (!strFileName.endsWith(GenerateInputParam.WORK_JAR) && strFileName.endsWith(".jar")) {
           strProjectCp += strPomFilePath + java.io.File.separator + "lib" + java.io.File.separator
-              + strFileName + AutConst.getJarConn();
+              + strFileName + JpfMvnUtil.getJarConn();
         }
       }
     }
-    if (strProjectCp.endsWith(AutConst.getJarConn())) {
+    if (strProjectCp.endsWith(JpfMvnUtil.getJarConn())) {
       strProjectCp = strProjectCp.substring(0, strProjectCp.length() - 1);
     }
 
-    AiFileUtil.saveFile(strPomFilePath + java.io.File.separator + "aitest_path.txt", strProjectCp);
+    JpfFileUtil.saveFile(strPomFilePath + java.io.File.separator + "aitest_path.txt", strProjectCp);
     if (logger.isDebugEnabled())
       logger.debug(strProjectCp);
     strProjectCp = " -DCP_file_path=" + strPomFilePath + java.io.File.separator + "aitest_path.txt";
@@ -128,16 +127,16 @@ public class GenUnitTestC2 {
     try {
       Vector<String> v = new Vector<String>();
 
-      if (AiFileUtil.isFile(strJavaSrcPath)) {
+      if (JpfFileUtil.isFile(strJavaSrcPath)) {
         if (strJavaSrcPath.endsWith(".java")) {
           v.add(strJavaSrcPath);
         }
-      } else if (AiFileUtil.isDirectory(strJavaSrcPath)) {
+      } else if (JpfFileUtil.isDirectory(strJavaSrcPath)) {
         // if (JpfMvnUtil.getSrcPath(strJavaSrcPath))
         if (strJavaSrcPath.equalsIgnoreCase(strPomFilePath)) {
-          AiFileUtil.getFiles(JpfMvnUtil.getSrcPath(strJavaSrcPath), v, ".java");
+          JpfFileUtil.getFiles(JpfMvnUtil.getSrcPath(strJavaSrcPath), v, ".java");
         } else {
-          AiFileUtil.getFiles(strJavaSrcPath, v, ".java");
+          JpfFileUtil.getFiles(strJavaSrcPath, v, ".java");
         }
       }
       if (logger.isDebugEnabled())
@@ -164,7 +163,7 @@ public class GenUnitTestC2 {
 
       String strProjectCp = getCpFilePath(strPomFilePath);
       String strCmd = "";
-      if (AiOsUtil.getInstance().isWindows()) {
+      if (JpfOsUtil.getInstance().isWindows()) {
         // strClassPath = "java -jar
         // D:\\jworkspaces\\JpfUnitTest2\\evosuite-master-1.0.7-SNAPSHOT.jar ";
         strCmd =
@@ -175,12 +174,12 @@ public class GenUnitTestC2 {
       // String strClassPath = "java -jar $HOME/aitest/aitest-gen_1.3.jar "
       strCmd += " org.jpf.aut.wupf  ";
 
-      if (!AiFileUtil.isDirectory(strPomFilePath)) {
+      if (!JpfFileUtil.isDirectory(strPomFilePath)) {
         logger.info("file does not exist :" + strPomFilePath);
         return;
       }
 
-      if (!AiFileUtil.isDirectory(strPomFilePath + java.io.File.separator + "lib")) {
+      if (!JpfFileUtil.isDirectory(strPomFilePath + java.io.File.separator + "lib")) {
         logger.info("file does not exist :" + strPomFilePath + java.io.File.separator + "lib");
         return;
       }
@@ -202,7 +201,7 @@ public class GenUnitTestC2 {
   /*
    * private void checkGenUtFiles(String strPomFilePath) { try { Vector<String> v = new
    * Vector<String>(); strPomFilePath = strPomFilePath + AiTestConst.FileSep +
-   * AiTestConst.AITEST_PATH; AiFileUtil.getFiles(strPomFilePath, v, ".java"); for (int i = 0; i <
+   * AiTestConst.AITEST_PATH; JpfFileUtil.getFiles(strPomFilePath, v, ".java"); for (int i = 0; i <
    * v.size(); i++) { if (!v.get(i).endsWith(AiTestConst.AITEST_HC_Suffix)) { v.remove(i); i--; } }
    * if (RunResult.GenFileCount != v.size()) { logger.info("utfile count warning:" +
    * RunResult.GenFileCount + "/" + v.size()); } v.clear(); } catch (Exception ex) {

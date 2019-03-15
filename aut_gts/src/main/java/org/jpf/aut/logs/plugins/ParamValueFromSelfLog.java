@@ -17,7 +17,7 @@ import java.util.Vector;
 import org.jpf.aut.base.GenerateInputParam;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jpf.utils.ios.AiFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 
 /**
  * 
@@ -67,7 +67,7 @@ public class ParamValueFromSelfLog {
 	private void init() throws Exception {
 		map = new HashMap<>();
 		Vector<String> vXmlFiles = new Vector<>();
-		AiFileUtil.getFiles(HandleLogInputParam.SELF_LOG_FILEPATH, vXmlFiles, ".log");
+		JpfFileUtil.getFiles(HandleLogInputParam.SELF_LOG_FILEPATH, vXmlFiles, ".log");
 		for (int j = 0; j < vXmlFiles.size(); j++) {
 			String strXmlFileName = vXmlFiles.get(j);
 			logger.info(strXmlFileName);

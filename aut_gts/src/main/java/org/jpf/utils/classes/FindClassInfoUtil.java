@@ -12,7 +12,7 @@ import org.jpf.aut.common.consts.AutConst;
 import org.jpf.aut.base.GenerateInputParam;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jpf.utils.ios.AiFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 
 
 /**
@@ -53,7 +53,7 @@ public class FindClassInfoUtil {
         String[] strFindJavaPaths=GenerateInputParam.FilePath_Find_Java_Source.split(";");
         for(String strFindJavaPath: strFindJavaPaths)
         {
-            AiFileUtil.getFiles(strFindJavaPath, vJavaFilesAll, FILE_TYPE_JAVA);
+            JpfFileUtil.getFiles(strFindJavaPath, vJavaFilesAll, FILE_TYPE_JAVA);
         }
         logger.info("can find java file size:" + vJavaFilesAll.size());
         map = new HashMap<>();

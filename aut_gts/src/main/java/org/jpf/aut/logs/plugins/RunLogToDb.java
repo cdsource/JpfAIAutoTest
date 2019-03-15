@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 import org.jpf.aut.utils.DbServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jpf.utils.ios.AiFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 
 /**
  * 
@@ -57,7 +57,7 @@ public class RunLogToDb {
 		try {
 			Vector<LogCaseInfo> vLogCase=new Vector<>();
 			Vector<String> vFiles = new Vector<String>();
-			AiFileUtil.getFiles(strInputLogFilePath, vFiles, LogFileType);
+			JpfFileUtil.getFiles(strInputLogFilePath, vFiles, LogFileType);
 			logger.info("find log file count=" + vFiles.size());
 			for (int i = 0; i < vFiles.size(); i++) {
 				HandleLogFile(vFiles.get(i),vLogCase);

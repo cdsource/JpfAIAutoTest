@@ -21,7 +21,7 @@ import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.jpf.utils.classes.ParseJavaByJdt;
 import org.jpf.utils.mavens.JpfMvnUtil;
 
-import org.jpf.utils.ios.AiFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 
 /**
  * @author wupf@asiainfo.com
@@ -79,7 +79,7 @@ public class JptUTSourceModify {
 			for (File f : fs) {
 				if (f.isFile()) {
 					// fileCopy(f.getPath(),des+"\\"+f.getName()); //调用文件拷贝的方法
-					AiFileUtil.copyFile(des + java.io.File.separator + f.getName(), f.getPath());
+					JpfFileUtil.copyFile(des + java.io.File.separator + f.getName(), f.getPath());
 				} else if (f.isDirectory()) {
 					copyDir(f.getPath(), des + java.io.File.separator + f.getName());
 				}
@@ -121,35 +121,35 @@ public class JptUTSourceModify {
 
 			Vector<String> vFiles = new Vector<String>();
 
-			AiFileUtil.getFiles(newJavaTestsPath, vFiles, ".java");
+			JpfFileUtil.getFiles(newJavaTestsPath, vFiles, ".java");
 			logger.info("find java files count:"+vFiles.size());
 			for (int i = 0; i < vFiles.size(); i++) {
 				String strFileName = vFiles.get(i).trim();
 				String strNewFileName = strFileName;
 				// logger.debug(strFileName);
 				if (strFileName.endsWith("_scaffolding.java")) {
-					AiFileUtil.delFile(strFileName);
+					JpfFileUtil.delFile(strFileName);
 					continue;
 				}
 				if (strFileName.endsWith("TestAll.java")) {
-					AiFileUtil.delFile(strFileName);
+					JpfFileUtil.delFile(strFileName);
 					continue;
 				}
 
 				if (strFileName.indexOf(".evosuite") > 0) {
-					AiFileUtil.delFile(strFileName);
-					delTmpPath(AiFileUtil.getFilePath(strFileName));
+					JpfFileUtil.delFile(strFileName);
+					delTmpPath(JpfFileUtil.getFilePath(strFileName));
 					continue;
 				}
 				if (strFileName.indexOf(".evosuite-tests") > 0) {
-					AiFileUtil.delFile(strFileName);
-					delTmpPath(AiFileUtil.getFilePath(strFileName));
+					JpfFileUtil.delFile(strFileName);
+					delTmpPath(JpfFileUtil.getFilePath(strFileName));
 					continue;
 				}
 
 				if (strFileName.endsWith("_ESTest.java")) {
 					strNewFileName = strFileName.replaceAll("_ESTest.java", "Test.java");
-					AiFileUtil.Rename(strFileName, strNewFileName);
+					JpfFileUtil.Rename(strFileName, strNewFileName);
 					//continue;
 				}
 
@@ -286,9 +286,9 @@ public class JptUTSourceModify {
 		}
 		try {
 			if (bDelete) {
-				AiFileUtil.delFile(strUTFileName);
+				JpfFileUtil.delFile(strUTFileName);
 			} else {
-				AiFileUtil.saveFile(strUTFileName, sb);
+				JpfFileUtil.saveFile(strUTFileName, sb);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -328,7 +328,7 @@ public class JptUTSourceModify {
 	protected void delNoMethodUtFile(final String strUTFileName) {
 
 		try {
-			if (!AiFileUtil.FileExist(strUTFileName)) {
+			if (!JpfFileUtil.FileExist(strUTFileName)) {
 				return;
 			}
 			CompilationUnit cCompilationUnit = ParseJavaByJdt.getInstance().parseJavaSourceFile17(strUTFileName,GenerateInputParam.JAVA_ENCODE);
@@ -354,7 +354,7 @@ public class JptUTSourceModify {
 			MethodDeclaration methodDec[] = typeDec.getMethods();
 			logger.debug(strUTFileName + ":" + methodDec.length);
 			if (methodDec.length == 0) {
-				AiFileUtil.delFile(strUTFileName);
+				JpfFileUtil.delFile(strUTFileName);
 			}
 
 		} catch (Exception ex) {
@@ -366,7 +366,7 @@ public class JptUTSourceModify {
 	protected void delTmpPath(String strDelPath) {
 		try {
 			logger.trace(strDelPath);
-			AiFileUtil.delDirWithFiles(strDelPath);
+			JpfFileUtil.delDirWithFiles(strDelPath);
 
 		} catch (Exception ex) {
 

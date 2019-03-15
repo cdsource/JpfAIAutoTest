@@ -113,4 +113,6 @@ public class ClassUtil {
   public static String getPackageFromClass(String strClassName) {
     return strClassName.substring(0, strClassName.lastIndexOf("."));
   }
+
+  public static String LineSeparator = System.getProperty("line.separator");
 }

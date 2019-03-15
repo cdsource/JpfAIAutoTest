@@ -17,7 +17,7 @@ import java.util.Vector;
 import org.jpf.aut.utils.DbServer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jpf.utils.ios.AiFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 
 /**
  * @author wupf@asiainfo.com
@@ -45,7 +45,7 @@ public class SelfTestLogToDb {
 		try {
 
 			Vector<String> vXmlFiles = new Vector<>();
-			AiFileUtil.getFiles(HandleLogInputParam.SELF_LOG_FILEPATH, vXmlFiles, LogFileType);
+			JpfFileUtil.getFiles(HandleLogInputParam.SELF_LOG_FILEPATH, vXmlFiles, LogFileType);
 			for (int j = 0; j < vXmlFiles.size(); j++) {
 				String strXmlFileName = vXmlFiles.get(j);
 				logger.info(strXmlFileName);

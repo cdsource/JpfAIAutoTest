@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.jpf.aut.base.GenerateInputParam;
-import org.jpf.utils.ios.AiFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -87,7 +87,7 @@ public class CompileErrClassName {
 				sb.append(line).append(line_separator);
 
 			}
-			AiFileUtil.saveFile(strFileName, sb);
+			JpfFileUtil.saveFile(strFileName, sb);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

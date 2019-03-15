@@ -20,7 +20,7 @@ import org.jpf.aut.gts.gtf.forabstract.GTFForAbstract;
 import org.jpf.aut.gts.gtf.fornormal.GTFForNormal;
 import org.jpf.aut.gts.plugins.springs.gtf.ItForDao;
 import org.jpf.aut.utils.AutUtil;
-import org.jpf.utils.ios.AiFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 
 /**
  * 
@@ -100,8 +100,8 @@ public class GenUnitTestW {
    */
   public String findMaxSearchPath(String strInputFilePath) {
     boolean isFind = false;
-    if (!AiFileUtil.isDirectory(strInputFilePath)) {
-      strInputFilePath = AiFileUtil.getFilePath(strInputFilePath);
+    if (!JpfFileUtil.isDirectory(strInputFilePath)) {
+      strInputFilePath = JpfFileUtil.getFilePath(strInputFilePath);
     }
 
     while (!isFind) {
@@ -109,12 +109,12 @@ public class GenUnitTestW {
         isFind = true;
         break;
       }
-      if (AiFileUtil.FileExist(strInputFilePath + java.io.File.separator + "pom.xml")) {
+      if (JpfFileUtil.FileExist(strInputFilePath + java.io.File.separator + "pom.xml")) {
         isFind = true;
         break;
       }
 
-      strInputFilePath = AiFileUtil.getFilePath(strInputFilePath);
+      strInputFilePath = JpfFileUtil.getFilePath(strInputFilePath);
 
     }
     return strInputFilePath;
@@ -170,14 +170,14 @@ public class GenUnitTestW {
       return;
     }
     try {
-      if (AiFileUtil.isFile(strInputFile)) {
+      if (JpfFileUtil.isFile(strInputFile)) {
         if (cGenerateTests.doGenerateFile(strInputFile)) {
           RunResult.addFinishFileCount();
         }
         RunResult.TotalJavaSrcFileCount++;
-      } else if (AiFileUtil.isDirectory(strInputFile)) {
+      } else if (JpfFileUtil.isDirectory(strInputFile)) {
         Vector<String> vFiles = new Vector<String>();
-        AiFileUtil.getFiles(strInputFile, vFiles, ".java");
+        JpfFileUtil.getFiles(strInputFile, vFiles, ".java");
         // add filter
         AutUtil.removeNotSourceFile(vFiles);
 

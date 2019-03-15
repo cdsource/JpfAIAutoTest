@@ -26,7 +26,7 @@ import org.jpf.utils.MatchUtil;
 import org.jpf.utils.classes.ParseJavaByJdt;
 
 import org.jpf.aut.base.RunResult;
-import org.jpf.utils.ios.AiFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 
 /**
  * @author wupf@asiainfo.com
@@ -58,13 +58,13 @@ public class SourceCheck {
 		try {
 			String strUtFileName = sourceFileName.replaceAll("main", "test");
 			logger.debug(strUtFileName);
-			String baseDirName = AiFileUtil.getFilePath(strUtFileName);
+			String baseDirName = JpfFileUtil.getFilePath(strUtFileName);
 			File baseDir = new File(baseDirName); // 创建一个File对象
 			String tempName = null;
 			File tempFile;
 			File[] files = baseDir.listFiles();
 			if (files != null) {
-				strUtFileName = AiFileUtil.getFileName(strUtFileName).replaceAll("\\.java", ".?Test[0-9]*\\.java");
+				strUtFileName = JpfFileUtil.getFileName(strUtFileName).replaceAll("\\.java", ".?Test[0-9]*\\.java");
 				//logger.debug(strUtFileName);
 				for (int i = 0; i < files.length; i++) {
 					tempFile = files[i];
@@ -191,7 +191,7 @@ public class SourceCheck {
 	public void doWork(String strPomFath) {
 		try {
 			Vector<String> vFiles = new Vector<String>();
-			AiFileUtil.getFiles(strPomFath, vFiles, ".java");
+			JpfFileUtil.getFiles(strPomFath, vFiles, ".java");
 			// remove test file
 			CheckUtils.checkForSource(vFiles);
 

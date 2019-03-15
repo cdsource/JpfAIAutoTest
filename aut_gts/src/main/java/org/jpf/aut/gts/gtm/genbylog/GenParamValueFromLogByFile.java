@@ -24,7 +24,7 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.jpf.utils.classes.FindClassInfoUtil;
-import org.jpf.utils.ios.AiFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 
 /**
  * 
@@ -160,7 +160,7 @@ public class GenParamValueFromLogByFile {
                         return "";
                     }
 
-                    String sourceString = AiFileUtil.getFileTxt(strJavaFileName, "GBK");
+                    String sourceString = JpfFileUtil.getFileTxt(strJavaFileName, "GBK");
                     logger.trace(sourceString);
                     ASTParser astParser = ASTParser.newParser(AST.JLS8);
                     astParser.setKind(ASTParser.K_COMPILATION_UNIT);

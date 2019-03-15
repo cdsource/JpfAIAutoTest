@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jpf.aut.utils.DbServer;
-import org.jpf.utils.dbsql.AiDBUtil;
+import org.jpf.utils.dbsql.JpfDBUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jpf.aut.base.JpfMethodInfo;
@@ -137,7 +137,7 @@ public class GenInfoFromNLP {
 			String strSql = "SELECT * FROM sql_row_value s where  left(col_name," + strVariableName.length() + ")=\""
 					+ strVariableName + "\" OR right(col_name, " + strVariableName.length() + ")=\"" + strVariableName
 					+ "\" and col_type=\""+cParamInitBody.getParamType()+"\"";
-			ResultSet rs = AiDBUtil.ExecSqlQuery(conn, strSql);
+			ResultSet rs = JpfDBUtil.ExecSqlQuery(conn, strSql);
 			if (rs.next()) {
 				return rs.getString("col_value");
 			}
@@ -161,7 +161,7 @@ public class GenInfoFromNLP {
 			String strSql = "SELECT * FROM sql_row_value s where  left(col_name," + strVariableName.length() + ")=\""
 					+ strVariableName + "\" OR right(col_name, " + strVariableName.length() + ")=\"" + strVariableName
 					+ "\"";
-			ResultSet rs = AiDBUtil.ExecSqlQuery(conn, strSql);
+			ResultSet rs = JpfDBUtil.ExecSqlQuery(conn, strSql);
 			if (rs.next()) {
 				return rs.getString("col_value");
 			}
@@ -210,7 +210,7 @@ public class GenInfoFromNLP {
 			logger.info(strSql);
 
 			Connection conn = DbServer.getInstance().getConn();
-			ResultSet rs = AiDBUtil.ExecSqlQuery(conn, strSql);
+			ResultSet rs = JpfDBUtil.ExecSqlQuery(conn, strSql);
 			while (rs.next()) {
 				StringBuffer sb=new StringBuffer();
 				for (int i = 0; i < cMethodInfo.getMethodParam().size(); i++) {

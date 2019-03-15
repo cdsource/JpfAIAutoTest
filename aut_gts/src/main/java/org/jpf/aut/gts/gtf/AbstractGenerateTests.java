@@ -32,10 +32,10 @@ import org.jpf.aut.gts.gtm.GenerateMethodPublic;
 import org.jpf.aut.gts.gtm.GenerateMethodPublicStatic;
 import org.jpf.aut.gts.gtm.gtConstructor.GeneratorConstructorImpl;
 import org.jpf.aut.gts.plugins.springs.gtm.GTMForDAOInterface;
-import org.jpf.utils.AiDateTimeUtil;
+import org.jpf.utils.JpfDateTimeUtil;
 import org.jpf.utils.classes.AddImport;
 import org.jpf.utils.classes.ParseJavaByJdt;
-import org.jpf.utils.ios.AiFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 
 /**
  * 
@@ -108,7 +108,7 @@ public abstract class AbstractGenerateTests {
     }
     String strSaveUtFileName = "";
     String strPomFileName = strFileName.substring(0, strFileName.indexOf("src")) + "pom.xml";
-    if (AiFileUtil.FileExist(strPomFileName)) {
+    if (JpfFileUtil.FileExist(strPomFileName)) {
       // maven
       strSaveUtFileName = strFileName.replace(".java", "_WRTest.java").replaceAll("main", "test");
       GenerateInputParam.setPOM_PATH(strPomFileName);
@@ -118,11 +118,11 @@ public abstract class AbstractGenerateTests {
     }
     if (getUTSavePath() != null && getUTSavePath().length() > 0) {
       strSaveUtFileName = getUTSavePath() + java.io.File.separator
-          + AiFileUtil.getFileName(strFileName).replaceAll(".java", "_WRTest.java");
+          + JpfFileUtil.getFileName(strFileName).replaceAll(".java", "_WRTest.java");
     }
     logger.info("save ut File :" + strSaveUtFileName);
     /*
-     * if (AiFileUtil.FileExist(strSaveUtFileName)) { logger.warn("File Exist:" +
+     * if (JpfFileUtil.FileExist(strSaveUtFileName)) { logger.warn("File Exist:" +
      * strSaveUtFileName); RunResult.iExistUtFileCount++; return false; }
      */
     JpfUtInfo cJpfUtInfo = new JpfUtInfo();
@@ -149,7 +149,7 @@ public abstract class AbstractGenerateTests {
   public void saveFile(String strFileFullName, String str, String strEncoding) {
     FileOutputStream fout = null;
     try {
-      AiFileUtil.mkdir(AiFileUtil.getFilePath(strFileFullName));
+      JpfFileUtil.mkdir(JpfFileUtil.getFilePath(strFileFullName));
       logger.debug("saving filename:" + strFileFullName);
 
       fout = new FileOutputStream(strFileFullName);
@@ -373,6 +373,7 @@ public abstract class AbstractGenerateTests {
    * @param sb update 2017年9月29日
    */
   public String addTestEnd(String strClass) {
+    String strCurrentDateTime = JpfDateTimeUtil.getCurrDateTime();
     StringBuffer sb = new StringBuffer();
     sb.append("\n").append("  /**").append("\n");
     sb.append("  * 测试方法初始化.").append("\n");
@@ -380,8 +381,7 @@ public abstract class AbstractGenerateTests {
     sb.append("  * @throws Exception ").append("\n");
     sb.append("  *         if the initialization fails for some reason ").append("\n");
     sb.append("  *  ").append("\n");
-    sb.append("  * @generatedBy wupf@asiainfo.com at ").append(AiDateTimeUtil.getCurrDateTime())
-        .append("\n");
+    sb.append("  * @generatedBy wupf@asiainfo.com at ").append(strCurrentDateTime).append("\n");
     sb.append("  */  ").append("\n");
     sb.append(" @Before ").append("\n");
     sb.append("  public void setUp()  throws Exception ").append("\n");
@@ -395,8 +395,7 @@ public abstract class AbstractGenerateTests {
     sb.append("  * @throws Exception ").append("\n");
     sb.append("  * if the clean-up fails for some reason ").append("\n");
     sb.append("  *  ").append("\n");
-    sb.append("  * @generatedBy wupf@asiainfo.com at ").append(AiDateTimeUtil.getCurrDateTime())
-        .append("\n");
+    sb.append("  * @generatedBy wupf@asiainfo.com at ").append(strCurrentDateTime).append("\n");
     sb.append("  */  ").append("\n");
     sb.append("  @After ").append("\n");
     sb.append("  public void tearDown()  throws Exception ").append("\n");
@@ -410,8 +409,7 @@ public abstract class AbstractGenerateTests {
     sb.append("  * @throws Exception ").append("\n");
     sb.append("  *         if the initialization fails for some reason ").append("\n");
     sb.append("  *  ").append("\n");
-    sb.append("  * @generatedBy wupf@asiainfo.com at ").append(AiDateTimeUtil.getCurrDateTime())
-        .append("\n");
+    sb.append("  * @generatedBy wupf@asiainfo.com at ").append(strCurrentDateTime).append("\n");
     sb.append("  */  ").append("\n");
     sb.append(" @BeforeClass ").append("\n");
     sb.append("  public static void setUpBeforeClass()  throws Exception ").append("\n");
@@ -425,8 +423,7 @@ public abstract class AbstractGenerateTests {
     sb.append("  * @throws Exception ").append("\n");
     sb.append("  * if the clean-up fails for some reason ").append("\n");
     sb.append("  *  ").append("\n");
-    sb.append("  * @generatedBy wupf@asiainfo.com at ").append(AiDateTimeUtil.getCurrDateTime())
-        .append("\n");
+    sb.append("  * @generatedBy wupf@asiainfo.com at ").append(strCurrentDateTime).append("\n");
     sb.append("  */  ").append("\n");
     sb.append("  @AfterClass ").append("\n");
     sb.append("  public static void tearDownAfterClass()  throws Exception ").append("\n");
@@ -439,8 +436,7 @@ public abstract class AbstractGenerateTests {
     sb.append("  * ").append("\n");
     sb.append("  * @param args the command line arguments ").append("\n");
     sb.append("  *  ").append("\n");
-    sb.append("  * @generatedBy wupf@asiainfo.com at ").append(AiDateTimeUtil.getCurrDateTime())
-        .append("\n");
+    sb.append("  * @generatedBy wupf@asiainfo.com at ").append(strCurrentDateTime).append("\n");
     sb.append("  * ").append("\n");
     sb.append("  */").append("\n");
     sb.append("  public static void main(String[] args) ").append("\n");
@@ -469,7 +465,7 @@ public abstract class AbstractGenerateTests {
     sb.append("* <p>").append("\n");
     sb.append("* Copyright (c) 2017").append("\n");
     sb.append("* ").append("\n");
-    sb.append("* @generatedBy wupf@asiainfo.com at ").append(AiDateTimeUtil.getCurrDateTime())
+    sb.append("* @generatedBy wupf@asiainfo.com at ").append(JpfDateTimeUtil.getCurrDateTime())
         .append("\n");
     sb.append("* @author Administrator").append("\n");
     sb.append("* @version $Revision: ").append(GenerateInputParam.VERSION_INFO).append("\n");

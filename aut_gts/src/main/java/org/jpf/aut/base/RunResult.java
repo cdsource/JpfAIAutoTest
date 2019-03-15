@@ -54,8 +54,10 @@ public class RunResult {
 
   // lvr产生的文件数量
   public static int GenFileCountByLVR = 0;
-
+  // 排除的类
   private static int ExclusionsFileCount = 0;
+  // 未知的类
+  private static int UnknownFileCount = 0;
 
   /**
    * 
@@ -69,15 +71,67 @@ public class RunResult {
     logger.info("EnumFileCount:" + RunResult.EnumFileCount);
     logger.info("exist ut files:" + RunResult.iExistUtFileCount);
     logger.info("Exception files:" + RunResult.iErrorFileCount);
-    logger.info("iFail_TestFile:" + RunResult.iFail_TestFile);
-    logger.info("iFail_TargetFile:" + RunResult.iFail_TargetFile);
+    logger.info("Fail_TestFile:" + RunResult.iFail_TestFile);
+    logger.info("Fail_TargetFile:" + RunResult.iFail_TargetFile);
     logger.info("GenericTypeCount:" + RunResult.iGenericTypeCount);
-    logger.info("CommentRowCount:" + RunResult.iCommentCountRow);
-    logger.info("CommentMethodCount:" + RunResult.CommentMethodCount);
-    logger.info("CommentFileCount:" + RunResult.iCommentCountFile);
     logger.info("GenEmptyUtFileCount:" + RunResult.GenEmptyUtFileCount);
     logger.info("GenFileCountByLVR:" + RunResult.GenFileCountByLVR);
     logger.info("ExclusionsFileCount:" + RunResult.ExclusionsFileCount);
+    logger.info("UnknownFileCount:" + RunResult.UnknownFileCount);
+
+    logger.info("CommentRowCount:" + RunResult.iCommentCountRow);
+    logger.info("CommentMethodCount:" + RunResult.CommentMethodCount);
+    logger.info("CommentFileCount:" + RunResult.iCommentCountFile);
+
+  }
+
+  /**
+   * 
+   * @category:
+   * @Title: printGenerateResult
+   * @author:wupf@asiainfo.com
+   * @date:2019年2月27日
+   */
+  public static void printGenerateResult() {
+    logger.info("TotalJavaSrcFileCount:" + RunResult.TotalJavaSrcFileCount);
+    logger.info("generate files:" + RunResult.GenFileCount);
+    logger.info("abstract files:" + RunResult.AbstractFileCount);
+    logger.info("interface files:" + RunResult.InterfaceFileCount);
+    logger.info("EnumFileCount:" + RunResult.EnumFileCount);
+    logger.info("exist ut files:" + RunResult.iExistUtFileCount);
+    logger.info("Exception files:" + RunResult.iErrorFileCount);
+    logger.info("Fail_TestFile:" + RunResult.iFail_TestFile);
+    logger.info("Fail_TargetFile:" + RunResult.iFail_TargetFile);
+    logger.info("GenericTypeCount:" + RunResult.iGenericTypeCount);
+    logger.info("GenEmptyUtFileCount:" + RunResult.GenEmptyUtFileCount);
+    logger.info("GenFileCountByLVR:" + RunResult.GenFileCountByLVR);
+    logger.info("ExclusionsFileCount:" + RunResult.ExclusionsFileCount);
+    logger.info("UnknownFileCount:" + RunResult.UnknownFileCount);
+
+    logger.info("CommentRowCount:" + RunResult.iCommentCountRow);
+    logger.info("CommentMethodCount:" + RunResult.CommentMethodCount);
+    logger.info("CommentFileCount:" + RunResult.iCommentCountFile);
+
+  }
+
+  public static void reset() {
+    TotalJavaSrcFileCount = 0;
+    GenFileCount = 0;
+    AbstractFileCount = 0;
+    InterfaceFileCount = 0;
+    EnumFileCount = 0;
+    iExistUtFileCount = 0;
+    iErrorFileCount = 0;
+    iFail_TestFile = 0;
+    iFail_TargetFile = 0;
+    iGenericTypeCount = 0;
+    GenEmptyUtFileCount = 0;
+    GenFileCountByLVR = 0;
+    ExclusionsFileCount = 0;
+    UnknownFileCount = 0;
+    iCommentCountRow = 0;
+    CommentMethodCount = 0;
+    iCommentCountFile = 0;
   }
 
   private static int iCommentCountRow = 0;
@@ -127,4 +181,9 @@ public class RunResult {
   public static int getExclusionsFileCount() {
     return ExclusionsFileCount;
   }
+
+  public static synchronized void addUnknownFileCount() {
+    UnknownFileCount++;
+  }
+
 }

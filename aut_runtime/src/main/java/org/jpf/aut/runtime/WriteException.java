@@ -8,8 +8,8 @@ import java.io.PrintStream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jpf.utils.AiDateTimeUtil;
-import org.jpf.utils.ios.AiFileUtil;
+import org.jpf.utils.JpfDateTimeUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 
 public class WriteException {
   private static final Logger logger = LogManager.getLogger();
@@ -30,7 +30,7 @@ public class WriteException {
   public static void WritePrivateException(Exception ex, StackTraceElement[] cStackTraceElement,
       boolean isLimitException) {
     StringBuilder sb = new StringBuilder();
-    sb.append(AiDateTimeUtil.getCurrDateTime()).append("\t");
+    sb.append(JpfDateTimeUtil.getCurrDateTime()).append("\t");
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     ex.printStackTrace(new PrintStream(baos));
     String[] exceptions = baos.toString().split("\n");
@@ -75,7 +75,7 @@ public class WriteException {
     try {
       // logger.info(sb);
       sb.append("\n");
-      AiFileUtil.appendToCsv(strTestClassName + ".junitlog.csv", sb);
+      JpfFileUtil.appendToCsv(strTestClassName + ".junitlog.csv", sb);
       sb.delete(0, sb.length());
     } catch (Exception cException) {
       logger.error(cException);

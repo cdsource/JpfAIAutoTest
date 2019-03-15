@@ -6,8 +6,6 @@
  */
 package org.jpf.aut.common.consts;
 
-import org.jpf.utils.ios.AiOsUtil;
-
 /**
  * @author wupf
  *
@@ -15,13 +13,7 @@ import org.jpf.utils.ios.AiOsUtil;
 public class AutConst {
 
   // LINUX
-  public static String getJarConn() {
-    if (AiOsUtil.getInstance().isWindows()) {
-      return ";";
-    }
-    return ":";
 
-  }
 
   public static final String AITEST_PATH = "aitest_tests";
 

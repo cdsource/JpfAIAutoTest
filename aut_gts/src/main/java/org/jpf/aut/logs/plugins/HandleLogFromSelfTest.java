@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jpf.utils.ios.AiFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 
 /**
  * 
@@ -37,7 +37,7 @@ public class HandleLogFromSelfTest {
         try {
 
             Vector<String> vFiles = new Vector<String>();
-            AiFileUtil.getFiles(strInputLogFilePath, vFiles, LogFileType);
+            JpfFileUtil.getFiles(strInputLogFilePath, vFiles, LogFileType);
             logger.info(vFiles.size());
             for (int i = 0; i < vFiles.size(); i++) {
                 HandleLogFile(vFiles.get(i), i);
@@ -119,7 +119,7 @@ public class HandleLogFromSelfTest {
             logger.info(lCount);
             lFindCount += lCount;
             if (sb.length() > 0) {
-                AiFileUtil.saveFile("D:\\abc\\b\\abcd" + iFileCount + ".log", sb);
+                JpfFileUtil.saveFile("D:\\abc\\b\\abcd" + iFileCount + ".log", sb);
             }
         } catch (Exception ex) {
             // TODO: handle exception

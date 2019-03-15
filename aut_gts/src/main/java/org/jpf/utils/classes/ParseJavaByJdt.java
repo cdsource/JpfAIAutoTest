@@ -35,7 +35,7 @@ import org.eclipse.jdt.core.dom.TextElement;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.TypeParameter;
-import org.jpf.utils.ios.AiFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 
 /**
  * 
@@ -69,7 +69,7 @@ public class ParseJavaByJdt {
       throws Exception {
     if (logger.isDebugEnabled())
       logger.debug(sourceFileName);
-    String sourceString = AiFileUtil.getFileTxt(sourceFileName, strEnCode);
+    String sourceString = JpfFileUtil.getFileTxt(sourceFileName, strEnCode);
     ASTParser astParser = ASTParser.newParser(AST.JLS8);
     astParser.setKind(ASTParser.K_COMPILATION_UNIT);
     astParser.setResolveBindings(true);
@@ -93,8 +93,8 @@ public class ParseJavaByJdt {
       throws Exception {
     if (logger.isDebugEnabled())
       logger.debug(sourceFileName);
-    String sourceString = AiFileUtil.getFileTxt(sourceFileName, strEnCode);
-    ASTParser astParser = ASTParser.newParser(AST.JLS10);
+    String sourceString = JpfFileUtil.getFileTxt(sourceFileName, strEnCode);
+    ASTParser astParser = ASTParser.newParser(AST.JLS8);
     astParser.setKind(ASTParser.K_COMPILATION_UNIT);
     astParser.setResolveBindings(true);
     astParser.setSource(sourceString.toCharArray());

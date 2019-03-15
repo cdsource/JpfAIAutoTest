@@ -13,8 +13,8 @@ import org.apache.logging.log4j.Logger;
 import org.jpf.aut.base.RunResult;
 import org.jpf.aut.common.consts.AutConst;
 import org.jpf.aut.utils.AutUtil;
-import org.jpf.utils.ios.AiFileUtil;
-import org.jpf.utils.ios.AiOsUtil;
+import org.jpf.utils.ios.JpfFileUtil;
+import org.jpf.utils.ios.JpfOsUtil;
 import org.jpf.utils.mavens.JpfMvnUtil;
 
 /**
@@ -33,7 +33,7 @@ public class GenUnitTestC7 {
       logger.info("strCmd" + strCmd);
 
       Process process;
-      if (AiOsUtil.getInstance().isWindows()) {
+      if (JpfOsUtil.getInstance().isWindows()) {
         process = Runtime.getRuntime().exec(strCmd);
       } else {
         String[] cmd = new String[] {"/bin/sh", "-c", strCmd};
@@ -76,16 +76,16 @@ public class GenUnitTestC7 {
 
   public String getProjectCp(String strPomFilePath) {
     String strProjectCp = " -projectCP " + strPomFilePath + java.io.File.separator + "target"
-        + java.io.File.separator + "classes" + AutConst.getJarConn();
+        + java.io.File.separator + "classes" + JpfMvnUtil.getJarConn();
     File f = new File(strPomFilePath + java.io.File.separator + "lib");
     if (f.exists() && f.isDirectory()) {
       for (String strFileName : f.list()) {
 
         strProjectCp += strPomFilePath + java.io.File.separator + "lib" + java.io.File.separator
-            + strFileName + AutConst.getJarConn();
+            + strFileName + JpfMvnUtil.getJarConn();
       }
     }
-    if (strProjectCp.endsWith(AutConst.getJarConn())) {
+    if (strProjectCp.endsWith(JpfMvnUtil.getJarConn())) {
       strProjectCp = strProjectCp.substring(0, strProjectCp.length() - 1);
     }
 
@@ -109,16 +109,16 @@ public class GenUnitTestC7 {
     try {
       Vector<String> v = new Vector<String>();
 
-      if (AiFileUtil.isFile(strJavaSrcPath)) {
+      if (JpfFileUtil.isFile(strJavaSrcPath)) {
         if (strJavaSrcPath.endsWith(".java")) {
           v.add(strJavaSrcPath);
         }
-      } else if (AiFileUtil.isDirectory(strJavaSrcPath)) {
+      } else if (JpfFileUtil.isDirectory(strJavaSrcPath)) {
         // if (JpfMvnUtil.getSrcPath(strJavaSrcPath))
         if (strJavaSrcPath.equalsIgnoreCase(strPomFilePath)) {
-          AiFileUtil.getFiles(JpfMvnUtil.getSrcPath(strJavaSrcPath), v, ".java");
+          JpfFileUtil.getFiles(JpfMvnUtil.getSrcPath(strJavaSrcPath), v, ".java");
         } else {
-          AiFileUtil.getFiles(strJavaSrcPath, v, ".java");
+          JpfFileUtil.getFiles(strJavaSrcPath, v, ".java");
         }
       }
 
@@ -145,7 +145,7 @@ public class GenUnitTestC7 {
 
       String strProjectCp = getProjectCp(strPomFilePath);
       String strClassPath = "";
-      if (AiOsUtil.getInstance().isWindows()) {
+      if (JpfOsUtil.getInstance().isWindows()) {
         strClassPath = "java -jar  D:\\jworkspaces\\JpfUnitTest2\\aitest-gen_1.3.jar ";
       } else {
         strClassPath = "java -jar $HOME/aitest/aitest-gen_1.3.jar ";
@@ -155,12 +155,12 @@ public class GenUnitTestC7 {
 
 
 
-      if (!AiFileUtil.isDirectory(strPomFilePath)) {
+      if (!JpfFileUtil.isDirectory(strPomFilePath)) {
         System.out.println("file does not exist :" + strPomFilePath);
         return;
       }
 
-      if (!AiFileUtil.isDirectory(strPomFilePath + java.io.File.separator + "lib")) {
+      if (!JpfFileUtil.isDirectory(strPomFilePath + java.io.File.separator + "lib")) {
         System.out
             .println("file does not exist :" + strPomFilePath + java.io.File.separator + "lib");
         return;
@@ -202,7 +202,7 @@ public class GenUnitTestC7 {
     try {
       Vector<String> v = new Vector<String>();
       strPomFilePath = strPomFilePath + java.io.File.separator + AutConst.AITEST_PATH;
-      AiFileUtil.getFiles(strPomFilePath, v, ".java");
+      JpfFileUtil.getFiles(strPomFilePath, v, ".java");
       for (int i = 0; i < v.size(); i++) {
         if (!v.get(i).endsWith("ESTest.java")) {
           v.remove(i);

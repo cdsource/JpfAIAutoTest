@@ -8,7 +8,7 @@
 package org.jpf.aut.base;
 
 import org.jpf.aut.common.consts.AutConst;
-import org.jpf.utils.ios.WuFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 
 /**
  * 
@@ -30,6 +30,7 @@ public class GenerateInputParam {
   // 单元测试函数超时设置
   public static int UtTimeOut = 1000;
 
+  public static int MaxJavaFile = -1;
   // 搜索超时时间
   public static int budget = 30;
 
@@ -96,7 +97,7 @@ public class GenerateInputParam {
   }
 
   public static void setPOM_PATH(String pOM_PATH) throws Exception {
-    if (WuFileUtil.FileExist(pOM_PATH)) {
+    if (JpfFileUtil.FileExist(pOM_PATH)) {
       POM_PATH = pOM_PATH;
     } else {
       throw new Exception("POM FILE NOT EXIST:" + pOM_PATH);

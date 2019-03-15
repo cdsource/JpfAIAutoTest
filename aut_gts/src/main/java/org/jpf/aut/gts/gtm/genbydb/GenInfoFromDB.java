@@ -12,7 +12,7 @@ import org.jpf.aut.base.JpfMethodInfo;
 import org.jpf.aut.base.JpfUtMethodInfo;
 import org.jpf.aut.gts.gtm.MethodParamBody;
 import org.jpf.aut.utils.DbServer;
-import org.jpf.utils.dbsql.AiDBUtil;
+import org.jpf.utils.dbsql.JpfDBUtil;
 
 /**
  * @author Administrator
@@ -99,12 +99,12 @@ public class GenInfoFromDB {
 			Connection conn = DbServer.getInstance().getConn();
 			String strSql = "SELECT t1.col_name,t1.col_value FROM sql_row_value t1,sql_info t2 where t1.log_info_id=t2.id and t2.exe_method='"
 					+ strMethodName + "' and t1.col_name='" + strVariableName + "';";
-			ResultSet rs = AiDBUtil.ExecSqlQuery(conn, strSql);
+			ResultSet rs = JpfDBUtil.ExecSqlQuery(conn, strSql);
 			if (rs.next()) {
 				return rs.getString("col_value");
 			}
 			strSql = "SELECT * FROM aicode.sql_row_value s where LOCATE(col_name,'" + strVariableName + "')>0";
-			rs = AiDBUtil.ExecSqlQuery(conn, strSql);
+			rs = JpfDBUtil.ExecSqlQuery(conn, strSql);
 			if (rs.next()) {
 				return rs.getString("col_value");
 			}

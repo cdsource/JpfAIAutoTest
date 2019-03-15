@@ -9,7 +9,7 @@ import java.util.Vector;
 import java.util.regex.Matcher;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jpf.utils.ios.AiFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,7 +35,7 @@ public class HandleLogFromDebug {
         try {
 
             Vector<String> vFiles = new Vector<String>();
-            AiFileUtil.getFiles(strInputLogFilePath, vFiles, LogFileType);
+            JpfFileUtil.getFiles(strInputLogFilePath, vFiles, LogFileType);
             logger.info(vFiles.size());
             for (int i = 0; i < vFiles.size(); i++) {
                 HandleLogFile(vFiles.get(i),i);
@@ -127,7 +127,7 @@ public class HandleLogFromDebug {
             lFindCount+=lCount;
             if (sb.length()>0)
             {
-                AiFileUtil.saveFile(HandleLogInputParam.RUN_LOG_FILEPATH+ "//debug_run_format"+iFileCount+".log", sb);
+                JpfFileUtil.saveFile(HandleLogInputParam.RUN_LOG_FILEPATH+ "//debug_run_format"+iFileCount+".log", sb);
             }
         } catch (Exception ex) {
             // TODO: handle exception

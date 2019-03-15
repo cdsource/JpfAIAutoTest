@@ -20,8 +20,8 @@ import org.jpf.aut.base.GenerateInputParam;
 import org.jpf.aut.base.RunResult;
 import org.jpf.aut.common.consts.AutConst;
 import org.jpf.utils.classes.ParseJavaByJdt;
-import org.jpf.utils.ios.AiFileUtil;
-import org.jpf.utils.ios.WuFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 import org.jpf.utils.mavens.JpfMvnUtil;
 
 /**
@@ -80,7 +80,7 @@ public class JpfUnitTestSourceCheck2 {
 			for (File f : fs) {
 				if (f.isFile()) {
 					// fileCopy(f.getPath(),des+"\\"+f.getName()); //调用文件拷贝的方法
-					AiFileUtil.copyFile(des + java.io.File.separator + f.getName(), f.getPath());
+					JpfFileUtil.copyFile(des + java.io.File.separator + f.getName(), f.getPath());
 				} else if (f.isDirectory()) {
 					copyDir(f.getPath(), des + java.io.File.separator + f.getName());
 				}
@@ -113,14 +113,14 @@ public class JpfUnitTestSourceCheck2 {
 			// logger.debug(oldJavaTestsPath);
 			copyDir(oldJavaTestsPath, newJavaTestsPath);
 
-			AiFileUtil.delDirWithFiles(strPomFilePath + java.io.File.separator + "evosuite-report");
-			AiFileUtil.delDirWithFiles(strPomFilePath + java.io.File.separator + "evosuite-tests");
-			AiFileUtil.delDirWithFiles(strPomFilePath + java.io.File.separator + ".evosuite");
+			JpfFileUtil.delDirWithFiles(strPomFilePath + java.io.File.separator + "evosuite-report");
+			JpfFileUtil.delDirWithFiles(strPomFilePath + java.io.File.separator + "evosuite-tests");
+			JpfFileUtil.delDirWithFiles(strPomFilePath + java.io.File.separator + ".evosuite");
 			// delTmpPath(strPrjPath + AiTestConst.FileSep + AiTestConst.AITEST_PATH);
 
 			Vector<String> vFiles = new Vector<String>();
 
-			AiFileUtil.getFiles(newJavaTestsPath, vFiles, ".java");
+			JpfFileUtil.getFiles(newJavaTestsPath, vFiles, ".java");
 			logger.info("find java files count:" + vFiles.size());
 			logger.info(AutConst.AITEST_HC_Suffix+".java");
 			for (int i = 0; i < vFiles.size(); i++) {
@@ -128,29 +128,29 @@ public class JpfUnitTestSourceCheck2 {
 				String strNewFileName = strFileName;
 				logger.info(strFileName);
 				if (strFileName.endsWith("_scaffolding.java")) {
-					AiFileUtil.delFile(strFileName);
+					JpfFileUtil.delFile(strFileName);
 					continue;
 				}
 				if (strFileName.endsWith("TestAll.java")) {
-					AiFileUtil.delFile(strFileName);
+					JpfFileUtil.delFile(strFileName);
 					continue;
 				}
 
 				if (strFileName.indexOf(".evosuite") > 0) {
-					AiFileUtil.delFile(strFileName);
-					AiFileUtil.delDirWithFiles(AiFileUtil.getFilePath(strFileName));
+					JpfFileUtil.delFile(strFileName);
+					JpfFileUtil.delDirWithFiles(JpfFileUtil.getFilePath(strFileName));
 					continue;
 				}
 				if (strFileName.indexOf(".evosuite-tests") > 0) {
-					AiFileUtil.delFile(strFileName);
-					AiFileUtil.delDirWithFiles(AiFileUtil.getFilePath(strFileName));
+					JpfFileUtil.delFile(strFileName);
+					JpfFileUtil.delDirWithFiles(JpfFileUtil.getFilePath(strFileName));
 					continue;
 				}
 				
 				/*
 				if (strFileName.endsWith("_ESTest.java")) {
 					strNewFileName = strFileName.replaceAll("_ESTest.java", AiTestConst.AITEST_HC_Suffix);
-					AiFileUtil.Rename(strFileName, strNewFileName);
+					JpfFileUtil.Rename(strFileName, strNewFileName);
 				}
 		        */
 				
@@ -312,9 +312,9 @@ public class JpfUnitTestSourceCheck2 {
 		}
 		try {
 			if (bDelete) {
-				WuFileUtil.delFile(strUTFileName);
+				JpfFileUtil.delFile(strUTFileName);
 			} else {
-				WuFileUtil.saveFile(strUTFileName, sb.toString(), GenerateInputParam.JAVA_ENCODE);
+				JpfFileUtil.saveFile(strUTFileName, sb.toString(), GenerateInputParam.JAVA_ENCODE);
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -350,7 +350,7 @@ public class JpfUnitTestSourceCheck2 {
 	protected void delNoMethodUtFile(final String strUTFileName) {
 
 		try {
-			if (!AiFileUtil.FileExist(strUTFileName)) {
+			if (!JpfFileUtil.FileExist(strUTFileName)) {
 				return;
 			}
 			CompilationUnit cCompilationUnit = ParseJavaByJdt.getInstance().parseJavaSourceFile18(strUTFileName,
@@ -375,7 +375,7 @@ public class JpfUnitTestSourceCheck2 {
 			MethodDeclaration methodDec[] = typeDec.getMethods();
 			// logger.debug(strUTFileName + ":" + methodDec.length);
 			if (methodDec.length == 0) {
-				AiFileUtil.delFile(strUTFileName);
+				JpfFileUtil.delFile(strUTFileName);
 			}
 
 		} catch (Exception ex) {

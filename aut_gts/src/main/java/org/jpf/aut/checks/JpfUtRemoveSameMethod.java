@@ -17,7 +17,7 @@ import org.eclipse.jdt.core.dom.SimpleName;
 
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.jpf.utils.classes.ParseJavaByJdt;
-import org.jpf.utils.ios.AiFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 import org.jpf.aut.base.RunResult;
 
 
@@ -44,7 +44,7 @@ public class JpfUtRemoveSameMethod {
 	public void doWork(String strPomPath) {
 		try {
 			Vector<String> vFiles = new Vector<String>();
-			AiFileUtil.getFiles(strPomPath, vFiles, ".java");
+			JpfFileUtil.getFiles(strPomPath, vFiles, ".java");
 			// remove test file
 			CheckUtils.checkForSource(vFiles);
 

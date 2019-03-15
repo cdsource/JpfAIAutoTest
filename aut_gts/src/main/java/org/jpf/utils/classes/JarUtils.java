@@ -14,7 +14,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarOutputStream;
 
-import org.jpf.utils.ios.AiFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 
 /**
  * 
@@ -63,7 +63,7 @@ public class JarUtils {
         JarEntry dbEntry = currentJar.getJarEntry(strJarFileName);
         InputStream in = currentJar.getInputStream(dbEntry);
         FileOutputStream fos =
-                new FileOutputStream(AiFileUtil.getFilePath(strEarFileName) + strJarFileName, true);
+                new FileOutputStream(JpfFileUtil.getFilePath(strEarFileName) + strJarFileName, true);
         int i = 0;
         while ((i = in.read()) != -1) {
             fos.write(i);

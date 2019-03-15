@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.jpf.aut.base.GenerateInputParam;
 import org.jpf.aut.common.consts.AutConst;
 import org.jpf.utils.MatchUtil;
-import org.jpf.utils.ios.AiOsUtil;
+import org.jpf.utils.ios.JpfOsUtil;
 
 /**
  * @author wupf@asiainfo.com
@@ -102,7 +102,7 @@ public class AutUtil {
    * @return
    */
   public static String getGENERATE_CMD() {
-    if (!AiOsUtil.getInstance().isWindows()) {
+    if (!JpfOsUtil.getInstance().isWindows()) {
       int iCore = 1;
       try {
         String[] cmd =

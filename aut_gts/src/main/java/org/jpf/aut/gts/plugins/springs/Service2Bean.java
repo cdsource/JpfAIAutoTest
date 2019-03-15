@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import org.jpf.utils.ios.AiFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 import org.jpf.utils.xmls.JpfXmlUtil;
 
 /**
@@ -45,7 +45,7 @@ public class Service2Bean {
     private void init() throws Exception {
         map = new HashMap<>();
         Vector<String> vXmlFiles = new Vector<>();
-        AiFileUtil.getFiles(SpringsInputParam.SPRING_XML_FILEPATH, vXmlFiles, ".xml");
+        JpfFileUtil.getFiles(SpringsInputParam.SPRING_XML_FILEPATH, vXmlFiles, ".xml");
         for (int j = 0; j < vXmlFiles.size(); j++) {
             String strXmlFileName = vXmlFiles.get(j);
             NodeList cNodeList = JpfXmlUtil.getNodeList("bean", strXmlFileName);

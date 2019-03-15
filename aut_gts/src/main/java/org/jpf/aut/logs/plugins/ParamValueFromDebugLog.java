@@ -16,7 +16,7 @@ import java.util.Vector;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jpf.utils.ios.AiFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 
 /**
  * 
@@ -85,7 +85,7 @@ public class ParamValueFromDebugLog {
     private void init() throws Exception {
         map = new HashMap<>();
         Vector<String> vXmlFiles = new Vector<>();
-        AiFileUtil.getFiles(HandleLogInputParam.RUN_LOG_FILEPATH, vXmlFiles, ".log");
+        JpfFileUtil.getFiles(HandleLogInputParam.RUN_LOG_FILEPATH, vXmlFiles, ".log");
         for (int j = 0; j < vXmlFiles.size(); j++) {
             String strXmlFileName = vXmlFiles.get(j);
             logger.info("debug run log:"+strXmlFileName);

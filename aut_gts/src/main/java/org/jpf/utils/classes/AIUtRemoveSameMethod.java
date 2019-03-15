@@ -16,8 +16,8 @@ import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.jpf.aut.base.RunResult;
 import org.jpf.aut.checks.CheckUtils;
-import org.jpf.utils.ios.AiFileUtil;
-import org.jpf.utils.ios.WuFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
+import org.jpf.utils.ios.JpfFileUtil;
 
 
 /**
@@ -44,15 +44,15 @@ public class AIUtRemoveSameMethod {
    */
   public void doWork() {
     try {
-      if (WuFileUtil.isDirectory(strPomPath)) {
+      if (JpfFileUtil.isDirectory(strPomPath)) {
         Vector<String> vFiles = new Vector<String>();
-        AiFileUtil.getFiles(strPomPath, vFiles, ".java");
+        JpfFileUtil.getFiles(strPomPath, vFiles, ".java");
         // remove test file
         CheckUtils.checkForSource(vFiles);
 
         RunResult.TotalJavaSrcFileCount = vFiles.size();
         logger.info(vFiles.size());
-      } else if (WuFileUtil.FileExist(strPomPath)) {
+      } else if (JpfFileUtil.FileExist(strPomPath)) {
         removeSameMethod(strPomPath);
       } else {
         logger.warn("Error input param:" + strPomPath);
